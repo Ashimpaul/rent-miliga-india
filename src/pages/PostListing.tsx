@@ -36,6 +36,7 @@ const PostListing = () => {
     owner_name: "",
     phone_number: "",
     google_map_link: "",
+    password: "",
   });
 
   const set = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
@@ -56,7 +57,7 @@ const PostListing = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.title || !form.property_type || !form.rent || !form.state || !form.city || !form.area || !form.owner_name || !form.phone_number) {
+    if (!form.title || !form.property_type || !form.rent || !form.state || !form.city || !form.area || !form.owner_name || !form.phone_number || !form.password) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -69,12 +70,22 @@ const PostListing = () => {
     try {
       const urls = await Promise.all(images.map(uploadImage));
       const { error } = await supabase.from("listings").insert({
-        ...form,
+        title: form.title,
+        property_type: form.property_type,
         rent: Number(form.rent),
+        description: form.description || null,
+        state: form.state,
+        city: form.city,
+        area: form.area,
+        address: form.address || null,
+        pincode: form.pincode || null,
+        owner_name: form.owner_name,
+        phone_number: form.phone_number,
+        google_map_link: form.google_map_link || null,
+        password: form.password,
         image1: urls[0] || null,
         image2: urls[1] || null,
         image3: urls[2] || null,
-        google_map_link: form.google_map_link || null,
       });
       if (error) throw error;
       toast.success("Listing posted successfully!");
@@ -167,6 +178,18 @@ const PostListing = () => {
               <div>
                 <Label htmlFor="phone">Phone Number *</Label>
                 <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder="+919876543210" />
+              </div>
+            </fieldset>
+
+            {/* Password for Edit/Delete */}
+            <fieldset className="space-y-4 rounded-lg border border-border p-4">
+              <legend className="px-2 text-sm font-semibold text-foreground">Security</legend>
+              <div>
+                <Label htmlFor="password">Listing Password *</Label>
+                <Input id="password" type="password" value={form.password} onChange={(e) => set("password", e.target.value)} placeholder="Set a password to edit/delete later" />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Remember this password — you'll need it to edit or delete your listing later.
+                </p>
               </div>
             </fieldset>
 
