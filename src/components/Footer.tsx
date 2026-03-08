@@ -6,6 +6,10 @@ const Footer = () => (
       <p className="text-sm font-semibold text-foreground sm:text-base">RentMiliga</p>
       <p className="mt-1">India's simple rental listing platform</p>
       <div className="mt-3 flex items-center justify-center gap-4">
+        <Link to="/help" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
+          Help
+        </Link>
+        <span className="text-border">•</span>
         <Link to="/about" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
           About Us
         </Link>
