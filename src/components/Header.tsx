@@ -1,17 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu, MoreVertical, HelpCircle, Info, Mail } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
 
 const NAV_ITEMS = [
   { path: "/", label: "Home", icon: Home },
