@@ -31,6 +31,7 @@ const PostListing = () => {
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [showPremiumDialog, setShowPremiumDialog] = useState(false);
+  const [premiumReason, setPremiumReason] = useState<"images" | "property_type">("images");
   const [form, setForm] = useState({
     title: "",
     property_type: "",
