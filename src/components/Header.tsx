@@ -13,7 +13,6 @@ const NAV_ITEMS = [
 
 const Header = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const isActive = (path: string) => location.pathname === path;
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
@@ -48,61 +47,24 @@ const Header = () => {
 
           <Button
             variant="ghost"
-            size="sm"
-            className="transition-all duration-200 hover:scale-105"
-            asChild
+            size="icon"
+            className="ml-1 h-8 w-8 transition-all duration-200 hover:scale-105"
+            onClick={toggle}
           >
-            <Link to="/help">
-              <HelpCircle className="mr-1.5 h-3.5 w-3.5" /> Help
-            </Link>
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
-
-          {/* Three-dot menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="ml-1 h-8 w-8">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuItem onClick={() => navigate("/about")} className="cursor-pointer gap-2">
-                <Info className="h-4 w-4" /> About Us
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/contact")} className="cursor-pointer gap-2">
-                <Mail className="h-4 w-4" /> Contact Us
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={toggle} className="cursor-pointer gap-2">
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {theme === "dark" ? "Light Mode" : "Dark Mode"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </nav>
 
         {/* Mobile nav */}
         <div className="flex items-center gap-1 sm:hidden">
-          {/* Three-dot menu (mobile) */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuItem onClick={() => navigate("/about")} className="cursor-pointer gap-2">
-                <Info className="h-4 w-4" /> About Us
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/contact")} className="cursor-pointer gap-2">
-                <Mail className="h-4 w-4" /> Contact Us
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={toggle} className="cursor-pointer gap-2">
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {theme === "dark" ? "Light Mode" : "Dark Mode"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={toggle}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -113,12 +75,7 @@ const Header = () => {
             <SheetContent side="right" className="w-64 pt-10">
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <nav className="flex flex-col gap-2">
-                {[
-                  ...NAV_ITEMS,
-                  { path: "/help", label: "Help", icon: HelpCircle },
-                  { path: "/about", label: "About Us", icon: Info },
-                  { path: "/contact", label: "Contact Us", icon: Mail },
-                ].map((item, i) => (
+                {NAV_ITEMS.map((item, i) => (
                   <Button
                     key={item.path}
                     variant={isActive(item.path) ? "default" : "ghost"}
