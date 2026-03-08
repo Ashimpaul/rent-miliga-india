@@ -48,7 +48,16 @@ const PostListing = () => {
     password: "",
   });
 
-  const set = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
+  const PREMIUM_TYPES = ["commercial", "apartment"];
+
+  const set = (key: string, value: string) => {
+    if (key === "property_type" && PREMIUM_TYPES.includes(value)) {
+      setPremiumReason("property_type");
+      setShowPremiumDialog(true);
+      return;
+    }
+    setForm((f) => ({ ...f, [key]: value }));
+  };
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
