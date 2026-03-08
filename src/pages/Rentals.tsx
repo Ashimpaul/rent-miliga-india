@@ -45,24 +45,24 @@ const Rentals = () => {
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-foreground">Find Rentals</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Browse rental listings across India</p>
+        <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6">
+          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Find Rentals</h1>
+          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Browse rental listings across India</p>
 
-          <div className="mt-4">
+          <div className="mt-3 sm:mt-4">
             <SearchFilters filters={filters} onChange={setFilters} />
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-20">
+            <div className="flex justify-center py-12 sm:py-20">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : filtered.length === 0 ? (
-            <p className="py-20 text-center text-muted-foreground">
+            <p className="py-12 text-center text-muted-foreground sm:py-20">
               No listings found. Be the first to post one!
             </p>
           ) : (
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((l) => (
                 <ListingCard key={l.id} listing={l} />
               ))}
