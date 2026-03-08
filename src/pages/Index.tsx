@@ -84,20 +84,20 @@ const Index = () => {
         </section>
 
         {/* Browse by Category */}
-        <section className="bg-secondary py-12">
+        <section className="bg-secondary py-8 sm:py-12">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
+            <h2 className="text-center text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
               Browse by Category
             </h2>
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.type}
                   onClick={() => navigate(`/rentals?type=${cat.type}`)}
-                  className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary hover:shadow-md"
+                  className="flex flex-col items-center gap-1.5 rounded-lg border border-border bg-card p-3 shadow-sm transition-all hover:border-primary hover:shadow-md sm:gap-3 sm:rounded-xl sm:p-5"
                 >
-                  <cat.icon className="h-8 w-8 text-primary" />
-                  <span className="text-sm font-medium text-foreground">{cat.label}</span>
+                  <cat.icon className="h-5 w-5 text-primary sm:h-8 sm:w-8" />
+                  <span className="text-xs font-medium text-foreground sm:text-sm">{cat.label}</span>
                 </button>
               ))}
             </div>
