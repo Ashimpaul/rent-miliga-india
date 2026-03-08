@@ -2,13 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 98%;
+    --background: 0 0% 100%;
     --foreground: 220 20% 14%;
 
     --card: 0 0% 100%;
@@ -17,16 +13,16 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 14%;
 
-    --primary: 152 56% 42%;
+    --primary: 28 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 152 30% 94%;
-    --secondary-foreground: 152 56% 30%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 14%;
 
     --muted: 220 14% 96%;
     --muted-foreground: 220 10% 46%;
 
-    --accent: 36 100% 50%;
+    --accent: 28 100% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -34,11 +30,9 @@ All colors MUST be HSL.
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 152 56% 42%;
+    --ring: 28 100% 50%;
 
-    --radius: 0.75rem;
-
-    --hero-gradient: linear-gradient(135deg, hsl(152 56% 42%), hsl(152 56% 32%));
+    --radius: 0.5rem;
   }
 }
 
@@ -49,15 +43,5 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
   }
 }
