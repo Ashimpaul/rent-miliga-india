@@ -334,8 +334,8 @@ const ListingDetail = () => {
 
               {/* Details */}
               <div className="mt-6">
-                <h1 className="text-2xl font-bold text-foreground">{listing.title}</h1>
-                <div className="mt-2 flex items-center gap-1 text-2xl font-bold text-primary">
+                <h1 className="text-xl font-bold text-foreground sm:text-2xl">{listing.title}</h1>
+                <div className="mt-2 flex items-center gap-1 text-xl font-bold text-primary sm:text-2xl">
                   <IndianRupee className="h-5 w-5" />
                   {listing.rent.toLocaleString("en-IN")}/mo
                 </div>
