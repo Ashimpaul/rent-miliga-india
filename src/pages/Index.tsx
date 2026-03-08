@@ -51,7 +51,7 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative flex min-h-[420px] items-center justify-center overflow-hidden bg-foreground/90">
+        <section className="relative flex min-h-[300px] items-center justify-center overflow-hidden bg-foreground/90 sm:min-h-[420px]">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
             alt="City skyline"
