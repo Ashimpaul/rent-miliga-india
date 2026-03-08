@@ -126,22 +126,22 @@ const PostListing = () => {
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <div className="container mx-auto max-w-2xl px-4 py-8">
-          <h1 className="text-2xl font-bold text-foreground">Post a Rental Listing</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Fill in the details to list your property</p>
+        <div className="container mx-auto max-w-2xl px-3 py-5 sm:px-4 sm:py-8">
+          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Post a Rental Listing</h1>
+          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Fill in the details to list your property</p>
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
             {/* Property Info */}
-            <fieldset className="space-y-4 rounded-lg border border-border p-4">
-              <legend className="px-2 text-sm font-semibold text-foreground">Property Information</legend>
+            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Property Information</legend>
               <div>
-                <Label htmlFor="title">Title *</Label>
-                <Input id="title" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="e.g. Spacious 2BHK near Metro" />
+                <Label htmlFor="title" className="text-xs sm:text-sm">Title *</Label>
+                <Input id="title" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="e.g. Spacious 2BHK near Metro" className="text-sm" />
               </div>
               <div>
-                <Label>Property Type *</Label>
+                <Label className="text-xs sm:text-sm">Property Type *</Label>
                 <Select value={form.property_type} onValueChange={(v) => set("property_type", v)}>
-                  <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+                  <SelectTrigger className="text-sm"><SelectValue placeholder="Select type" /></SelectTrigger>
                   <SelectContent>
                     {PROPERTY_TYPES.map((t) => (
                       <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>
@@ -150,104 +150,104 @@ const PostListing = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="rent">Monthly Rent (₹) *</Label>
-                <Input id="rent" type="number" value={form.rent} onChange={(e) => set("rent", e.target.value)} placeholder="e.g. 8000" />
+                <Label htmlFor="rent" className="text-xs sm:text-sm">Monthly Rent (₹) *</Label>
+                <Input id="rent" type="number" value={form.rent} onChange={(e) => set("rent", e.target.value)} placeholder="e.g. 8000" className="text-sm" />
               </div>
               <div>
-                <Label htmlFor="desc">Description</Label>
-                <Textarea id="desc" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Brief description of the property" rows={3} />
+                <Label htmlFor="desc" className="text-xs sm:text-sm">Description</Label>
+                <Textarea id="desc" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Brief description of the property" rows={3} className="text-sm" />
               </div>
             </fieldset>
 
             {/* Location */}
-            <fieldset className="space-y-4 rounded-lg border border-border p-4">
-              <legend className="px-2 text-sm font-semibold text-foreground">Location</legend>
-              <div className="grid grid-cols-2 gap-3">
+            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Location</legend>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <div>
-                  <Label htmlFor="state">State *</Label>
-                  <Input id="state" value={form.state} onChange={(e) => set("state", e.target.value)} />
+                  <Label htmlFor="state" className="text-xs sm:text-sm">State *</Label>
+                  <Input id="state" value={form.state} onChange={(e) => set("state", e.target.value)} className="text-sm" />
                 </div>
                 <div>
-                  <Label htmlFor="city">City *</Label>
-                  <Input id="city" value={form.city} onChange={(e) => set("city", e.target.value)} />
+                  <Label htmlFor="city" className="text-xs sm:text-sm">City *</Label>
+                  <Input id="city" value={form.city} onChange={(e) => set("city", e.target.value)} className="text-sm" />
                 </div>
               </div>
               <div>
-                <Label htmlFor="area">Area / Locality *</Label>
-                <Input id="area" value={form.area} onChange={(e) => set("area", e.target.value)} />
+                <Label htmlFor="area" className="text-xs sm:text-sm">Area / Locality *</Label>
+                <Input id="area" value={form.area} onChange={(e) => set("area", e.target.value)} className="text-sm" />
               </div>
               <div>
-                <Label htmlFor="address">Address</Label>
-                <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
+                <Label htmlFor="address" className="text-xs sm:text-sm">Address</Label>
+                <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} className="text-sm" />
               </div>
               <div>
-                <Label htmlFor="pincode">Pincode</Label>
-                <Input id="pincode" value={form.pincode} onChange={(e) => set("pincode", e.target.value)} maxLength={6} />
+                <Label htmlFor="pincode" className="text-xs sm:text-sm">Pincode</Label>
+                <Input id="pincode" value={form.pincode} onChange={(e) => set("pincode", e.target.value)} maxLength={6} className="text-sm" />
               </div>
               <div>
-                <Label htmlFor="google_map_link">Google Maps Link</Label>
-                <Input id="google_map_link" value={form.google_map_link} onChange={(e) => set("google_map_link", e.target.value)} placeholder="Paste Google Maps link of your property" />
-                <p className="mt-1 text-xs text-muted-foreground">
+                <Label htmlFor="google_map_link" className="text-xs sm:text-sm">Google Maps Link</Label>
+                <Input id="google_map_link" value={form.google_map_link} onChange={(e) => set("google_map_link", e.target.value)} placeholder="Paste Google Maps link" className="text-sm" />
+                <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
                   Open Google Maps → Find your property → Click "Share" → Copy link
                 </p>
               </div>
             </fieldset>
 
             {/* Contact */}
-            <fieldset className="space-y-4 rounded-lg border border-border p-4">
-              <legend className="px-2 text-sm font-semibold text-foreground">Contact Information</legend>
+            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Contact Information</legend>
               <div>
-                <Label htmlFor="owner">Owner Name *</Label>
-                <Input id="owner" value={form.owner_name} onChange={(e) => set("owner_name", e.target.value)} />
+                <Label htmlFor="owner" className="text-xs sm:text-sm">Owner Name *</Label>
+                <Input id="owner" value={form.owner_name} onChange={(e) => set("owner_name", e.target.value)} className="text-sm" />
               </div>
               <div>
-                <Label htmlFor="phone">Phone Number *</Label>
-                <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder="+919876543210" />
+                <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number *</Label>
+                <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder="+919876543210" className="text-sm" />
               </div>
             </fieldset>
 
-            {/* Password for Edit/Delete */}
-            <fieldset className="space-y-4 rounded-lg border border-border p-4">
-              <legend className="px-2 text-sm font-semibold text-foreground">Security</legend>
+            {/* Password */}
+            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Security</legend>
               <div>
-                <Label htmlFor="password">Listing Password *</Label>
-                <Input id="password" type="password" value={form.password} onChange={(e) => set("password", e.target.value)} placeholder="Set a password to edit/delete later" />
-                <p className="mt-1 text-xs text-muted-foreground">
+                <Label htmlFor="password" className="text-xs sm:text-sm">Listing Password *</Label>
+                <Input id="password" type="password" value={form.password} onChange={(e) => set("password", e.target.value)} placeholder="Set a password to edit/delete later" className="text-sm" />
+                <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
                   Remember this password — you'll need it to edit or delete your listing later.
                 </p>
               </div>
             </fieldset>
 
             {/* Images */}
-            <fieldset className="space-y-4 rounded-lg border border-border p-4">
-              <legend className="px-2 text-sm font-semibold text-foreground">Images</legend>
+            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Images</legend>
               <div>
-                <Label htmlFor="images">Upload Images (1-3) *</Label>
-                <Input id="images" type="file" accept="image/*" multiple onChange={handleImages} />
+                <Label htmlFor="images" className="text-xs sm:text-sm">Upload Images (1-3) *</Label>
+                <Input id="images" type="file" accept="image/*" multiple onChange={handleImages} className="text-sm" />
                 {images.length > 0 && (
-                  <p className="mt-1 text-xs text-muted-foreground">{images.length} image(s) selected (max 3 free)</p>
+                  <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">{images.length} image(s) selected (max 3 free)</p>
                 )}
               </div>
             </fieldset>
 
             {/* Premium Dialog */}
             <Dialog open={showPremiumDialog} onOpenChange={setShowPremiumDialog}>
-              <DialogContent className="sm:max-w-md">
+              <DialogContent className="mx-auto max-w-[calc(100vw-2rem)] rounded-lg sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    <Crown className="h-5 w-5 text-amber-500" />
+                  <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+                    <Crown className="h-4 w-4 text-amber-500 sm:h-5 sm:w-5" />
                     Upgrade to Premium
                   </DialogTitle>
-                  <DialogDescription>
+                  <DialogDescription className="text-xs sm:text-sm">
                     {premiumReason === "images"
-                      ? "Free listings support up to 3 images. Upgrade to upload more images and make your listing stand out."
-                      : "Listing commercial properties and apartments is a premium feature. Upgrade to unlock these property types."}
+                      ? "Free listings support up to 3 images. Upgrade to upload more."
+                      : "Commercial & apartment listings are premium. Upgrade to unlock."}
                   </DialogDescription>
                 </DialogHeader>
-                <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
-                  <p className="text-2xl font-bold text-foreground">₹99</p>
-                  <p className="text-sm text-muted-foreground">one-time per listing</p>
-                  <ul className="mt-3 space-y-1 text-sm text-muted-foreground text-left">
+                <div className="rounded-lg border border-border bg-muted/50 p-3 text-center sm:p-4">
+                  <p className="text-xl font-bold text-foreground sm:text-2xl">₹99</p>
+                  <p className="text-xs text-muted-foreground sm:text-sm">one-time per listing</p>
+                  <ul className="mt-2 space-y-1 text-left text-xs text-muted-foreground sm:mt-3 sm:text-sm">
                     {premiumReason === "images" ? (
                       <>
                         <li>✓ Upload up to 10 images</li>
@@ -264,10 +264,10 @@ const PostListing = () => {
                   </ul>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1" onClick={() => setShowPremiumDialog(false)}>
+                  <Button variant="outline" size="sm" className="flex-1 text-xs sm:text-sm" onClick={() => setShowPremiumDialog(false)}>
                     {premiumReason === "images" ? "Continue with 3" : "Pick another type"}
                   </Button>
-                  <Button className="flex-1" onClick={() => { toast.info("Payment integration coming soon!"); setShowPremiumDialog(false); }}>
+                  <Button size="sm" className="flex-1 text-xs sm:text-sm" onClick={() => { toast.info("Payment integration coming soon!"); setShowPremiumDialog(false); }}>
                     Upgrade Now
                   </Button>
                 </div>

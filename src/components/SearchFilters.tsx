@@ -53,48 +53,50 @@ const SearchFilters = ({ filters, onChange }: Props) => {
     onChange({ city: "", area: "", propertyType: "", minRent: "", maxRent: "" });
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+    <div className="rounded-lg border border-border bg-card p-3 shadow-sm sm:rounded-xl sm:p-4">
       {/* Top row: search + toggle */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search by city or area..."
+            placeholder="Search city or area..."
             value={filters.city}
             onChange={(e) => update("city", e.target.value)}
-            className="pl-10"
+            className="pl-10 text-sm"
           />
         </div>
         <Button
           variant={expanded ? "default" : "outline"}
           size="sm"
           onClick={() => setExpanded(!expanded)}
-          className="shrink-0 gap-1.5"
+          className="shrink-0 gap-1 px-2.5 sm:gap-1.5 sm:px-3"
         >
           <SlidersHorizontal className="h-3.5 w-3.5" />
-          Filters
+          <span className="hidden sm:inline">Filters</span>
           {activeCount > 0 && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-foreground text-xs font-bold text-primary">
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary-foreground text-[10px] font-bold text-primary sm:h-5 sm:w-5 sm:text-xs">
               {activeCount}
             </span>
           )}
         </Button>
         {activeCount > 0 && (
-          <Button variant="ghost" size="sm" onClick={clearAll} className="shrink-0 gap-1 text-muted-foreground">
-            <X className="h-3.5 w-3.5" /> Clear
+          <Button variant="ghost" size="sm" onClick={clearAll} className="shrink-0 gap-1 px-2 text-muted-foreground sm:px-3">
+            <X className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Clear</span>
           </Button>
         )}
       </div>
 
       {/* Expanded filters */}
       {expanded && (
-        <div className="mt-4 grid gap-4 border-t border-border pt-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:mt-4 sm:grid-cols-2 sm:gap-4 sm:pt-4 lg:grid-cols-4">
           <div className="space-y-1.5">
             <Label className="text-xs font-medium text-muted-foreground">Area / Locality</Label>
             <Input
               placeholder="e.g. Koramangala"
               value={filters.area}
               onChange={(e) => update("area", e.target.value)}
+              className="text-sm"
             />
           </div>
           <div className="space-y-1.5">
@@ -103,7 +105,7 @@ const SearchFilters = ({ filters, onChange }: Props) => {
               value={filters.propertyType || "all"}
               onValueChange={(v) => update("propertyType", v)}
             >
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="All types" />
               </SelectTrigger>
               <SelectContent>
@@ -125,7 +127,7 @@ const SearchFilters = ({ filters, onChange }: Props) => {
                 onChange({ ...filters, minRent: min, maxRent: max });
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="Any budget" />
               </SelectTrigger>
               <SelectContent>
@@ -145,12 +147,14 @@ const SearchFilters = ({ filters, onChange }: Props) => {
                 placeholder="Min ₹"
                 value={filters.minRent}
                 onChange={(e) => update("minRent", e.target.value)}
+                className="text-sm"
               />
               <Input
                 type="number"
                 placeholder="Max ₹"
                 value={filters.maxRent}
                 onChange={(e) => update("maxRent", e.target.value)}
+                className="text-sm"
               />
             </div>
           </div>

@@ -34,40 +34,22 @@ const ListingDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
 
-  // Password dialog state
   const [passwordDialog, setPasswordDialog] = useState<"edit" | "delete" | null>(null);
   const [password, setPassword] = useState("");
   const [verifying, setVerifying] = useState(false);
 
-  // Edit mode state
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({
-    title: "",
-    property_type: "",
-    rent: "",
-    description: "",
-    state: "",
-    city: "",
-    area: "",
-    address: "",
-    pincode: "",
-    owner_name: "",
-    phone_number: "",
-    google_map_link: "",
+    title: "", property_type: "", rent: "", description: "",
+    state: "", city: "", area: "", address: "", pincode: "",
+    owner_name: "", phone_number: "", google_map_link: "",
   });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-    supabase
-      .from("listings")
-      .select("*")
-      .eq("id", id)
-      .single()
-      .then(({ data }) => {
-        setListing(data);
-        setLoading(false);
-      });
+    supabase.from("listings").select("*").eq("id", id).single()
+      .then(({ data }) => { setListing(data); setLoading(false); });
   }, [id]);
 
   const verifyPassword = async (action: "edit" | "delete") => {
@@ -75,31 +57,20 @@ const ListingDetail = () => {
     setVerifying(true);
     try {
       const { data, error } = await supabase.rpc("verify_listing_password", {
-        listing_id: id,
-        input_password: password,
+        listing_id: id, input_password: password,
       });
       if (error) throw error;
-      if (!data) {
-        toast.error("Incorrect password");
-        return;
-      }
+      if (!data) { toast.error("Incorrect password"); return; }
       setPasswordDialog(null);
       setPassword("");
-
       if (action === "edit") {
         setEditForm({
-          title: listing?.title || "",
-          property_type: listing?.property_type || "",
-          rent: String(listing?.rent || ""),
-          description: listing?.description || "",
-          state: listing?.state || "",
-          city: listing?.city || "",
-          area: listing?.area || "",
-          address: listing?.address || "",
-          pincode: listing?.pincode || "",
-          owner_name: listing?.owner_name || "",
-          phone_number: listing?.phone_number || "",
-          google_map_link: listing?.google_map_link || "",
+          title: listing?.title || "", property_type: listing?.property_type || "",
+          rent: String(listing?.rent || ""), description: listing?.description || "",
+          state: listing?.state || "", city: listing?.city || "",
+          area: listing?.area || "", address: listing?.address || "",
+          pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
+          phone_number: listing?.phone_number || "", google_map_link: listing?.google_map_link || "",
         });
         setEditing(true);
       } else {
@@ -115,10 +86,7 @@ const ListingDetail = () => {
   const handleDelete = async () => {
     if (!id) return;
     const { error } = await supabase.from("listings").delete().eq("id", id);
-    if (error) {
-      toast.error("Failed to delete listing");
-      return;
-    }
+    if (error) { toast.error("Failed to delete listing"); return; }
     toast.success("Listing deleted successfully");
     navigate("/");
   };
@@ -126,31 +94,19 @@ const ListingDetail = () => {
   const handleSaveEdit = async () => {
     if (!id) return;
     if (!editForm.title || !editForm.property_type || !editForm.rent || !editForm.state || !editForm.city || !editForm.area || !editForm.owner_name || !editForm.phone_number) {
-      toast.error("Please fill all required fields");
-      return;
+      toast.error("Please fill all required fields"); return;
     }
     setSaving(true);
     try {
-      const { error } = await supabase
-        .from("listings")
-        .update({
-          title: editForm.title,
-          property_type: editForm.property_type,
-          rent: Number(editForm.rent),
-          description: editForm.description || null,
-          state: editForm.state,
-          city: editForm.city,
-          area: editForm.area,
-          address: editForm.address || null,
-          pincode: editForm.pincode || null,
-          owner_name: editForm.owner_name,
-          phone_number: editForm.phone_number,
-          google_map_link: editForm.google_map_link || null,
-        })
-        .eq("id", id);
+      const { error } = await supabase.from("listings").update({
+        title: editForm.title, property_type: editForm.property_type,
+        rent: Number(editForm.rent), description: editForm.description || null,
+        state: editForm.state, city: editForm.city, area: editForm.area,
+        address: editForm.address || null, pincode: editForm.pincode || null,
+        owner_name: editForm.owner_name, phone_number: editForm.phone_number,
+        google_map_link: editForm.google_map_link || null,
+      }).eq("id", id);
       if (error) throw error;
-
-      // Refresh listing
       const { data } = await supabase.from("listings").select("*").eq("id", id).single();
       setListing(data);
       setEditing(false);
@@ -193,48 +149,37 @@ const ListingDetail = () => {
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <div className="container mx-auto max-w-3xl px-4 py-6">
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="mr-1 h-4 w-4" /> Back to listings
+        <div className="container mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">
+          <div className="mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
+            <Link to="/" className="inline-flex items-center text-xs text-muted-foreground hover:text-foreground sm:text-sm">
+              <ArrowLeft className="mr-1 h-3.5 w-3.5 sm:h-4 sm:w-4" /> Back to listings
             </Link>
             {!editing && (
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 sm:flex-none"
-                  onClick={() => setPasswordDialog("edit")}
-                >
-                  <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+                <Button variant="outline" size="sm" className="flex-1 text-xs sm:flex-none sm:text-sm" onClick={() => setPasswordDialog("edit")}>
+                  <Pencil className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5" /> Edit
                 </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  className="flex-1 sm:flex-none"
-                  onClick={() => setPasswordDialog("delete")}
-                >
-                  <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
+                <Button variant="destructive" size="sm" className="flex-1 text-xs sm:flex-none sm:text-sm" onClick={() => setPasswordDialog("delete")}>
+                  <Trash2 className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5" /> Delete
                 </Button>
               </div>
             )}
           </div>
 
-          {/* Edit Mode */}
           {editing ? (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold text-foreground">Edit Listing</h2>
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-lg font-bold text-foreground sm:text-xl">Edit Listing</h2>
 
-              <fieldset className="space-y-4 rounded-lg border border-border p-4">
-                <legend className="px-2 text-sm font-semibold text-foreground">Property Information</legend>
+              <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+                <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Property Information</legend>
                 <div>
-                  <Label htmlFor="edit-title">Title *</Label>
-                  <Input id="edit-title" value={editForm.title} onChange={(e) => setEdit("title", e.target.value)} />
+                  <Label htmlFor="edit-title" className="text-xs sm:text-sm">Title *</Label>
+                  <Input id="edit-title" value={editForm.title} onChange={(e) => setEdit("title", e.target.value)} className="text-sm" />
                 </div>
                 <div>
-                  <Label>Property Type *</Label>
+                  <Label className="text-xs sm:text-sm">Property Type *</Label>
                   <Select value={editForm.property_type} onValueChange={(v) => setEdit("property_type", v)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="text-sm"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {PROPERTY_TYPES.map((t) => (
                         <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>
@@ -243,63 +188,63 @@ const ListingDetail = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="edit-rent">Monthly Rent (₹) *</Label>
-                  <Input id="edit-rent" type="number" value={editForm.rent} onChange={(e) => setEdit("rent", e.target.value)} />
+                  <Label htmlFor="edit-rent" className="text-xs sm:text-sm">Monthly Rent (₹) *</Label>
+                  <Input id="edit-rent" type="number" value={editForm.rent} onChange={(e) => setEdit("rent", e.target.value)} className="text-sm" />
                 </div>
                 <div>
-                  <Label htmlFor="edit-desc">Description</Label>
-                  <Textarea id="edit-desc" value={editForm.description} onChange={(e) => setEdit("description", e.target.value)} rows={3} />
+                  <Label htmlFor="edit-desc" className="text-xs sm:text-sm">Description</Label>
+                  <Textarea id="edit-desc" value={editForm.description} onChange={(e) => setEdit("description", e.target.value)} rows={3} className="text-sm" />
                 </div>
               </fieldset>
 
-              <fieldset className="space-y-4 rounded-lg border border-border p-4">
-                <legend className="px-2 text-sm font-semibold text-foreground">Location</legend>
-                <div className="grid grid-cols-2 gap-3">
+              <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+                <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Location</legend>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <div>
-                    <Label htmlFor="edit-state">State *</Label>
-                    <Input id="edit-state" value={editForm.state} onChange={(e) => setEdit("state", e.target.value)} />
+                    <Label htmlFor="edit-state" className="text-xs sm:text-sm">State *</Label>
+                    <Input id="edit-state" value={editForm.state} onChange={(e) => setEdit("state", e.target.value)} className="text-sm" />
                   </div>
                   <div>
-                    <Label htmlFor="edit-city">City *</Label>
-                    <Input id="edit-city" value={editForm.city} onChange={(e) => setEdit("city", e.target.value)} />
+                    <Label htmlFor="edit-city" className="text-xs sm:text-sm">City *</Label>
+                    <Input id="edit-city" value={editForm.city} onChange={(e) => setEdit("city", e.target.value)} className="text-sm" />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="edit-area">Area / Locality *</Label>
-                  <Input id="edit-area" value={editForm.area} onChange={(e) => setEdit("area", e.target.value)} />
+                  <Label htmlFor="edit-area" className="text-xs sm:text-sm">Area / Locality *</Label>
+                  <Input id="edit-area" value={editForm.area} onChange={(e) => setEdit("area", e.target.value)} className="text-sm" />
                 </div>
                 <div>
-                  <Label htmlFor="edit-address">Address</Label>
-                  <Input id="edit-address" value={editForm.address} onChange={(e) => setEdit("address", e.target.value)} />
+                  <Label htmlFor="edit-address" className="text-xs sm:text-sm">Address</Label>
+                  <Input id="edit-address" value={editForm.address} onChange={(e) => setEdit("address", e.target.value)} className="text-sm" />
                 </div>
                 <div>
-                  <Label htmlFor="edit-pincode">Pincode</Label>
-                  <Input id="edit-pincode" value={editForm.pincode} onChange={(e) => setEdit("pincode", e.target.value)} maxLength={6} />
+                  <Label htmlFor="edit-pincode" className="text-xs sm:text-sm">Pincode</Label>
+                  <Input id="edit-pincode" value={editForm.pincode} onChange={(e) => setEdit("pincode", e.target.value)} maxLength={6} className="text-sm" />
                 </div>
                 <div>
-                  <Label htmlFor="edit-map">Google Maps Link</Label>
-                  <Input id="edit-map" value={editForm.google_map_link} onChange={(e) => setEdit("google_map_link", e.target.value)} />
+                  <Label htmlFor="edit-map" className="text-xs sm:text-sm">Google Maps Link</Label>
+                  <Input id="edit-map" value={editForm.google_map_link} onChange={(e) => setEdit("google_map_link", e.target.value)} className="text-sm" />
                 </div>
               </fieldset>
 
-              <fieldset className="space-y-4 rounded-lg border border-border p-4">
-                <legend className="px-2 text-sm font-semibold text-foreground">Contact Information</legend>
+              <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+                <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Contact Information</legend>
                 <div>
-                  <Label htmlFor="edit-owner">Owner Name *</Label>
-                  <Input id="edit-owner" value={editForm.owner_name} onChange={(e) => setEdit("owner_name", e.target.value)} />
+                  <Label htmlFor="edit-owner" className="text-xs sm:text-sm">Owner Name *</Label>
+                  <Input id="edit-owner" value={editForm.owner_name} onChange={(e) => setEdit("owner_name", e.target.value)} className="text-sm" />
                 </div>
                 <div>
-                  <Label htmlFor="edit-phone">Phone Number *</Label>
-                  <Input id="edit-phone" type="tel" value={editForm.phone_number} onChange={(e) => setEdit("phone_number", e.target.value)} />
+                  <Label htmlFor="edit-phone" className="text-xs sm:text-sm">Phone Number *</Label>
+                  <Input id="edit-phone" type="tel" value={editForm.phone_number} onChange={(e) => setEdit("phone_number", e.target.value)} className="text-sm" />
                 </div>
               </fieldset>
 
-              <div className="flex gap-3">
-                <Button className="flex-1" size="lg" onClick={handleSaveEdit} disabled={saving}>
+              <div className="flex gap-2 sm:gap-3">
+                <Button className="flex-1" onClick={handleSaveEdit} disabled={saving}>
                   {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {saving ? "Saving..." : "Save Changes"}
                 </Button>
-                <Button variant="outline" size="lg" onClick={() => setEditing(false)} disabled={saving}>
+                <Button variant="outline" onClick={() => setEditing(false)} disabled={saving}>
                   Cancel
                 </Button>
               </div>
@@ -312,15 +257,15 @@ const ListingDetail = () => {
                   <img
                     src={images[activeImage]}
                     alt={listing.title}
-                    className="aspect-video w-full object-cover"
+                    className="aspect-[4/3] w-full object-cover sm:aspect-video"
                   />
                   {images.length > 1 && (
-                    <div className="mt-2 flex gap-2 overflow-x-auto">
+                    <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
                       {images.map((img, i) => (
                         <button
                           key={i}
                           onClick={() => setActiveImage(i)}
-                          className={`h-14 w-16 shrink-0 overflow-hidden rounded-md border-2 sm:h-16 sm:w-20 ${
+                          className={`h-12 w-14 shrink-0 overflow-hidden rounded-md border-2 active:scale-95 sm:h-16 sm:w-20 ${
                             i === activeImage ? "border-primary" : "border-border"
                           }`}
                         >
@@ -333,50 +278,50 @@ const ListingDetail = () => {
               )}
 
               {/* Details */}
-              <div className="mt-6">
-                <h1 className="text-xl font-bold text-foreground sm:text-2xl">{listing.title}</h1>
-                <div className="mt-2 flex items-center gap-1 text-xl font-bold text-primary sm:text-2xl">
-                  <IndianRupee className="h-5 w-5" />
+              <div className="mt-4 sm:mt-6">
+                <h1 className="text-lg font-bold text-foreground sm:text-2xl">{listing.title}</h1>
+                <div className="mt-1.5 flex items-center gap-1 text-lg font-bold text-primary sm:mt-2 sm:text-2xl">
+                  <IndianRupee className="h-4 w-4 sm:h-5 sm:w-5" />
                   {listing.rent.toLocaleString("en-IN")}/mo
                 </div>
-                <p className="mt-1 text-sm capitalize text-muted-foreground">{listing.property_type}</p>
+                <p className="mt-1 text-xs capitalize text-muted-foreground sm:text-sm">{listing.property_type}</p>
 
                 {listing.description && (
-                  <p className="mt-4 text-foreground">{listing.description}</p>
+                  <p className="mt-3 text-sm text-foreground sm:mt-4">{listing.description}</p>
                 )}
 
                 {/* Location */}
-                <div className="mt-6 rounded-lg border border-border p-4">
-                  <h2 className="mb-2 font-semibold text-foreground flex items-center gap-1">
-                    <MapPin className="h-4 w-4" /> Location
+                <div className="mt-4 rounded-lg border border-border p-3 sm:mt-6 sm:p-4">
+                  <h2 className="mb-2 flex items-center gap-1 text-sm font-semibold text-foreground sm:text-base">
+                    <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
                   </h2>
-                  <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-1.5 text-xs sm:grid-cols-2 sm:gap-2 sm:text-sm">
                     <div><span className="text-muted-foreground">State:</span> {listing.state}</div>
                     <div><span className="text-muted-foreground">City:</span> {listing.city}</div>
                     <div><span className="text-muted-foreground">Area:</span> {listing.area}</div>
                     {listing.pincode && <div><span className="text-muted-foreground">Pincode:</span> {listing.pincode}</div>}
                   </div>
                   {listing.address && (
-                    <p className="mt-2 text-sm"><span className="text-muted-foreground">Address:</span> {listing.address}</p>
+                    <p className="mt-1.5 text-xs sm:mt-2 sm:text-sm"><span className="text-muted-foreground">Address:</span> {listing.address}</p>
                   )}
                   {listing.google_map_link && (
                     <a
                       href={listing.google_map_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                      className="mt-2.5 inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground active:bg-primary/80 hover:bg-primary/90 sm:mt-3 sm:text-sm"
                     >
-                      <MapPin className="h-4 w-4" /> View on Google Maps
+                      <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> View on Google Maps
                     </a>
                   )}
                 </div>
 
                 {/* Contact */}
-                <div className="mt-4 rounded-lg border border-border p-4">
-                  <h2 className="mb-2 font-semibold text-foreground">Contact</h2>
-                  <p className="text-sm">{listing.owner_name}</p>
-                  <p className="text-sm text-muted-foreground">{listing.phone_number}</p>
-                  <Button className="mt-3 w-full" size="lg" asChild>
+                <div className="mt-3 rounded-lg border border-border p-3 sm:mt-4 sm:p-4">
+                  <h2 className="mb-2 text-sm font-semibold text-foreground sm:text-base">Contact</h2>
+                  <p className="text-xs sm:text-sm">{listing.owner_name}</p>
+                  <p className="text-xs text-muted-foreground sm:text-sm">{listing.phone_number}</p>
+                  <Button className="mt-2.5 w-full sm:mt-3" asChild>
                     <a href={`tel:${listing.phone_number}`}>
                       <Phone className="mr-2 h-4 w-4" /> Call Owner
                     </a>
@@ -391,33 +336,36 @@ const ListingDetail = () => {
 
       {/* Password Verification Dialog */}
       <Dialog open={passwordDialog !== null} onOpenChange={() => { setPasswordDialog(null); setPassword(""); }}>
-        <DialogContent>
+        <DialogContent className="mx-auto max-w-[calc(100vw-2rem)] rounded-lg sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5" />
+            <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Lock className="h-4 w-4 sm:h-5 sm:w-5" />
               {passwordDialog === "delete" ? "Delete Listing" : "Edit Listing"}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-xs sm:text-sm">
               Enter the password you set when posting this listing to {passwordDialog === "delete" ? "delete" : "edit"} it.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-2">
-            <Label htmlFor="verify-password">Listing Password</Label>
+          <div className="py-1 sm:py-2">
+            <Label htmlFor="verify-password" className="text-xs sm:text-sm">Listing Password</Label>
             <Input
               id="verify-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your listing password"
+              className="text-sm"
               onKeyDown={(e) => e.key === "Enter" && verifyPassword(passwordDialog!)}
             />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setPasswordDialog(null); setPassword(""); }}>
+          <DialogFooter className="flex-row gap-2 sm:flex-row">
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => { setPasswordDialog(null); setPassword(""); }}>
               Cancel
             </Button>
             <Button
               variant={passwordDialog === "delete" ? "destructive" : "default"}
+              size="sm"
+              className="flex-1 sm:flex-none"
               onClick={() => verifyPassword(passwordDialog!)}
               disabled={!password || verifying}
             >

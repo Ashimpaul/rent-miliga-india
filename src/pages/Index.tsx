@@ -51,19 +51,19 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative flex min-h-[300px] items-center justify-center overflow-hidden bg-foreground/90 sm:min-h-[420px]">
+        <section className="relative flex min-h-[260px] items-center justify-center overflow-hidden bg-foreground/90 sm:min-h-[420px]">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
             alt="City skyline"
             className="absolute inset-0 h-full w-full object-cover opacity-40"
           />
-          <div className="relative z-10 mx-auto max-w-2xl px-4 text-center">
-            <h1 className="text-2xl font-bold text-white sm:text-3xl md:text-5xl">
+          <div className="relative z-10 mx-auto w-full max-w-2xl px-4 py-8 text-center sm:py-0">
+            <h1 className="text-xl font-bold text-white sm:text-3xl md:text-5xl">
               Find Your Perfect{" "}
               <span className="text-primary">Rental Home</span>{" "}
               in India
             </h1>
-            <p className="mt-3 text-base text-white/70 sm:text-lg">
+            <p className="mt-2 text-sm text-white/70 sm:mt-3 sm:text-base md:text-lg">
               Search thousands of rental listings across every city and town in India
             </p>
             <form onSubmit={handleSearch} className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row">
@@ -72,11 +72,11 @@ const Index = () => {
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search by city, area, or locality..."
+                  placeholder="Search by city, area..."
                   className="h-11 bg-white pl-10 text-foreground"
                 />
               </div>
-              <Button type="submit" size="default" className="h-9 w-full px-4 text-sm sm:h-11 sm:w-auto sm:px-6 sm:text-base">
+              <Button type="submit" className="h-11 w-full px-6 sm:w-auto">
                 Search
               </Button>
             </form>
@@ -84,20 +84,20 @@ const Index = () => {
         </section>
 
         {/* Browse by Category */}
-        <section className="bg-secondary py-8 sm:py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-center text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
+        <section className="bg-secondary py-6 sm:py-12">
+          <div className="container mx-auto px-3 sm:px-4">
+            <h2 className="text-center text-lg font-bold text-foreground sm:text-2xl md:text-3xl">
               Browse by Category
             </h2>
-            <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+            <div className="mt-4 grid grid-cols-3 gap-2 sm:mt-8 sm:gap-4 lg:grid-cols-6">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.type}
                   onClick={() => navigate(`/rentals?type=${cat.type}`)}
-                  className="flex flex-col items-center gap-1.5 rounded-lg border border-border bg-card p-3 shadow-sm transition-all hover:border-primary hover:shadow-md sm:gap-3 sm:rounded-xl sm:p-5"
+                  className="flex flex-col items-center gap-1 rounded-lg border border-border bg-card p-2.5 shadow-sm transition-all active:scale-95 active:border-primary hover:border-primary hover:shadow-md sm:gap-3 sm:rounded-xl sm:p-5"
                 >
                   <cat.icon className="h-5 w-5 text-primary sm:h-8 sm:w-8" />
-                  <span className="text-xs font-medium text-foreground sm:text-sm">{cat.label}</span>
+                  <span className="text-[11px] font-medium text-foreground sm:text-sm">{cat.label}</span>
                 </button>
               ))}
             </div>
@@ -105,10 +105,10 @@ const Index = () => {
         </section>
 
         {/* Recent Listings */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
+        <section className="py-6 sm:py-12">
+          <div className="container mx-auto px-3 sm:px-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
+              <h2 className="text-lg font-bold text-foreground sm:text-2xl md:text-3xl">
                 Recent Listings
               </h2>
               <Button variant="ghost" size="sm" asChild>
@@ -116,15 +116,15 @@ const Index = () => {
               </Button>
             </div>
             {loading ? (
-              <div className="flex justify-center py-16">
+              <div className="flex justify-center py-12 sm:py-16">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : listings.length === 0 ? (
-              <p className="py-16 text-center text-muted-foreground">
+              <p className="py-12 text-center text-muted-foreground sm:py-16">
                 No listings yet. Be the first to post one!
               </p>
             ) : (
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
                 {listings.map((l) => (
                   <ListingCard key={l.id} listing={l} />
                 ))}
@@ -133,20 +133,20 @@ const Index = () => {
           </div>
         </section>
 
-        {/* How It Works — at the end */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
+        {/* How It Works */}
+        <section className="py-6 sm:py-12">
+          <div className="container mx-auto px-3 sm:px-4">
+            <h2 className="text-center text-lg font-bold text-foreground sm:text-2xl md:text-3xl">
               How <span className="text-primary">RentMiliga</span> Works
             </h2>
-            <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            <div className="mt-4 grid gap-3 sm:mt-8 sm:grid-cols-3 sm:gap-6">
               {STEPS.map((s) => (
-                <div key={s.num} className="flex flex-col items-center rounded-xl border border-border bg-card p-6 text-center shadow-sm">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                <div key={s.num} className="flex flex-col items-center rounded-lg border border-border bg-card p-4 text-center shadow-sm sm:rounded-xl sm:p-6">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground sm:h-10 sm:w-10 sm:text-sm">
                     {s.num}
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-foreground">{s.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                  <h3 className="mt-3 text-sm font-semibold text-foreground sm:mt-4 sm:text-lg">{s.title}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground sm:mt-2 sm:text-sm">{s.desc}</p>
                 </div>
               ))}
             </div>
