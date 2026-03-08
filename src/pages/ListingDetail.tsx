@@ -150,9 +150,9 @@ const ListingDetail = () => {
       <Header />
       <main className="flex-1">
         <div className="container mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">
-          <div className="mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
-            <Link to="/" className="inline-flex items-center text-xs text-muted-foreground hover:text-foreground sm:text-sm">
-              <ArrowLeft className="mr-1 h-3.5 w-3.5 sm:h-4 sm:w-4" /> Back to listings
+          <div className="animate-fade-up mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
+            <Link to="/" className="group inline-flex items-center text-xs text-muted-foreground transition-colors duration-200 hover:text-foreground sm:text-sm">
+              <ArrowLeft className="mr-1 h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1 sm:h-4 sm:w-4" /> Back to listings
             </Link>
             {!editing && (
               <div className="flex gap-2">
