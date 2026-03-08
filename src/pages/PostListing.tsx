@@ -36,6 +36,7 @@ const PostListing = () => {
     owner_name: "",
     phone_number: "",
     google_map_link: "",
+    password: "",
   });
 
   const set = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
