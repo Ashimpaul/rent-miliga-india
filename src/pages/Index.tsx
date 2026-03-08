@@ -83,6 +83,27 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Browse by Category */}
+        <section className="bg-secondary py-12">
+          <div className="container mx-auto px-4">
+            <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
+              Browse by Category
+            </h2>
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.type}
+                  onClick={() => navigate(`/rentals?type=${cat.type}`)}
+                  className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary hover:shadow-md"
+                >
+                  <cat.icon className="h-8 w-8 text-primary" />
+                  <span className="text-sm font-medium text-foreground">{cat.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Recent Listings */}
         <section className="py-12">
           <div className="container mx-auto px-4">
@@ -109,27 +130,6 @@ const Index = () => {
                 ))}
               </div>
             )}
-          </div>
-        </section>
-
-        {/* Browse by Category */}
-        <section className="bg-secondary py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
-              Browse by Category
-            </h2>
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.type}
-                  onClick={() => navigate(`/rentals?type=${cat.type}`)}
-                  className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary hover:shadow-md"
-                >
-                  <cat.icon className="h-8 w-8 text-primary" />
-                  <span className="text-sm font-medium text-foreground">{cat.label}</span>
-                </button>
-              ))}
-            </div>
           </div>
         </section>
 
