@@ -66,7 +66,7 @@ const Index = () => {
             <p className="mt-3 text-base text-white/70 sm:text-lg">
               Search thousands of rental listings across every city and town in India
             </p>
-            <form onSubmit={handleSearch} className="mt-6 flex gap-2">
+            <form onSubmit={handleSearch} className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
