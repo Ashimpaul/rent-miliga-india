@@ -7,13 +7,13 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
   const imageUrl = listing.image1 || "/placeholder.svg";
 
   return (
-    <div className="group overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-shadow active:shadow-md hover:shadow-md">
+    <div className="group overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]">
       <Link to={`/listing/${listing.id}`}>
         <div className="aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
           <img
             src={imageUrl}
             alt={listing.title}
-            className="h-full w-full object-cover transition-transform group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
             loading="lazy"
           />
         </div>
@@ -24,7 +24,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           {listing.rent.toLocaleString("en-IN")}/mo
         </div>
         <Link to={`/listing/${listing.id}`}>
-          <h3 className="mt-1 text-sm font-semibold text-foreground line-clamp-1 hover:underline sm:text-base">
+          <h3 className="mt-1 text-sm font-semibold text-foreground line-clamp-1 transition-colors duration-200 hover:text-primary hover:underline sm:text-base">
             {listing.title}
           </h3>
         </Link>
@@ -36,7 +36,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         {listing.description && (
           <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2 sm:mt-2 sm:text-sm">{listing.description}</p>
         )}
-        <Button size="sm" className="mt-2.5 w-full text-xs sm:mt-3 sm:text-sm" asChild>
+        <Button size="sm" className="mt-2.5 w-full text-xs transition-all duration-300 active:scale-95 hover:shadow-md sm:mt-3 sm:text-sm" asChild>
           <a href={`tel:${listing.phone_number}`}>
             <Phone className="mr-1 h-3 w-3" /> Call Owner
           </a>
