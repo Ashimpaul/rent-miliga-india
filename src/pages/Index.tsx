@@ -76,7 +76,7 @@ const Index = () => {
                   className="h-11 bg-white pl-10 text-foreground"
                 />
               </div>
-              <Button type="submit" size="lg" className="h-11 w-full px-6 sm:w-auto">
+              <Button type="submit" size="default" className="h-9 w-full px-4 text-sm sm:h-11 sm:w-auto sm:px-6 sm:text-base">
                 Search
               </Button>
             </form>
