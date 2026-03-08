@@ -6,6 +6,8 @@ import Index from "./pages/Index";
 import Rentals from "./pages/Rentals";
 import PostListing from "./pages/PostListing";
 import ListingDetail from "./pages/ListingDetail";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +22,8 @@ const App = () => (
           <Route path="/rentals" element={<Rentals />} />
           <Route path="/post" element={<PostListing />} />
           <Route path="/listing/:id" element={<ListingDetail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
