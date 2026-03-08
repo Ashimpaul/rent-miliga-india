@@ -194,7 +194,7 @@ const ListingDetail = () => {
       <Header />
       <main className="flex-1">
         <div className="container mx-auto max-w-3xl px-4 py-6">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
               <ArrowLeft className="mr-1 h-4 w-4" /> Back to listings
             </Link>
@@ -203,6 +203,7 @@ const ListingDetail = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   onClick={() => setPasswordDialog("edit")}
                 >
                   <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
@@ -210,6 +211,7 @@ const ListingDetail = () => {
                 <Button
                   variant="destructive"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   onClick={() => setPasswordDialog("delete")}
                 >
                   <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
