@@ -112,6 +112,16 @@ const ListingDetail = () => {
               {listing.address && (
                 <p className="mt-2 text-sm"><span className="text-muted-foreground">Address:</span> {listing.address}</p>
               )}
+              {(listing as any).google_map_link && (
+                <a
+                  href={(listing as any).google_map_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                >
+                  <MapPin className="h-4 w-4" /> View on Google Maps
+                </a>
+              )}
             </div>
 
             {/* Contact */}
