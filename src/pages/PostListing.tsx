@@ -74,6 +74,7 @@ const PostListing = () => {
         image1: urls[0] || null,
         image2: urls[1] || null,
         image3: urls[2] || null,
+        google_map_link: form.google_map_link || null,
       });
       if (error) throw error;
       toast.success("Listing posted successfully!");
