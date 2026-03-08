@@ -350,7 +350,7 @@ const ListingDetail = () => {
                   <h2 className="mb-2 font-semibold text-foreground flex items-center gap-1">
                     <MapPin className="h-4 w-4" /> Location
                   </h2>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
                     <div><span className="text-muted-foreground">State:</span> {listing.state}</div>
                     <div><span className="text-muted-foreground">City:</span> {listing.city}</div>
                     <div><span className="text-muted-foreground">Area:</span> {listing.area}</div>
