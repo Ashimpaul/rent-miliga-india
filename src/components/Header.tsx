@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, MoreVertical, HelpCircle, Info, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 const NAV_ITEMS = [
   { path: "/", label: "Home", icon: Home },
@@ -13,6 +21,7 @@ const NAV_ITEMS = [
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = (path: string) => location.pathname === path;
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
@@ -44,26 +53,65 @@ const Header = () => {
               </Link>
             </Button>
           ))}
+
           <Button
             variant="ghost"
-            size="icon"
-            className="ml-1 h-8 w-8 transition-transform duration-300 hover:rotate-180"
-            onClick={toggle}
+            size="sm"
+            className="transition-all duration-200 hover:scale-105"
+            asChild
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            <Link to="/help">
+              <HelpCircle className="mr-1.5 h-3.5 w-3.5" /> Help
+            </Link>
           </Button>
+
+          {/* Three-dot menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="ml-1 h-8 w-8">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem onClick={() => navigate("/about")} className="cursor-pointer gap-2">
+                <Info className="h-4 w-4" /> About Us
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/contact")} className="cursor-pointer gap-2">
+                <Mail className="h-4 w-4" /> Contact Us
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={toggle} className="cursor-pointer gap-2">
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {theme === "dark" ? "Light Mode" : "Dark Mode"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Mobile nav */}
         <div className="flex items-center gap-1 sm:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 transition-transform duration-300 hover:rotate-180"
-            onClick={toggle}
-          >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
+          {/* Three-dot menu (mobile) */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem onClick={() => navigate("/about")} className="cursor-pointer gap-2">
+                <Info className="h-4 w-4" /> About Us
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/contact")} className="cursor-pointer gap-2">
+                <Mail className="h-4 w-4" /> Contact Us
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={toggle} className="cursor-pointer gap-2">
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {theme === "dark" ? "Light Mode" : "Dark Mode"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -73,7 +121,7 @@ const Header = () => {
             <SheetContent side="right" className="w-64 pt-10">
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <nav className="flex flex-col gap-2">
-                {NAV_ITEMS.map((item, i) => (
+                {[...NAV_ITEMS, { path: "/help", label: "Help", icon: HelpCircle }].map((item, i) => (
                   <Button
                     key={item.path}
                     variant={isActive(item.path) ? "default" : "ghost"}
