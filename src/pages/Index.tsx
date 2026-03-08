@@ -160,6 +160,34 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Promotional Banner */}
+        <section className="bg-primary py-8 sm:py-14">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="animate-fade-up text-lg font-bold text-primary-foreground sm:text-2xl md:text-3xl">
+              Ready to Find Your Dream Home?
+            </h2>
+            <p className="mx-auto mt-2 max-w-xl animate-fade-up text-xs text-primary-foreground/80 opacity-0 stagger-1 sm:mt-3 sm:text-sm">
+              Join thousands of happy tenants who found their perfect rental through RentMiliga. Post your property or start browsing — it's completely free!
+            </p>
+            <div className="mt-5 flex animate-fade-up flex-col items-center justify-center gap-3 opacity-0 stagger-2 sm:mt-7 sm:flex-row">
+              <Button
+                onClick={() => navigate("/rentals")}
+                variant="secondary"
+                className="w-full gap-2 rounded-full px-6 font-semibold shadow-lg transition-all duration-300 active:scale-95 hover:shadow-xl sm:w-auto"
+              >
+                <Search className="h-4 w-4" /> Browse Rentals
+              </Button>
+              <Button
+                onClick={() => navigate("/post")}
+                variant="outline"
+                className="w-full gap-2 rounded-full border-primary-foreground/30 px-6 font-semibold text-primary-foreground transition-all duration-300 active:scale-95 hover:bg-primary-foreground/10 sm:w-auto"
+              >
+                <ArrowRight className="h-4 w-4" /> Post Free Listing
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
