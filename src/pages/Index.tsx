@@ -188,6 +188,22 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Ad Space */}
+        <section className="border-t border-border bg-muted/20 py-6 sm:py-10">
+          <div className="container mx-auto px-3 sm:px-4">
+            <div className="flex min-h-[120px] items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 p-4 sm:min-h-[200px] sm:rounded-2xl">
+              <div className="text-center">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 sm:text-sm">
+                  Advertisement
+                </p>
+                <p className="mt-1 text-[10px] text-muted-foreground/40 sm:text-xs">
+                  Your ad could be here — contact us for details
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
