@@ -278,7 +278,7 @@ const ListingDetail = () => {
               )}
 
               {/* Details */}
-              <div className="mt-4 sm:mt-6">
+              <div className="mt-4 animate-fade-up sm:mt-6">
                 <h1 className="text-lg font-bold text-foreground sm:text-2xl">{listing.title}</h1>
                 <div className="mt-1.5 flex items-center gap-1 text-lg font-bold text-primary sm:mt-2 sm:text-2xl">
                   <IndianRupee className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -291,7 +291,7 @@ const ListingDetail = () => {
                 )}
 
                 {/* Location */}
-                <div className="mt-4 rounded-lg border border-border p-3 sm:mt-6 sm:p-4">
+                <div className="mt-4 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-1 transition-all duration-300 hover:shadow-md sm:mt-6 sm:p-4">
                   <h2 className="mb-2 flex items-center gap-1 text-sm font-semibold text-foreground sm:text-base">
                     <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
                   </h2>
