@@ -253,11 +253,11 @@ const ListingDetail = () => {
             <>
               {/* Image Gallery */}
               {images.length > 0 && (
-                <div className="overflow-hidden rounded-lg">
+                <div className="animate-scale-up overflow-hidden rounded-lg">
                   <img
                     src={images[activeImage]}
                     alt={listing.title}
-                    className="aspect-[4/3] w-full object-cover sm:aspect-video"
+                    className="aspect-[4/3] w-full object-cover transition-all duration-500 sm:aspect-video"
                   />
                   {images.length > 1 && (
                     <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
