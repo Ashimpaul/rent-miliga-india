@@ -315,12 +315,12 @@ const ListingDetail = () => {
                     className="aspect-video w-full object-cover"
                   />
                   {images.length > 1 && (
-                    <div className="mt-2 flex gap-2">
+                    <div className="mt-2 flex gap-2 overflow-x-auto">
                       {images.map((img, i) => (
                         <button
                           key={i}
                           onClick={() => setActiveImage(i)}
-                          className={`h-16 w-20 overflow-hidden rounded-md border-2 ${
+                          className={`h-14 w-16 shrink-0 overflow-hidden rounded-md border-2 sm:h-16 sm:w-20 ${
                             i === activeImage ? "border-primary" : "border-border"
                           }`}
                         >
