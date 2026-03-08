@@ -181,6 +181,18 @@ const PostListing = () => {
               </div>
             </fieldset>
 
+            {/* Password for Edit/Delete */}
+            <fieldset className="space-y-4 rounded-lg border border-border p-4">
+              <legend className="px-2 text-sm font-semibold text-foreground">Security</legend>
+              <div>
+                <Label htmlFor="password">Listing Password *</Label>
+                <Input id="password" type="password" value={form.password} onChange={(e) => set("password", e.target.value)} placeholder="Set a password to edit/delete later" />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Remember this password — you'll need it to edit or delete your listing later.
+                </p>
+              </div>
+            </fieldset>
+
             {/* Images */}
             <fieldset className="space-y-4 rounded-lg border border-border p-4">
               <legend className="px-2 text-sm font-semibold text-foreground">Images</legend>
