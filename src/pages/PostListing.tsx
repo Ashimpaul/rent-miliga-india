@@ -50,7 +50,13 @@ const PostListing = () => {
   const set = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []).slice(0, 3);
+    const files = Array.from(e.target.files || []);
+    if (files.length > 3) {
+      setShowPremiumDialog(true);
+      setImages(files.slice(0, 3));
+      e.target.value = "";
+      return;
+    }
     setImages(files);
   };
 
