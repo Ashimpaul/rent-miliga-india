@@ -21,6 +21,7 @@ export type Database = {
           city: string
           created_at: string
           description: string | null
+          google_map_link: string | null
           id: string
           image1: string | null
           image2: string | null
@@ -39,6 +40,7 @@ export type Database = {
           city: string
           created_at?: string
           description?: string | null
+          google_map_link?: string | null
           id?: string
           image1?: string | null
           image2?: string | null
@@ -57,6 +59,7 @@ export type Database = {
           city?: string
           created_at?: string
           description?: string | null
+          google_map_link?: string | null
           id?: string
           image1?: string | null
           image2?: string | null
