@@ -51,14 +51,14 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative flex min-h-[420px] items-center justify-center overflow-hidden bg-foreground/90">
+        <section className="relative flex min-h-[300px] items-center justify-center overflow-hidden bg-foreground/90 sm:min-h-[420px]">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
             alt="City skyline"
             className="absolute inset-0 h-full w-full object-cover opacity-40"
           />
           <div className="relative z-10 mx-auto max-w-2xl px-4 text-center">
-            <h1 className="text-3xl font-bold text-white sm:text-5xl">
+            <h1 className="text-2xl font-bold text-white sm:text-3xl md:text-5xl">
               Find Your Perfect{" "}
               <span className="text-primary">Rental Home</span>{" "}
               in India
@@ -66,7 +66,7 @@ const Index = () => {
             <p className="mt-3 text-base text-white/70 sm:text-lg">
               Search thousands of rental listings across every city and town in India
             </p>
-            <form onSubmit={handleSearch} className="mt-6 flex gap-2">
+            <form onSubmit={handleSearch} className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -76,7 +76,7 @@ const Index = () => {
                   className="h-11 bg-white pl-10 text-foreground"
                 />
               </div>
-              <Button type="submit" size="lg" className="h-11 px-6">
+              <Button type="submit" size="lg" className="h-11 w-full px-6 sm:w-auto">
                 Search
               </Button>
             </form>

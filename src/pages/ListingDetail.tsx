@@ -194,7 +194,7 @@ const ListingDetail = () => {
       <Header />
       <main className="flex-1">
         <div className="container mx-auto max-w-3xl px-4 py-6">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
               <ArrowLeft className="mr-1 h-4 w-4" /> Back to listings
             </Link>
@@ -203,6 +203,7 @@ const ListingDetail = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   onClick={() => setPasswordDialog("edit")}
                 >
                   <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
@@ -210,6 +211,7 @@ const ListingDetail = () => {
                 <Button
                   variant="destructive"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   onClick={() => setPasswordDialog("delete")}
                 >
                   <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
@@ -313,12 +315,12 @@ const ListingDetail = () => {
                     className="aspect-video w-full object-cover"
                   />
                   {images.length > 1 && (
-                    <div className="mt-2 flex gap-2">
+                    <div className="mt-2 flex gap-2 overflow-x-auto">
                       {images.map((img, i) => (
                         <button
                           key={i}
                           onClick={() => setActiveImage(i)}
-                          className={`h-16 w-20 overflow-hidden rounded-md border-2 ${
+                          className={`h-14 w-16 shrink-0 overflow-hidden rounded-md border-2 sm:h-16 sm:w-20 ${
                             i === activeImage ? "border-primary" : "border-border"
                           }`}
                         >
@@ -332,8 +334,8 @@ const ListingDetail = () => {
 
               {/* Details */}
               <div className="mt-6">
-                <h1 className="text-2xl font-bold text-foreground">{listing.title}</h1>
-                <div className="mt-2 flex items-center gap-1 text-2xl font-bold text-primary">
+                <h1 className="text-xl font-bold text-foreground sm:text-2xl">{listing.title}</h1>
+                <div className="mt-2 flex items-center gap-1 text-xl font-bold text-primary sm:text-2xl">
                   <IndianRupee className="h-5 w-5" />
                   {listing.rent.toLocaleString("en-IN")}/mo
                 </div>
@@ -348,7 +350,7 @@ const ListingDetail = () => {
                   <h2 className="mb-2 font-semibold text-foreground flex items-center gap-1">
                     <MapPin className="h-4 w-4" /> Location
                   </h2>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
                     <div><span className="text-muted-foreground">State:</span> {listing.state}</div>
                     <div><span className="text-muted-foreground">City:</span> {listing.city}</div>
                     <div><span className="text-muted-foreground">Area:</span> {listing.area}</div>

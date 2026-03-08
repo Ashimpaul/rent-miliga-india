@@ -1,12 +1,21 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+
+const NAV_ITEMS = [
+  { path: "/", label: "Home", icon: Home },
+  { path: "/rentals", label: "Find Rentals", icon: Search },
+  { path: "/post", label: "Post Property", icon: PlusCircle },
+];
 
 const Header = () => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
   const { theme, toggle } = useTheme();
+  const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-md">
@@ -19,20 +28,52 @@ const Header = () => {
             Rent<span className="text-primary">Miliga</span>
           </span>
         </Link>
-        <nav className="flex items-center gap-1">
-          <Button variant={isActive("/") ? "default" : "ghost"} size="sm" asChild>
-            <Link to="/"><Home className="mr-1.5 h-3.5 w-3.5" /> Home</Link>
-          </Button>
-          <Button variant={isActive("/rentals") ? "default" : "ghost"} size="sm" asChild>
-            <Link to="/rentals"><Search className="mr-1.5 h-3.5 w-3.5" /> Find Rentals</Link>
-          </Button>
-          <Button variant={isActive("/post") ? "default" : "ghost"} size="sm" asChild>
-            <Link to="/post"><PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Post Property</Link>
-          </Button>
+
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-1 sm:flex">
+          {NAV_ITEMS.map((item) => (
+            <Button key={item.path} variant={isActive(item.path) ? "default" : "ghost"} size="sm" asChild>
+              <Link to={item.path}>
+                <item.icon className="mr-1.5 h-3.5 w-3.5" /> {item.label}
+              </Link>
+            </Button>
+          ))}
           <Button variant="ghost" size="icon" className="ml-1 h-8 w-8" onClick={toggle}>
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
         </nav>
+
+        {/* Mobile nav */}
+        <div className="flex items-center gap-1 sm:hidden">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64 pt-10">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <nav className="flex flex-col gap-2">
+                {NAV_ITEMS.map((item) => (
+                  <Button
+                    key={item.path}
+                    variant={isActive(item.path) ? "default" : "ghost"}
+                    className="justify-start"
+                    asChild
+                    onClick={() => setOpen(false)}
+                  >
+                    <Link to={item.path}>
+                      <item.icon className="mr-2 h-4 w-4" /> {item.label}
+                    </Link>
+                  </Button>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

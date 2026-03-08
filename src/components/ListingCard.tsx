@@ -9,7 +9,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
   return (
     <div className="group overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
       <Link to={`/listing/${listing.id}`}>
-        <div className="aspect-[4/3] overflow-hidden">
+        <div className="aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
           <img
             src={imageUrl}
             alt={listing.title}
