@@ -27,6 +27,7 @@ export type Database = {
           image2: string | null
           image3: string | null
           owner_name: string
+          password: string
           phone_number: string
           pincode: string | null
           property_type: string
@@ -46,6 +47,7 @@ export type Database = {
           image2?: string | null
           image3?: string | null
           owner_name: string
+          password?: string
           phone_number: string
           pincode?: string | null
           property_type: string
@@ -65,6 +67,7 @@ export type Database = {
           image2?: string | null
           image3?: string | null
           owner_name?: string
+          password?: string
           phone_number?: string
           pincode?: string | null
           property_type?: string
