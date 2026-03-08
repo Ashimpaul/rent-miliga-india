@@ -73,7 +73,7 @@ const Index = () => {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search by city, area..."
-                  className="h-11 bg-white pl-10 text-foreground dark:text-foreground placeholder:text-foreground/50 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/10"
+                  className="h-11 bg-white pl-10 !text-gray-900 placeholder:!text-gray-500 transition-shadow duration-300 focus:shadow-lg focus:shadow-primary/10"
                 />
               </div>
               <Button type="submit" className="h-9 w-full gap-1.5 rounded-full px-5 text-xs font-semibold shadow-md shadow-primary/25 transition-all duration-300 active:scale-95 hover:shadow-lg hover:shadow-primary/30 sm:h-11 sm:w-auto sm:gap-2 sm:px-6 sm:text-sm">
