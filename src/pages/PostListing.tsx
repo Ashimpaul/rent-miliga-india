@@ -31,6 +31,7 @@ const PostListing = () => {
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [showPremiumDialog, setShowPremiumDialog] = useState(false);
+  const [premiumReason, setPremiumReason] = useState<"images" | "property_type">("images");
   const [form, setForm] = useState({
     title: "",
     property_type: "",
@@ -47,11 +48,21 @@ const PostListing = () => {
     password: "",
   });
 
-  const set = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
+  const PREMIUM_TYPES = ["commercial", "apartment"];
+
+  const set = (key: string, value: string) => {
+    if (key === "property_type" && PREMIUM_TYPES.includes(value)) {
+      setPremiumReason("property_type");
+      setShowPremiumDialog(true);
+      return;
+    }
+    setForm((f) => ({ ...f, [key]: value }));
+  };
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 3) {
+      setPremiumReason("images");
       setShowPremiumDialog(true);
       setImages(files.slice(0, 3));
       e.target.value = "";
@@ -224,25 +235,37 @@ const PostListing = () => {
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <Crown className="h-5 w-5 text-yellow-500" />
+                    <Crown className="h-5 w-5 text-amber-500" />
                     Upgrade to Premium
                   </DialogTitle>
                   <DialogDescription>
-                    Free listings support up to 3 images. To upload more images and make your listing stand out, upgrade to our premium plan.
+                    {premiumReason === "images"
+                      ? "Free listings support up to 3 images. Upgrade to upload more images and make your listing stand out."
+                      : "Listing commercial properties and apartments is a premium feature. Upgrade to unlock these property types."}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
                   <p className="text-2xl font-bold text-foreground">₹99</p>
                   <p className="text-sm text-muted-foreground">one-time per listing</p>
                   <ul className="mt-3 space-y-1 text-sm text-muted-foreground text-left">
-                    <li>✓ Upload up to 10 images</li>
-                    <li>✓ Featured badge on listing</li>
-                    <li>✓ Priority in search results</li>
+                    {premiumReason === "images" ? (
+                      <>
+                        <li>✓ Upload up to 10 images</li>
+                        <li>✓ Featured badge on listing</li>
+                        <li>✓ Priority in search results</li>
+                      </>
+                    ) : (
+                      <>
+                        <li>✓ List apartments &amp; commercial properties</li>
+                        <li>✓ Upload up to 10 images</li>
+                        <li>✓ Featured badge &amp; priority placement</li>
+                      </>
+                    )}
                   </ul>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" className="flex-1" onClick={() => setShowPremiumDialog(false)}>
-                    Continue with 3
+                    {premiumReason === "images" ? "Continue with 3" : "Pick another type"}
                   </Button>
                   <Button className="flex-1" onClick={() => { toast.info("Payment integration coming soon!"); setShowPremiumDialog(false); }}>
                     Upgrade Now
