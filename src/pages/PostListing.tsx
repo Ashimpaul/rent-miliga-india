@@ -147,6 +147,13 @@ const PostListing = () => {
                 <Label htmlFor="pincode">Pincode</Label>
                 <Input id="pincode" value={form.pincode} onChange={(e) => set("pincode", e.target.value)} maxLength={6} />
               </div>
+              <div>
+                <Label htmlFor="google_map_link">Google Maps Link</Label>
+                <Input id="google_map_link" value={form.google_map_link} onChange={(e) => set("google_map_link", e.target.value)} placeholder="Paste Google Maps link of your property" />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Open Google Maps → Find your property → Click "Share" → Copy link
+                </p>
+              </div>
             </fieldset>
 
             {/* Contact */}
