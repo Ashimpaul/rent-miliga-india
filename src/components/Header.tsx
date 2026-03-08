@@ -121,7 +121,12 @@ const Header = () => {
             <SheetContent side="right" className="w-64 pt-10">
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <nav className="flex flex-col gap-2">
-                {[...NAV_ITEMS, { path: "/help", label: "Help", icon: HelpCircle }].map((item, i) => (
+                {[
+                  ...NAV_ITEMS,
+                  { path: "/help", label: "Help", icon: HelpCircle },
+                  { path: "/about", label: "About Us", icon: Info },
+                  { path: "/contact", label: "Contact Us", icon: Mail },
+                ].map((item, i) => (
                   <Button
                     key={item.path}
                     variant={isActive(item.path) ? "default" : "ghost"}
