@@ -317,11 +317,11 @@ const ListingDetail = () => {
                 </div>
 
                 {/* Contact */}
-                <div className="mt-3 rounded-lg border border-border p-3 sm:mt-4 sm:p-4">
+                <div className="mt-3 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-2 transition-all duration-300 hover:shadow-md sm:mt-4 sm:p-4">
                   <h2 className="mb-2 text-sm font-semibold text-foreground sm:text-base">Contact</h2>
                   <p className="text-xs sm:text-sm">{listing.owner_name}</p>
                   <p className="text-xs text-muted-foreground sm:text-sm">{listing.phone_number}</p>
-                  <Button className="mt-2.5 w-full sm:mt-3" asChild>
+                  <Button className="mt-2.5 w-full transition-all duration-300 active:scale-95 hover:shadow-md sm:mt-3" asChild>
                     <a href={`tel:${listing.phone_number}`}>
                       <Phone className="mr-2 h-4 w-4" /> Call Owner
                     </a>
