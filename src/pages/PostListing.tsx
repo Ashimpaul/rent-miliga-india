@@ -30,6 +30,7 @@ const PostListing = () => {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<File[]>([]);
+  const [showPremiumDialog, setShowPremiumDialog] = useState(false);
   const [form, setForm] = useState({
     title: "",
     property_type: "",
