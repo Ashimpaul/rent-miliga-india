@@ -150,9 +150,9 @@ const ListingDetail = () => {
       <Header />
       <main className="flex-1">
         <div className="container mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">
-          <div className="mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
-            <Link to="/" className="inline-flex items-center text-xs text-muted-foreground hover:text-foreground sm:text-sm">
-              <ArrowLeft className="mr-1 h-3.5 w-3.5 sm:h-4 sm:w-4" /> Back to listings
+          <div className="animate-fade-up mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
+            <Link to="/" className="group inline-flex items-center text-xs text-muted-foreground transition-colors duration-200 hover:text-foreground sm:text-sm">
+              <ArrowLeft className="mr-1 h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1 sm:h-4 sm:w-4" /> Back to listings
             </Link>
             {!editing && (
               <div className="flex gap-2">
@@ -253,11 +253,11 @@ const ListingDetail = () => {
             <>
               {/* Image Gallery */}
               {images.length > 0 && (
-                <div className="overflow-hidden rounded-lg">
+                <div className="animate-scale-up overflow-hidden rounded-lg">
                   <img
                     src={images[activeImage]}
                     alt={listing.title}
-                    className="aspect-[4/3] w-full object-cover sm:aspect-video"
+                    className="aspect-[4/3] w-full object-cover transition-all duration-500 sm:aspect-video"
                   />
                   {images.length > 1 && (
                     <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
@@ -278,7 +278,7 @@ const ListingDetail = () => {
               )}
 
               {/* Details */}
-              <div className="mt-4 sm:mt-6">
+              <div className="mt-4 animate-fade-up sm:mt-6">
                 <h1 className="text-lg font-bold text-foreground sm:text-2xl">{listing.title}</h1>
                 <div className="mt-1.5 flex items-center gap-1 text-lg font-bold text-primary sm:mt-2 sm:text-2xl">
                   <IndianRupee className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -291,7 +291,7 @@ const ListingDetail = () => {
                 )}
 
                 {/* Location */}
-                <div className="mt-4 rounded-lg border border-border p-3 sm:mt-6 sm:p-4">
+                <div className="mt-4 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-1 transition-all duration-300 hover:shadow-md sm:mt-6 sm:p-4">
                   <h2 className="mb-2 flex items-center gap-1 text-sm font-semibold text-foreground sm:text-base">
                     <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
                   </h2>
@@ -317,11 +317,11 @@ const ListingDetail = () => {
                 </div>
 
                 {/* Contact */}
-                <div className="mt-3 rounded-lg border border-border p-3 sm:mt-4 sm:p-4">
+                <div className="mt-3 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-2 transition-all duration-300 hover:shadow-md sm:mt-4 sm:p-4">
                   <h2 className="mb-2 text-sm font-semibold text-foreground sm:text-base">Contact</h2>
                   <p className="text-xs sm:text-sm">{listing.owner_name}</p>
                   <p className="text-xs text-muted-foreground sm:text-sm">{listing.phone_number}</p>
-                  <Button className="mt-2.5 w-full sm:mt-3" asChild>
+                  <Button className="mt-2.5 w-full transition-all duration-300 active:scale-95 hover:shadow-md sm:mt-3" asChild>
                     <a href={`tel:${listing.phone_number}`}>
                       <Phone className="mr-2 h-4 w-4" /> Call Owner
                     </a>

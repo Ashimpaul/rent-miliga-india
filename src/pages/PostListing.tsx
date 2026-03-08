@@ -127,10 +127,10 @@ const PostListing = () => {
       <Header />
       <main className="flex-1">
         <div className="container mx-auto max-w-2xl px-3 py-5 sm:px-4 sm:py-8">
-          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Post a Rental Listing</h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Fill in the details to list your property</p>
+          <h1 className="animate-fade-up text-lg font-bold text-foreground sm:text-2xl">Post a Rental Listing</h1>
+          <p className="animate-fade-up mt-1 text-xs text-muted-foreground opacity-0 stagger-1 sm:text-sm">Fill in the details to list your property</p>
 
-          <form onSubmit={handleSubmit} className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
+          <form onSubmit={handleSubmit} className="mt-4 animate-fade-up space-y-4 opacity-0 stagger-2 sm:mt-6 sm:space-y-6">
             {/* Property Info */}
             <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
               <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Property Information</legend>
