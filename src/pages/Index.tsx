@@ -58,7 +58,7 @@ const Index = () => {
             className="absolute inset-0 h-full w-full object-cover opacity-40"
           />
           <div className="relative z-10 mx-auto max-w-2xl px-4 text-center">
-            <h1 className="text-3xl font-bold text-white sm:text-5xl">
+            <h1 className="text-2xl font-bold text-white sm:text-3xl md:text-5xl">
               Find Your Perfect{" "}
               <span className="text-primary">Rental Home</span>{" "}
               in India
