@@ -62,6 +62,7 @@ const PostListing = () => {
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 3) {
+      setPremiumReason("images");
       setShowPremiumDialog(true);
       setImages(files.slice(0, 3));
       e.target.value = "";
