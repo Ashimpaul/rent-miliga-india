@@ -17,5 +17,6 @@ export type Listing = {
   image1: string | null;
   image2: string | null;
   image3: string | null;
+  google_map_link: string | null;
   created_at: string;
 };
