@@ -58,12 +58,12 @@ const Header = () => {
         {/* Mobile nav */}
         <div className="flex items-center gap-1 sm:hidden">
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 border-border"
             onClick={toggle}
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark" ? <Sun className="h-4 w-4 text-foreground" /> : <Moon className="h-4 w-4 text-foreground" />}
           </Button>
 
           <Sheet open={open} onOpenChange={setOpen}>
