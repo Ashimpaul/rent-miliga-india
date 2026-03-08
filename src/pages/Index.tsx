@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ListingCard from "@/components/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Home, Building2, Hotel, Warehouse, Building, Store } from "lucide-react";
+import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight } from "lucide-react";
 
 const CATEGORIES = [
   { label: "Rooms", icon: Home, type: "room" },
@@ -23,7 +25,21 @@ const STEPS = [
 
 const Index = () => {
   const [search, setSearch] = useState("");
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase
+      .from("listings")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(8)
+      .then(({ data }) => {
+        setListings(data || []);
+        setLoading(false);
+      });
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,33 +83,42 @@ const Index = () => {
           </div>
         </section>
 
-        {/* How It Works */}
-        <section className="py-16">
+        {/* Recent Listings */}
+        <section className="py-12">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
-              How <span className="text-primary">RentMiliga</span> Works
-            </h2>
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
-              {STEPS.map((s) => (
-                <div key={s.num} className="flex flex-col items-center rounded-xl border border-border bg-card p-6 text-center shadow-sm">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-                    {s.num}
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-foreground">{s.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-                </div>
-              ))}
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
+                Recent Listings
+              </h2>
+              <Button variant="ghost" size="sm" asChild>
+                <a href="/rentals">View all <ArrowRight className="ml-1 h-4 w-4" /></a>
+              </Button>
             </div>
+            {loading ? (
+              <div className="flex justify-center py-16">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : listings.length === 0 ? (
+              <p className="py-16 text-center text-muted-foreground">
+                No listings yet. Be the first to post one!
+              </p>
+            ) : (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {listings.map((l) => (
+                  <ListingCard key={l.id} listing={l} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
         {/* Browse by Category */}
-        <section className="bg-secondary py-16">
+        <section className="bg-secondary py-12">
           <div className="container mx-auto px-4">
             <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
               Browse by Category
             </h2>
-            <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.type}
@@ -103,6 +128,26 @@ const Index = () => {
                   <cat.icon className="h-8 w-8 text-primary" />
                   <span className="text-sm font-medium text-foreground">{cat.label}</span>
                 </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works — at the end */}
+        <section className="py-12">
+          <div className="container mx-auto px-4">
+            <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
+              How <span className="text-primary">RentMiliga</span> Works
+            </h2>
+            <div className="mt-8 grid gap-6 sm:grid-cols-3">
+              {STEPS.map((s) => (
+                <div key={s.num} className="flex flex-col items-center rounded-xl border border-border bg-card p-6 text-center shadow-sm">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                    {s.num}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-foreground">{s.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                </div>
               ))}
             </div>
           </div>
