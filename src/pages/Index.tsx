@@ -55,7 +55,7 @@ const Index = () => {
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
             alt="City skyline"
-            className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-[20s] hover:scale-110"
+            className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-[20000ms] hover:scale-110"
           />
           <div className="relative z-10 mx-auto w-full max-w-2xl px-4 py-8 text-center sm:py-0">
             <h1 className="animate-fade-up text-xl font-bold text-white sm:text-3xl md:text-5xl">

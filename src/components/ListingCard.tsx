@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { Phone, MapPin, IndianRupee } from "lucide-react";
+import { Phone, MapPin, IndianRupee, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/lib/supabase";
+import { useAuth } from "../contexts/AuthContext";
 
-const ListingCard = ({ listing }: { listing: Listing }) => {
+const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: string) => void }) => {
   const imageUrl = listing.image1 || "/placeholder.svg";
+  const { isAdmin } = useAuth();
 
   return (
     <div className="group overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]">
@@ -36,11 +38,23 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         {listing.description && (
           <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2 sm:mt-2 sm:text-sm">{listing.description}</p>
         )}
-        <Button size="sm" className="mt-2.5 w-full text-xs transition-all duration-300 active:scale-95 hover:shadow-md sm:mt-3 sm:text-sm" asChild>
-          <a href={`tel:${listing.phone_number}`}>
-            <Phone className="mr-1 h-3 w-3" /> Call Owner
-          </a>
-        </Button>
+        <div className="mt-2.5 flex gap-2 sm:mt-3">
+          <Button size="sm" className="w-full text-xs transition-all duration-300 active:scale-95 hover:shadow-md sm:text-sm" asChild>
+            <a href={`tel:${listing.phone_number}`}>
+              <Phone className="mr-1 h-3 w-3" /> Call Owner
+            </a>
+          </Button>
+          {isAdmin && onDelete && (
+            <Button
+              size="sm"
+              variant="destructive"
+              className="text-xs transition-all duration-300 active:scale-95 hover:shadow-md sm:text-sm"
+              onClick={() => onDelete(listing.id)}
+            >
+              <Trash2 className="mr-1 h-3 w-3" /> Delete
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

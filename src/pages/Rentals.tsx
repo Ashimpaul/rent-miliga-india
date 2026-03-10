@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
@@ -41,6 +41,13 @@ const Rentals = () => {
     });
   }, [listings, filters]);
 
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from("listings").delete().eq("id", id);
+    if (!error) {
+      setListings((prev) => prev.filter((l) => l.id !== id));
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -64,7 +71,7 @@ const Rentals = () => {
           ) : (
             <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((l) => (
-                <ListingCard key={l.id} listing={l} />
+                <ListingCard key={l.id} listing={l} onDelete={handleDelete} />
               ))}
             </div>
           )}

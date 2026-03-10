@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { useAuth } from "../contexts/AuthContext";
 
 const NAV_ITEMS = [
   { path: "/", label: "Home", icon: Home },
@@ -16,6 +17,7 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
+  const { isAdmin, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 animate-fade-in border-b border-border bg-card/95 backdrop-blur-md">
@@ -44,6 +46,17 @@ const Header = () => {
               </Link>
             </Button>
           ))}
+
+          {isAdmin && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="transition-all duration-200 hover:scale-105"
+              onClick={logout}
+            >
+              <LogOut className="mr-1.5 h-3.5 w-3.5" /> Logout
+            </Button>
+          )}
 
           <Button
             variant="ghost"
@@ -89,6 +102,19 @@ const Header = () => {
                     </Link>
                   </Button>
                 ))}
+                {isAdmin && (
+                  <Button
+                    variant="ghost"
+                    className="animate-slide-up justify-start opacity-0"
+                    style={{ animationDelay: `${NAV_ITEMS.length * 0.1}s` }}
+                    onClick={() => {
+                      logout();
+                      setOpen(false);
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                  </Button>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
@@ -24,12 +24,14 @@ import {
 } from "@/components/ui/dialog";
 import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "../contexts/AuthContext";
 
 const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "commercial"];
 
 const ListingDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
@@ -52,6 +54,18 @@ const ListingDetail = () => {
       .then(({ data }) => { setListing(data); setLoading(false); });
   }, [id]);
 
+  const startEditing = () => {
+    setEditForm({
+      title: listing?.title || "", property_type: listing?.property_type || "",
+      rent: String(listing?.rent || ""), description: listing?.description || "",
+      state: listing?.state || "", city: listing?.city || "",
+      area: listing?.area || "", address: listing?.address || "",
+      pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
+      phone_number: listing?.phone_number || "", google_map_link: listing?.google_map_link || "",
+    });
+    setEditing(true);
+  };
+
   const verifyPassword = async (action: "edit" | "delete") => {
     if (!id || !password) return;
     setVerifying(true);
@@ -64,15 +78,7 @@ const ListingDetail = () => {
       setPasswordDialog(null);
       setPassword("");
       if (action === "edit") {
-        setEditForm({
-          title: listing?.title || "", property_type: listing?.property_type || "",
-          rent: String(listing?.rent || ""), description: listing?.description || "",
-          state: listing?.state || "", city: listing?.city || "",
-          area: listing?.area || "", address: listing?.address || "",
-          pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
-          phone_number: listing?.phone_number || "", google_map_link: listing?.google_map_link || "",
-        });
-        setEditing(true);
+        startEditing();
       } else {
         await handleDelete();
       }
@@ -156,10 +162,20 @@ const ListingDetail = () => {
             </Link>
             {!editing && (
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1 text-xs sm:flex-none sm:text-sm" onClick={() => setPasswordDialog("edit")}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 text-xs sm:flex-none sm:text-sm"
+                  onClick={() => isAdmin ? startEditing() : setPasswordDialog("edit")}
+                >
                   <Pencil className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5" /> Edit
                 </Button>
-                <Button variant="destructive" size="sm" className="flex-1 text-xs sm:flex-none sm:text-sm" onClick={() => setPasswordDialog("delete")}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="flex-1 text-xs sm:flex-none sm:text-sm"
+                  onClick={() => isAdmin ? handleDelete() : setPasswordDialog("delete")}
+                >
                   <Trash2 className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5" /> Delete
                 </Button>
               </div>
