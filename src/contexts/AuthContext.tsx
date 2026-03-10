@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const login = (password: string) => {
-    if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
+    if (password === "Admin###102") {
       setIsAdmin(true);
     }
   };
