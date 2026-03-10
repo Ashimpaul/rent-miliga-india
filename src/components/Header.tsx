@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -10,6 +10,12 @@ const NAV_ITEMS = [
   { path: "/", label: "Home", icon: Home },
   { path: "/rentals", label: "Find Rentals", icon: Search },
   { path: "/post", label: "Post Property", icon: PlusCircle },
+];
+
+const SIDEBAR_EXTRA_ITEMS = [
+  { path: "/about", label: "About Us", icon: Info },
+  { path: "/contact", label: "Contact Us", icon: PhoneCall },
+  { path: "/help", label: "Help & FAQ", icon: HelpCircle },
 ];
 
 const Header = () => {
@@ -102,18 +108,39 @@ const Header = () => {
                     </Link>
                   </Button>
                 ))}
-                {isAdmin && (
+
+                <div className="my-2 border-t border-border" />
+
+                {SIDEBAR_EXTRA_ITEMS.map((item, i) => (
                   <Button
-                    variant="ghost"
+                    key={item.path}
+                    variant={isActive(item.path) ? "secondary" : "ghost"}
                     className="animate-slide-up justify-start opacity-0"
-                    style={{ animationDelay: `${NAV_ITEMS.length * 0.1}s` }}
-                    onClick={() => {
-                      logout();
-                      setOpen(false);
-                    }}
+                    style={{ animationDelay: `${(NAV_ITEMS.length + i) * 0.1}s` }}
+                    asChild
+                    onClick={() => setOpen(false)}
                   >
-                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                    <Link to={item.path}>
+                      <item.icon className="mr-2 h-4 w-4" /> {item.label}
+                    </Link>
                   </Button>
+                ))}
+
+                {isAdmin && (
+                  <>
+                    <div className="my-2 border-t border-border" />
+                    <Button
+                      variant="ghost"
+                      className="animate-slide-up justify-start opacity-0"
+                      style={{ animationDelay: `${(NAV_ITEMS.length + SIDEBAR_EXTRA_ITEMS.length) * 0.1}s` }}
+                      onClick={() => {
+                        logout();
+                        setOpen(false);
+                      }}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" /> Logout
+                    </Button>
+                  </>
                 )}
               </nav>
             </SheetContent>
