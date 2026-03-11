@@ -33,7 +33,7 @@ const Header = () => {
             <Home className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold text-foreground">
-            Rent<span className="text-primary">Miliga</span>
+            Rent<span className="text-primary">Milega</span>
           </span>
         </Link>
 

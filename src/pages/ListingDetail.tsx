@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -152,6 +153,10 @@ const ListingDetail = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Helmet>
+        <title>{listing.title} | RentMilega</title>
+        <meta name="description" content={`${listing.title} for rent in ${listing.area}, ${listing.city}. Rent: ₹${listing.rent.toLocaleString("en-IN")}/mo. ${listing.description?.substring(0, 150)}`} />
+      </Helmet>
       <Header />
       <main className="flex-1">
         <div className="container mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">

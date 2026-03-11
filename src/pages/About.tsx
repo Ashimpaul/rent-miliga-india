@@ -8,10 +8,10 @@ const About = () => (
     <main className="flex-1 py-8 sm:py-16">
       <div className="container mx-auto max-w-3xl px-4">
         <h1 className="animate-fade-up text-2xl font-bold text-foreground sm:text-4xl">
-          About <span className="text-primary">RentMiliga</span>
+          About <span className="text-primary">RentMilega</span>
         </h1>
         <p className="mt-4 animate-fade-up text-sm leading-relaxed text-muted-foreground opacity-0 stagger-1 sm:text-base">
-          RentMiliga is India's simple and transparent rental listing platform. We connect property owners directly with tenants — no middlemen, no hidden fees.
+          RentMilega is India's simple and transparent rental listing platform. We connect property owners directly with tenants — no middlemen, no hidden fees.
         </p>
 
         <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-6">
@@ -33,7 +33,7 @@ const About = () => (
         </div>
 
         <p className="mt-8 animate-fade-up text-sm leading-relaxed text-muted-foreground opacity-0 stagger-6 sm:mt-12 sm:text-base">
-          Our mission is to make renting simple, accessible, and stress-free for everyone in India. Whether you're looking for a room, apartment, PG, or commercial space — RentMiliga has you covered.
+          Our mission is to make renting simple, accessible, and stress-free for everyone in India. Whether you're looking for a room, apartment, PG, or commercial space — RentMilega has you covered.
         </p>
       </div>
     </main>

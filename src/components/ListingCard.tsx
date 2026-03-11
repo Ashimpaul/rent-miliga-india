@@ -10,11 +10,11 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
 
   return (
     <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl active:scale-[0.98]">
-      <Link to={`/listing/${listing.id}`}>
+      <Link to={`/listing/${listing.id}`} aria-label={`View details for ${listing.title}`}>
         <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
           <img
             src={imageUrl}
-            alt={listing.title}
+            alt={`Rental property: ${listing.title} in ${listing.area}, ${listing.city}`}
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
           />

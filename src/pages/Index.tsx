@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -48,6 +49,10 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Helmet>
+        <title>RentMilega - Find & Post Rental Listings in India | No Signup Required</title>
+        <meta name="description" content="Discover thousands of rental properties across India on RentMilega. Find rooms, apartments, houses, PGs, and commercial spaces. Post your property for free with no signup needed." />
+      </Helmet>
       <Header />
       <main className="flex-1">
         {/* Hero */}
@@ -147,7 +152,7 @@ const Index = () => {
         <section className="py-12 sm:py-20 bg-gradient-to-b from-white to-secondary/30">
           <div className="container mx-auto px-3 sm:px-4">
             <h2 className="animate-fade-up text-center text-2xl font-bold text-foreground sm:text-3xl md:text-4xl">
-              How <span className="text-primary underline decoration-primary/30 underline-offset-8">RentMiliga</span> Works
+              How <span className="text-primary underline decoration-primary/30 underline-offset-8">RentMilega</span> Works
             </h2>
             <div className="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-3 sm:gap-8">
               {STEPS.map((s, i) => (
@@ -174,7 +179,7 @@ const Index = () => {
               Ready to Find Your Dream Home?
             </h2>
             <p className="mx-auto mt-2 max-w-xl animate-fade-up text-xs text-primary-foreground/80 opacity-0 stagger-1 sm:mt-3 sm:text-sm">
-              Join thousands of happy tenants who found their perfect rental through RentMiliga. Post your property or start browsing — it's completely free!
+              Join thousands of happy tenants who found their perfect rental through RentMilega. Post your property or start browsing — it's completely free!
             </p>
             <div className="mt-5 flex animate-fade-up flex-col items-center justify-center gap-3 opacity-0 stagger-2 sm:mt-7 sm:flex-row">
               <Button

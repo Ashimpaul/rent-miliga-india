@@ -1,4 +1,4 @@
-# RentMiliga - Rental Listings India
+# RentMilega - Rental Listings India
 
 Find and post rental listings across India. No signup needed.
 

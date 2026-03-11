@@ -23,7 +23,7 @@ const Help = () => (
             Help Center
           </h1>
           <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-            Everything you need to know about using RentMiliga
+            Everything you need to know about using RentMilega
           </p>
         </div>
 

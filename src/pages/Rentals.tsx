@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -50,6 +51,10 @@ const Rentals = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Helmet>
+        <title>Browse Rental Properties in India | RentMilega</title>
+        <meta name="description" content="Search through our extensive list of rental properties in India. Filter by city, area, rent, and property type to find your perfect match." />
+      </Helmet>
       <Header />
       <main className="flex-1">
         <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6">
