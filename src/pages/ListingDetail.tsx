@@ -25,8 +25,7 @@ import {
 import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
-
-const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "commercial"];
+import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
 
 const ListingDetail = () => {
   const { id } = useParams();
@@ -218,7 +217,16 @@ const ListingDetail = () => {
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <div>
                     <Label htmlFor="edit-state" className="text-xs sm:text-sm">State *</Label>
-                    <Input id="edit-state" value={editForm.state} onChange={(e) => setEdit("state", e.target.value)} className="text-sm" />
+                    <Select value={editForm.state} onValueChange={(v) => setEdit("state", v)}>
+                      <SelectTrigger id="edit-state" className="text-sm">
+                        <SelectValue placeholder="Select state" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {INDIAN_STATES.map((s) => (
+                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <Label htmlFor="edit-city" className="text-xs sm:text-sm">City *</Label>

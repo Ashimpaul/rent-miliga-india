@@ -23,8 +23,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-
-const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "commercial"];
+import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
 
 const PostListing = () => {
   const navigate = useNavigate();
@@ -165,7 +164,16 @@ const PostListing = () => {
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <div>
                   <Label htmlFor="state" className="text-xs sm:text-sm">State *</Label>
-                  <Input id="state" value={form.state} onChange={(e) => set("state", e.target.value)} className="text-sm" />
+                  <Select value={form.state} onValueChange={(v) => set("state", v)}>
+                    <SelectTrigger id="state" className="text-sm">
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {INDIAN_STATES.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="city" className="text-xs sm:text-sm">City *</Label>
