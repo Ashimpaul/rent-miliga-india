@@ -17,8 +17,18 @@ const Footer = () => (
         <Link to="/contact" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
           Contact Us
         </Link>
+        <span className="text-border">•</span>
+        <Link to="/terms" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
+          Terms
+        </Link>
+        <span className="text-border">•</span>
+        <Link to="/privacy" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
+          Privacy
+        </Link>
       </div>
-      <p className="mt-2 sm:mt-3">© {new Date().getFullYear()} RentMilega. All rights reserved.</p>
+      <p className="mt-2 sm:mt-3">
+        © {new Date().getFullYear()} <span className="font-bold">RentMilega</span>. All Rights Reserved.
+      </p>
     </div>
   </footer>
 );

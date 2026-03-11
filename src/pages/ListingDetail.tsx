@@ -27,6 +27,7 @@ import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock } 
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
+import WatermarkedImage from "@/components/WatermarkedImage";
 
 const ListingDetail = () => {
   const { id } = useParams();
@@ -283,10 +284,10 @@ const ListingDetail = () => {
               {/* Image Gallery */}
               {images.length > 0 && (
                 <div className="animate-scale-up overflow-hidden rounded-lg">
-                  <img
+                  <WatermarkedImage
                     src={images[activeImage]}
                     alt={listing.title}
-                    className="aspect-[4/3] w-full object-cover transition-all duration-500 sm:aspect-video"
+                    imageClassName="aspect-[4/3] w-full object-cover transition-all duration-500 sm:aspect-video"
                   />
                   {images.length > 1 && (
                     <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
@@ -298,7 +299,7 @@ const ListingDetail = () => {
                             i === activeImage ? "border-primary" : "border-border"
                           }`}
                         >
-                          <img src={img} alt="" className="h-full w-full object-cover" />
+                          <WatermarkedImage src={img} alt="" imageClassName="h-full w-full object-cover" />
                         </button>
                       ))}
                     </div>

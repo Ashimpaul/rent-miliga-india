@@ -3,6 +3,7 @@ import { Phone, MapPin, IndianRupee, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+import WatermarkedImage from "./WatermarkedImage";
 
 const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: string) => void }) => {
   const imageUrl = listing.image1 || "/placeholder.svg";
@@ -12,14 +13,13 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
     <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl active:scale-[0.98]">
       <Link to={`/listing/${listing.id}`} aria-label={`View details for ${listing.title}`}>
         <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
-          <img
+          <WatermarkedImage
             src={imageUrl}
             alt={`Rental property: ${listing.title} in ${listing.area}, ${listing.city}`}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-            loading="lazy"
+            imageClassName="transition-transform duration-700 group-hover:scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md opacity-0 transition-all duration-500 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-20 pointer-events-none" />
+          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md opacity-0 transition-all duration-500 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 z-30 pointer-events-none">
             <IndianRupee className="h-3 w-3" />
             {listing.rent.toLocaleString("en-IN")}
           </div>
