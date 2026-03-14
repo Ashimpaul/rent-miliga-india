@@ -74,7 +74,7 @@ const Rentals = () => {
               No listings found. Be the first to post one!
             </p>
           ) : (
-            <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((l) => (
                 <ListingCard key={l.id} listing={l} onDelete={handleDelete} />
               ))}

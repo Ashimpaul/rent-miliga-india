@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
@@ -8,7 +8,7 @@ import ListingCard from "@/components/ListingCard";
 // import AdPopup from "@/components/AdPopup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight } from "lucide-react";
+import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus } from "lucide-react";
 
 const CATEGORIES = [
   { label: "Rooms", icon: Home, type: "room" },
@@ -61,8 +61,8 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Helmet>
-        <title>Find Houses, Rooms & PG for Rent in Assam | RentMilega</title>
-        <meta name="description" content="RentMilega helps you find houses, rooms, PGs and flats for rent across Assam including Silchar, Guwahati, Dibrugarh and other cities. Post or find rental listings easily." />
+        <title>Find Houses, Rooms & PG for Rent in Assam & India | RentMilega</title>
+        <meta name="description" content="RentMilega helps you find houses, rooms, PGs and flats for rent across Silchar, Guwahati, and all of India. Post or find rental listings easily." />
       </Helmet>
       <Header />
       {/* <AdPopup 
@@ -72,23 +72,25 @@ const Index = () => {
         delay={3000}
       /> */}
       <main className="flex-1 bg-background">
-        {/* Hero */}
+        {/* Hero - Optimized for mobile/desktop split */}
         <section 
-          className="relative flex min-h-[65vh] items-center justify-center overflow-hidden bg-zinc-950 sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
+          className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-zinc-950 sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
           style={{ 
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80")' 
           }}
         >
-          <div className="relative z-10 mx-auto w-full max-w-3xl px-4 py-12 text-center sm:py-0">
-            <h1 className="animate-fade-up text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-7xl">
-              Find Houses and Rooms for <span className="text-primary italic">Rent in Assam</span>
+          <div className="relative z-10 mx-auto w-full max-w-3xl px-4 py-6 text-center sm:py-0">
+            <h1 className="animate-fade-up text-2xl font-bold tracking-tight text-white sm:text-5xl md:text-7xl">
+              Find Houses and Rooms for <span className="text-primary italic">Rent in India</span>
             </h1>
-            <p className="mt-6 animate-fade-up text-lg text-white/80 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light">
-              RentMilega is a rental platform helping people find houses, rooms, flats and PG accommodations across Assam including Silchar, Guwahati and nearby cities.
+            <p className="mt-3 animate-fade-up text-xs text-white/80 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light sm:mt-4">
+              RentMilega is a premier rental platform helping people find houses, rooms, flats and PG accommodations across Assam and beyond.
             </p>
-            <form onSubmit={handleSearch} className="mt-10 flex animate-fade-up flex-col gap-3 opacity-0 stagger-3 sm:mt-12 sm:flex-row backdrop-blur-md bg-white/5 p-2 rounded-2xl border border-white/10 shadow-2xl">
+            
+            {/* Desktop Only Search Form */}
+            <form onSubmit={handleSearch} className="hidden sm:flex mt-12 animate-fade-up flex-col gap-2 opacity-0 stagger-3 sm:flex-row backdrop-blur-md bg-white/5 p-1.5 rounded-xl border border-white/10 shadow-2xl">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -100,14 +102,69 @@ const Index = () => {
                 Search
               </Button>
             </form>
+            
+            <div className="mt-6 flex animate-fade-up flex-col items-center justify-center gap-4 opacity-0 stagger-4 sm:flex-row sm:mt-8">
+              <Button
+                onClick={() => navigate("/post")}
+                size="lg"
+                className="h-11 w-full rounded-lg bg-white text-primary px-6 text-sm font-black shadow-2xl transition-all duration-300 hover:scale-[1.05] active:scale-95 sm:h-14 sm:w-auto sm:rounded-xl sm:text-lg sm:px-8 group border-2 border-white/20 hover:bg-primary hover:text-white"
+              >
+                <PlusCircle className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-90 sm:h-6 sm:w-6" />
+                Post Your Property Free
+              </Button>
+            </div>
           </div>
         </section>
 
+        {/* Mobile: Top Deals Scroller (OLX Style circular icons) */}
+        {!loading && listings.length > 0 && (
+          <div className="bg-muted/30 py-6 sm:hidden border-b border-border">
+            <div className="px-4 mb-3 flex justify-between items-center">
+              <h2 className="text-sm font-bold">Top Deals in Silchar</h2>
+              <Link to="/rentals" className="text-xs text-primary font-semibold">View all</Link>
+            </div>
+            <div className="flex gap-4 px-4 overflow-x-auto no-scrollbar">
+              {listings.slice(0, 6).map((l) => (
+                <Link key={l.id} to={`/listing/${l.id}`} className="flex flex-col items-center gap-1.5 w-20 shrink-0">
+                  <div className="w-20 h-20 rounded-full border-2 border-primary/30 p-0.5 overflow-hidden bg-card">
+                    <img 
+                      src={l.image1 || "/placeholder.svg"} 
+                      alt="" 
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+                  <span className="text-[10px] font-bold text-foreground truncate w-full text-center">
+                    ₹{l.rent.toLocaleString("en-IN")}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Horizontal Category Scroller (OLX Style) */}
+        <div className="bg-card py-4 sm:hidden overflow-x-auto no-scrollbar border-b border-border">
+          <div className="flex gap-4 px-4 min-w-max">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.type}
+                onClick={() => navigate(`/rentals?type=${cat.type}`)}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <div className="w-16 h-16 rounded-full bg-primary/5 border-2 border-primary/20 flex items-center justify-center transition-all active:scale-95">
+                  <cat.icon className="h-7 w-7 text-primary" />
+                </div>
+                <span className="text-[11px] font-semibold text-muted-foreground">{cat.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Popular Locations */}
-        <section className="py-12 border-b border-border bg-muted/30">
+        <section className="py-8 border-b border-border bg-muted/30 sm:py-12">
           <div className="container mx-auto px-4">
-            <h2 className="text-xl font-bold mb-6 text-center sm:text-2xl">Popular Rental Locations in Assam</h2>
-            <div className="flex flex-wrap justify-center gap-3">
+            <h2 className="text-lg font-bold mb-4 text-center sm:text-2xl sm:mb-6">Popular Rental Locations</h2>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {POPULAR_LOCATIONS.map((city) => (
                 <Button
                   key={city}
@@ -129,14 +186,14 @@ const Index = () => {
             <div className="flex flex-col items-end justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-center">
               <div>
                 <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-                  Rental Listings in Silchar, Guwahati and Across Assam
+                  Recent Rental Listings
                 </h2>
-                <p className="mt-3 text-base text-muted-foreground sm:text-lg">Our handpicked selection of the latest rentals in Assam</p>
+                <p className="mt-3 text-base text-muted-foreground sm:text-lg">Discover the latest rental opportunities near you</p>
               </div>
               <Button variant="link" size="lg" className="group text-lg font-bold p-0 h-auto" asChild>
-                <a href="/rentals" className="flex items-center">
+                <Link to="/rentals" className="flex items-center">
                   View All <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
+                </Link>
               </Button>
             </div>
             {loading ? (
@@ -148,7 +205,7 @@ const Index = () => {
                 No listings yet. Be the first to post one!
               </p>
             ) : (
-              <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {listings.map((l, i) => (
                   <div key={l.id} className="animate-slide-up opacity-0" style={{ animationDelay: `${i * 0.1}s` }}>
                     <ListingCard listing={l} />
@@ -160,25 +217,25 @@ const Index = () => {
         </section>
 
         {/* Browse by Category */}
-        <section className="py-20 sm:py-32 border-t border-border/50 bg-muted/5">
+        <section className="py-12 sm:py-32 border-t border-border/50 bg-muted/5">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto">
-              <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+              <h2 className="animate-fade-up text-2xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
                 Browse by Category
               </h2>
-              <p className="mt-4 text-muted-foreground sm:text-lg">Find the specific type of property that fits your needs</p>
+              <p className="mt-2 text-sm text-muted-foreground sm:text-lg sm:mt-4">Find the specific type of property that fits your needs</p>
             </div>
-            <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6 sm:mt-16">
               {CATEGORIES.map((cat, i) => (
                 <button
                   key={cat.type}
                   onClick={() => navigate(`/rentals?type=${cat.type}`)}
-                  className={`group flex animate-scale-up flex-col items-center gap-6 rounded-3xl border border-border bg-card p-8 opacity-0 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/50 hover:shadow-xl hover:bg-primary/[0.02] stagger-${i + 1}`}
+                  className={`group flex animate-scale-up flex-col items-center gap-4 rounded-2xl border border-border bg-card p-5 opacity-0 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/50 hover:shadow-xl hover:bg-primary/[0.02] stagger-${i + 1} sm:rounded-3xl sm:p-8 sm:gap-6`}
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted/50 transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-6 sm:h-20 sm:w-20">
-                    <cat.icon className="h-8 w-8 transition-transform duration-500 group-hover:scale-110 sm:h-10 sm:w-10" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted/50 transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-6 sm:h-20 sm:w-20 sm:rounded-2xl">
+                    <cat.icon className="h-6 w-6 transition-transform duration-500 group-hover:scale-110 sm:h-10 sm:w-10" />
                   </div>
-                  <span className="text-base font-bold tracking-tight text-foreground sm:text-lg">{cat.label}</span>
+                  <span className="text-sm font-bold tracking-tight text-foreground sm:text-lg">{cat.label}</span>
                 </button>
               ))}
             </div>
@@ -186,25 +243,25 @@ const Index = () => {
         </section>
 
         {/* How It Works */}
-        <section className="py-20 sm:py-32 border-t border-border/50">
+        <section className="py-12 sm:py-32 border-t border-border/50">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto">
-              <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+              <h2 className="animate-fade-up text-2xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
                 Experience <span className="text-primary">Simplicity</span>
               </h2>
-              <p className="mt-4 text-muted-foreground sm:text-lg">Getting your next home has never been easier</p>
+              <p className="mt-2 text-sm text-muted-foreground sm:text-lg sm:mt-4">Getting your next home has never been easier</p>
             </div>
-            <div className="mt-20 grid gap-12 sm:grid-cols-3">
+            <div className="mt-12 grid gap-8 sm:grid-cols-3 sm:mt-20 sm:gap-12">
               {STEPS.map((s, i) => (
                 <div
                   key={s.num}
                   className={`group relative flex animate-fade-up flex-col items-center text-center opacity-0 stagger-${i + 1}`}
                 >
-                  <div className="flex h-20 w-20 items-center justify-center rounded-[2.5rem] bg-primary/5 text-2xl font-black text-primary shadow-inner transition-all duration-500 group-hover:rounded-2xl group-hover:bg-primary group-hover:text-white">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/5 text-lg font-black text-primary shadow-inner transition-all duration-500 group-hover:rounded-2xl group-hover:bg-primary group-hover:text-white sm:h-20 sm:w-20 sm:rounded-[2.5rem] sm:text-2xl">
                     {s.num}
                   </div>
-                  <h3 className="mt-8 text-xl font-bold tracking-tight text-foreground sm:text-2xl">{s.title}</h3>
-                  <p className="mt-4 text-base text-muted-foreground leading-relaxed font-light sm:text-lg">{s.desc}</p>
+                  <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground sm:text-2xl sm:mt-8">{s.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed font-light sm:text-lg sm:mt-4">{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -212,21 +269,21 @@ const Index = () => {
         </section>
 
         {/* Promotional Banner */}
-        <section className="container mx-auto px-4 py-12 sm:py-24">
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-zinc-950 px-8 py-16 text-center sm:px-16 sm:py-24">
+        <section className="container mx-auto px-4 py-8 sm:py-24">
+          <div className="relative overflow-hidden rounded-3xl bg-zinc-950 px-6 py-10 text-center sm:px-16 sm:py-24 sm:rounded-[2.5rem]">
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')] bg-cover bg-center opacity-20 grayscale" />
             <div className="relative z-10">
-              <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-6xl">
-                Post Your Property for <span className="text-primary italic">Rent in Assam</span>
+              <h2 className="animate-fade-up text-2xl font-bold tracking-tight text-white sm:text-4xl md:text-6xl">
+                Post Your Property for <span className="text-primary italic">Rent</span>
               </h2>
-              <p className="mx-auto mt-8 max-w-2xl animate-fade-up text-lg text-white/70 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light">
-                Are you a property owner in Silchar, Guwahati, or anywhere in Assam? Join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
+              <p className="mx-auto mt-4 max-w-2xl animate-fade-up text-sm text-white/70 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light sm:mt-8">
+                Whether you're in Silchar, Guwahati, or anywhere in India, join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
               </p>
-              <div className="mt-12 flex animate-fade-up flex-col items-center justify-center gap-4 opacity-0 stagger-2 sm:flex-row">
+              <div className="mt-8 flex animate-fade-up flex-col items-center justify-center gap-3 opacity-0 stagger-2 sm:flex-row sm:mt-12 sm:gap-4">
                 <Button
                   onClick={() => navigate("/rentals")}
                   size="lg"
-                  className="h-14 w-full rounded-2xl bg-primary px-10 text-lg font-bold text-white shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 sm:w-auto"
+                  className="h-12 w-full rounded-xl bg-primary px-8 text-base font-bold text-white shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 sm:h-14 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-lg"
                 >
                   Browse Rentals
                 </Button>
@@ -234,7 +291,7 @@ const Index = () => {
                   onClick={() => navigate("/post")}
                   variant="outline"
                   size="lg"
-                  className="h-14 w-full rounded-2xl border-white/20 bg-white/5 px-10 text-lg font-bold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/40 active:scale-95 sm:w-auto"
+                  className="h-12 w-full rounded-xl border-white/20 bg-white/5 px-8 text-base font-bold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/40 active:scale-95 sm:h-14 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-lg"
                 >
                   Post Free Listing
                 </Button>
@@ -260,6 +317,41 @@ const Index = () => {
         </section>
       </main>
       <Footer />
+      
+      {/* Mobile Bottom Navigation Bar (App Style) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
+        <Link to="/" className="flex flex-col items-center gap-1 text-primary">
+          <Home className="h-5 w-5" />
+          <span className="text-[10px] font-bold">HOME</span>
+        </Link>
+        <Link to="/rentals" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <Search className="h-5 w-5" />
+          <span className="text-[10px] font-medium">SEARCH</span>
+        </Link>
+        
+        {/* The Post Button is absolute and sits above this nav */}
+        <div className="w-12" /> 
+        
+        <Link to="/rentals" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <MapPin className="h-5 w-5" />
+          <span className="text-[10px] font-medium">LOCATIONS</span>
+        </Link>
+        <Link to="/admin" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <LogOut className="h-5 w-5" />
+          <span className="text-[10px] font-medium">ADMIN</span>
+        </Link>
+      </div>
+
+      {/* Mobile Floating Action Button (Centered like OLX) */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] sm:hidden">
+        <Button
+          onClick={() => navigate("/post")}
+          className="h-14 w-14 rounded-full bg-white text-primary p-0 shadow-[0_8px_30px_rgb(0,0,0,0.3)] border-4 border-primary flex items-center justify-center transition-all duration-300 active:scale-90 hover:bg-primary hover:text-white group"
+        >
+          <Plus className="h-8 w-8 group-hover:rotate-90 transition-transform duration-300" />
+        </Button>
+        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[9px] font-black text-primary bg-white px-1 rounded shadow-sm">POST</span>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle, Plus, MapPin, ChevronDown, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -27,127 +27,124 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 animate-fade-in border-b border-border bg-card/95 backdrop-blur-md">
-      <div className="container mx-auto flex min-h-[50px] items-center justify-between px-4 sm:min-h-[65px]">
-        <div className="relative flex items-center">
-          <Link to="/" className="group absolute left-0 top-1/2 -translate-y-1/2 flex items-center">
-            <img 
-              src="/logo.png" 
-              alt="RentMilega Logo" 
-              className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:h-28 mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal" 
-            />
-          </Link>
-          {/* Invisible spacer to maintain layout balance if needed, but since logo is absolute, we might need a margin on the nav */}
-          <div className="w-24 sm:w-32 h-1" /> 
-        </div>
+      <div className="container mx-auto px-4 py-2 sm:py-0">
+        <div className="flex min-h-[40px] items-center justify-between sm:min-h-[65px]">
+          {/* Mobile: Left Hamburger */}
+          <div className="flex items-center gap-2 sm:hidden">
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 pt-10">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <nav className="flex flex-col gap-2">
+                  {NAV_ITEMS.map((item, i) => (
+                    <Button
+                      key={item.path}
+                      variant={isActive(item.path) ? "default" : "ghost"}
+                      className="justify-start"
+                      asChild
+                      onClick={() => setOpen(false)}
+                    >
+                      <Link to={item.path}>
+                        <item.icon className="mr-2 h-4 w-4" /> {item.label}
+                      </Link>
+                    </Button>
+                  ))}
+                  <div className="my-2 border-t border-border" />
+                  {SIDEBAR_EXTRA_ITEMS.map((item) => (
+                    <Button
+                      key={item.path}
+                      variant={isActive(item.path) ? "secondary" : "ghost"}
+                      className="justify-start"
+                      asChild
+                      onClick={() => setOpen(false)}
+                    >
+                      <Link to={item.path}>
+                        <item.icon className="mr-2 h-4 w-4" /> {item.label}
+                      </Link>
+                    </Button>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+            
+            <Link to="/" className="flex items-center shrink-0">
+              <img 
+                src="/logo.png" 
+                alt="RentMilega" 
+                className="h-10 w-auto object-contain mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-24" 
+              />
+            </Link>
+          </div>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 sm:flex">
-          {NAV_ITEMS.map((item) => (
+          {/* Desktop Logo */}
+          <div className="hidden items-center sm:flex">
+            <Link to="/" className="group flex items-center">
+              <img 
+                src="/logo.png" 
+                alt="RentMilega Logo" 
+                className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:h-24 mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal" 
+              />
+            </Link>
+          </div>
+
+          {/* Desktop Nav */}
+          <nav className="hidden items-center gap-1 sm:flex">
+            {NAV_ITEMS.map((item) => (
+              <Button
+                key={item.path}
+                variant={isActive(item.path) ? "default" : "ghost"}
+                size="sm"
+                className="transition-all duration-200"
+                asChild
+              >
+                <Link to={item.path}>
+                  <item.icon className="mr-1.5 h-3.5 w-3.5" /> {item.label}
+                </Link>
+              </Button>
+            ))}
+            {isAdmin && (
+              <Button variant="ghost" size="sm" onClick={logout}>
+                <LogOut className="mr-1.5 h-3.5 w-3.5" /> Logout
+              </Button>
+            )}
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
             <Button
-              key={item.path}
-              variant={isActive(item.path) ? "default" : "ghost"}
+              variant="default"
               size="sm"
-              className="transition-all duration-200 hover:scale-105"
+              className="ml-2 bg-primary text-white font-bold"
               asChild
             >
-              <Link to={item.path}>
-                <item.icon className="mr-1.5 h-3.5 w-3.5" /> {item.label}
+              <Link to="/post">
+                <Plus className="mr-1.5 h-4 w-4" /> Post Your Property
               </Link>
             </Button>
-          ))}
+          </nav>
 
-          {isAdmin && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="transition-all duration-200 hover:scale-105"
-              onClick={logout}
-            >
-              <LogOut className="mr-1.5 h-3.5 w-3.5" /> Logout
+          {/* Mobile: Right Actions (Location & Theme) */}
+          <div className="flex items-center gap-1 sm:hidden">
+            <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground">
+              <MapPin className="h-3 w-3 text-primary" />
+              <span>India</span>
+              <ChevronDown className="h-3 w-3" />
             </Button>
-          )}
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="ml-1 h-8 w-8 transition-all duration-200 hover:scale-105"
-            onClick={toggle}
-          >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
-        </nav>
-
-        {/* Mobile nav */}
-        <div className="flex items-center gap-1 sm:hidden">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8 border-border"
-            onClick={toggle}
-          >
-            {theme === "dark" ? <Sun className="h-4 w-4 text-foreground" /> : <Moon className="h-4 w-4 text-foreground" />}
-          </Button>
-
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Menu className="h-5 w-5 transition-transform duration-200" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-64 pt-10">
-              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-              <nav className="flex flex-col gap-2">
-                {NAV_ITEMS.map((item, i) => (
-                  <Button
-                    key={item.path}
-                    variant={isActive(item.path) ? "default" : "ghost"}
-                    className="animate-slide-up justify-start opacity-0"
-                    style={{ animationDelay: `${i * 0.1}s` }}
-                    asChild
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link to={item.path}>
-                      <item.icon className="mr-2 h-4 w-4" /> {item.label}
-                    </Link>
-                  </Button>
-                ))}
-
-                <div className="my-2 border-t border-border" />
-
-                {SIDEBAR_EXTRA_ITEMS.map((item, i) => (
-                  <Button
-                    key={item.path}
-                    variant={isActive(item.path) ? "secondary" : "ghost"}
-                    className="animate-slide-up justify-start opacity-0"
-                    style={{ animationDelay: `${(NAV_ITEMS.length + i) * 0.1}s` }}
-                    asChild
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link to={item.path}>
-                      <item.icon className="mr-2 h-4 w-4" /> {item.label}
-                    </Link>
-                  </Button>
-                ))}
-
-                {isAdmin && (
-                  <>
-                    <div className="my-2 border-t border-border" />
-                    <Button
-                      variant="ghost"
-                      className="animate-slide-up justify-start opacity-0"
-                      style={{ animationDelay: `${(NAV_ITEMS.length + SIDEBAR_EXTRA_ITEMS.length) * 0.1}s` }}
-                      onClick={() => {
-                        logout();
-                        setOpen(false);
-                      }}
-                    >
-                      <LogOut className="mr-2 h-4 w-4" /> Logout
-                    </Button>
-                  </>
-                )}
-              </nav>
-            </SheetContent>
-          </Sheet>
+        {/* Mobile: Second row search (OLX Style) */}
+        <div className="mt-2 sm:hidden pb-1">
+          <Link to="/rentals" className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg px-3 h-10 text-muted-foreground transition-all active:scale-95">
+            <Search className="h-4 w-4" />
+            <span className="text-sm">For Rent: Houses & Apartments near you...</span>
+          </Link>
         </div>
       </div>
     </header>

@@ -7,7 +7,7 @@ const Footer = () => (
         <img 
           src="/logo.png" 
           alt="RentMilega Logo" 
-          className="h-32 w-auto object-contain opacity-90 hover:opacity-100 transition-all mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-48" 
+          className="h-20 w-auto object-contain opacity-90 hover:opacity-100 transition-all mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-48" 
         />
       </div>
       <p className="text-sm font-semibold text-foreground sm:text-base">RentMilega</p>
