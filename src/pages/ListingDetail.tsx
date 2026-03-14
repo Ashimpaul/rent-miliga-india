@@ -152,11 +152,33 @@ const ListingDetail = () => {
 
   const images = [listing.image1, listing.image2, listing.image3].filter(Boolean) as string[];
 
+  // Structured Data for SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    "name": `${listing.title} in ${listing.area}, ${listing.city}`,
+    "description": listing.description || `Rental property in ${listing.area}, ${listing.city}, ${listing.state}`,
+    "datePosted": listing.created_at,
+    "propertyID": listing.id,
+    "url": `https://rentmilega.in/listing/${listing.id}`,
+    "image": images,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": listing.city,
+      "addressRegion": listing.state,
+      "addressCountry": "India",
+      "streetAddress": listing.address || listing.area
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <Helmet>
-        <title>{listing.title} | RentMilega</title>
-        <meta name="description" content={`${listing.title} for rent in ${listing.area}, ${listing.city}. Rent: ₹${listing.rent.toLocaleString("en-IN")}/mo. ${listing.description?.substring(0, 150)}`} />
+        <title>{listing.title} for Rent in {listing.city}, {listing.state} | RentMilega</title>
+        <meta name="description" content={`${listing.title} for rent in ${listing.area}, ${listing.city}, ${listing.state}. Rent: ₹${listing.rent.toLocaleString("en-IN")}/mo. ${listing.description?.substring(0, 150)}`} />
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
       </Helmet>
       <Header />
       <main className="flex-1">

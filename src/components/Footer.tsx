@@ -36,6 +36,21 @@ const Footer = () => (
       <p className="mt-2 sm:mt-3">
         © {new Date().getFullYear()} <span className="font-bold">RentMilega</span>. All Rights Reserved.
       </p>
+      
+      <div className="mt-8 pt-8 border-t border-border/50">
+        <p className="text-sm font-bold text-foreground mb-4">Popular Rental Searches</p>
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-[10px] sm:text-xs">
+          <Link to="/rentals?q=House for rent in Silchar" className="hover:text-primary transition-colors">House for rent in Silchar</Link>
+          <span className="text-border hidden sm:inline">•</span>
+          <Link to="/rentals?q=PG in Guwahati" className="hover:text-primary transition-colors">PG in Guwahati</Link>
+          <span className="text-border hidden sm:inline">•</span>
+          <Link to="/rentals?q=Room for rent in Assam" className="hover:text-primary transition-colors">Room for rent in Assam</Link>
+          <span className="text-border hidden sm:inline">•</span>
+          <Link to="/rentals?q=Flats for rent in Guwahati" className="hover:text-primary transition-colors">Flats for rent in Guwahati</Link>
+          <span className="text-border hidden sm:inline">•</span>
+          <Link to="/rentals?q=Rental listings in Silchar Assam" className="hover:text-primary transition-colors">Rental listings in Silchar Assam</Link>
+        </div>
+      </div>
     </div>
   </footer>
 );

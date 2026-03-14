@@ -25,6 +25,16 @@ const STEPS = [
   { num: 3, title: "Connect", desc: "Contact the property owner directly and move into your new home!" },
 ];
 
+const POPULAR_LOCATIONS = [
+  "Silchar",
+  "Guwahati",
+  "Dibrugarh",
+  "Jorhat",
+  "Tezpur",
+  "Karimganj",
+  "Hailakandi",
+];
+
 const Index = () => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState<Listing[]>([]);
@@ -51,8 +61,8 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Helmet>
-        <title>RentMilega - Find & Post Rental Listings in India | No Signup Required</title>
-        <meta name="description" content="Discover thousands of rental properties across India on RentMilega. Find rooms, apartments, houses, PGs, and commercial spaces. Post your property for free with no signup needed." />
+        <title>Find Houses, Rooms & PG for Rent in Assam | RentMilega</title>
+        <meta name="description" content="RentMilega helps you find houses, rooms, PGs and flats for rent across Assam including Silchar, Guwahati, Dibrugarh and other cities. Post or find rental listings easily." />
       </Helmet>
       <Header />
       {/* <AdPopup 
@@ -71,11 +81,10 @@ const Index = () => {
         >
           <div className="relative z-10 mx-auto w-full max-w-3xl px-4 py-12 text-center sm:py-0">
             <h1 className="animate-fade-up text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-7xl">
-              Find Your Perfect{" "}
-              <span className="text-primary italic">Rental Home</span>
+              Find Houses and Rooms for <span className="text-primary italic">Rent in Assam</span>
             </h1>
             <p className="mt-6 animate-fade-up text-lg text-white/80 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light">
-              Search thousands of premium rental listings across India
+              RentMilega is a rental platform helping people find houses, rooms, flats and PG accommodations across Assam including Silchar, Guwahati and nearby cities.
             </p>
             <form onSubmit={handleSearch} className="mt-10 flex animate-fade-up flex-col gap-3 opacity-0 stagger-3 sm:mt-12 sm:flex-row backdrop-blur-md bg-white/5 p-2 rounded-2xl border border-white/10 shadow-2xl">
               <div className="relative flex-1">
@@ -83,7 +92,7 @@ const Index = () => {
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search by city, area..."
+                  placeholder="Search by city (e.g. Silchar, Guwahati)..."
                   className="h-14 bg-transparent border-none text-white placeholder:text-white/40 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg pl-12"
                 />
               </div>
@@ -94,15 +103,35 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Popular Locations */}
+        <section className="py-12 border-b border-border bg-muted/30">
+          <div className="container mx-auto px-4">
+            <h2 className="text-xl font-bold mb-6 text-center sm:text-2xl">Popular Rental Locations in Assam</h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {POPULAR_LOCATIONS.map((city) => (
+                <Button
+                  key={city}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full bg-card hover:bg-primary hover:text-white transition-colors"
+                  onClick={() => navigate(`/rentals?q=${encodeURIComponent(city)}`)}
+                >
+                  {city}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Recent Listings */}
         <section className="py-20 sm:py-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-end justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-center">
               <div>
                 <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-                  Featured Properties
+                  Rental Listings in Silchar, Guwahati and Across Assam
                 </h2>
-                <p className="mt-3 text-base text-muted-foreground sm:text-lg">Our handpicked selection of the latest rentals</p>
+                <p className="mt-3 text-base text-muted-foreground sm:text-lg">Our handpicked selection of the latest rentals in Assam</p>
               </div>
               <Button variant="link" size="lg" className="group text-lg font-bold p-0 h-auto" asChild>
                 <a href="/rentals" className="flex items-center">
@@ -188,10 +217,10 @@ const Index = () => {
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')] bg-cover bg-center opacity-20 grayscale" />
             <div className="relative z-10">
               <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-6xl">
-                Ready to find your <span className="text-primary italic">dream home?</span>
+                Post Your Property for <span className="text-primary italic">Rent in Assam</span>
               </h2>
               <p className="mx-auto mt-8 max-w-2xl animate-fade-up text-lg text-white/70 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light">
-                Join thousands of happy tenants who found their perfect rental through RentMilega. Post your property or start browsing — it's completely free!
+                Are you a property owner in Silchar, Guwahati, or anywhere in Assam? Join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
               </p>
               <div className="mt-12 flex animate-fade-up flex-col items-center justify-center gap-4 opacity-0 stagger-2 sm:flex-row">
                 <Button
