@@ -3,6 +3,13 @@ import { Link } from "react-router-dom";
 const Footer = () => (
   <footer className="animate-fade-in border-t border-border bg-card py-5 sm:py-8">
     <div className="container mx-auto px-3 text-center text-xs text-muted-foreground sm:px-4 sm:text-sm">
+      <div className="flex justify-center mb-6">
+        <img 
+          src="/logo.png" 
+          alt="RentMilega Logo" 
+          className="h-32 w-auto object-contain opacity-90 hover:opacity-100 transition-all mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-48" 
+        />
+      </div>
       <p className="text-sm font-semibold text-foreground sm:text-base">RentMilega</p>
       <p className="mt-1">India's simple rental listing platform</p>
       <div className="mt-3 flex items-center justify-center gap-4">

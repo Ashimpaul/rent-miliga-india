@@ -6,7 +6,14 @@ const About = () => (
   <div className="flex min-h-screen flex-col">
     <Header />
     <main className="flex-1 py-8 sm:py-16">
-      <div className="container mx-auto max-w-3xl px-4">
+      <div className="container mx-auto max-w-3xl px-4 text-center sm:text-left">
+        <div className="flex justify-center sm:justify-start mb-6">
+          <img 
+            src="/logo.png" 
+            alt="RentMilega Logo" 
+            className="h-32 w-auto object-contain mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-48" 
+          />
+        </div>
         <h1 className="animate-fade-up text-2xl font-bold text-foreground sm:text-4xl">
           About <span className="text-primary">RentMilega</span>
         </h1>

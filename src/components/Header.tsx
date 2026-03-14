@@ -27,15 +27,18 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 animate-fade-in border-b border-border bg-card/95 backdrop-blur-md">
-      <div className="container mx-auto flex h-14 items-center justify-between px-4">
-        <Link to="/" className="group flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary transition-transform duration-300 group-hover:scale-110">
-            <Home className="h-4 w-4 text-primary-foreground" />
-          </div>
-          <span className="text-lg font-bold text-foreground">
-            Rent<span className="text-primary">Milega</span>
-          </span>
-        </Link>
+      <div className="container mx-auto flex min-h-[50px] items-center justify-between px-4 sm:min-h-[65px]">
+        <div className="relative flex items-center">
+          <Link to="/" className="group absolute left-0 top-1/2 -translate-y-1/2 flex items-center">
+            <img 
+              src="/logo.png" 
+              alt="RentMilega Logo" 
+              className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:h-28 mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal" 
+            />
+          </Link>
+          {/* Invisible spacer to maintain layout balance if needed, but since logo is absolute, we might need a margin on the nav */}
+          <div className="w-24 sm:w-32 h-1" /> 
+        </div>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 sm:flex">
