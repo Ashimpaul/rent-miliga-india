@@ -5,7 +5,7 @@ import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ListingCard from "@/components/ListingCard";
-import AdPopup from "@/components/AdPopup";
+// import AdPopup from "@/components/AdPopup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight } from "lucide-react";
@@ -55,12 +55,12 @@ const Index = () => {
         <meta name="description" content="Discover thousands of rental properties across India on RentMilega. Find rooms, apartments, houses, PGs, and commercial spaces. Post your property for free with no signup needed." />
       </Helmet>
       <Header />
-      <AdPopup 
+      {/* <AdPopup 
         type="image" 
         src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80" 
         link="https://rentmilega.in/post"
         delay={3000}
-      />
+      /> */}
       <main className="flex-1 bg-background">
         {/* Hero */}
         <section 
