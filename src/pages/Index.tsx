@@ -64,7 +64,7 @@ const Index = () => {
       <main className="flex-1 bg-background">
         {/* Hero */}
         <section 
-          className="relative flex min-h-[65vh] items-center justify-center overflow-hidden bg-foreground sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
+          className="relative flex min-h-[65vh] items-center justify-center overflow-hidden bg-zinc-950 sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
           style={{ 
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80")' 
           }}
@@ -184,13 +184,13 @@ const Index = () => {
 
         {/* Promotional Banner */}
         <section className="container mx-auto px-4 py-12 sm:py-24">
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-foreground px-8 py-16 text-center sm:px-16 sm:py-24">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')] bg-cover bg-center opacity-10 grayscale" />
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-zinc-950 px-8 py-16 text-center sm:px-16 sm:py-24">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')] bg-cover bg-center opacity-20 grayscale" />
             <div className="relative z-10">
               <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-6xl">
                 Ready to find your <span className="text-primary italic">dream home?</span>
               </h2>
-              <p className="mx-auto mt-8 max-w-2xl animate-fade-up text-lg text-white/60 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light">
+              <p className="mx-auto mt-8 max-w-2xl animate-fade-up text-lg text-white/70 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light">
                 Join thousands of happy tenants who found their perfect rental through RentMilega. Post your property or start browsing — it's completely free!
               </p>
               <div className="mt-12 flex animate-fade-up flex-col items-center justify-center gap-4 opacity-0 stagger-2 sm:flex-row">
@@ -219,10 +219,10 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="flex min-h-[150px] items-center justify-center rounded-[2rem] border border-border bg-muted/30 p-8 sm:min-h-[250px]">
               <div className="text-center">
-                <p className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground/40 sm:text-base">
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground/60 sm:text-base">
                   Partnership Opportunities
                 </p>
-                <p className="mt-3 text-base text-muted-foreground/30 font-light italic">
+                <p className="mt-3 text-base text-muted-foreground/50 font-light italic">
                   Showcase your brand to thousands of property seekers
                 </p>
               </div>
