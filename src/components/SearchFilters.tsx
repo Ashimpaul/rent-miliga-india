@@ -59,7 +59,7 @@ const SearchFilters = ({ filters, onChange }: Props) => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search city or area..."
+            placeholder="Search city, area or state..."
             value={filters.city}
             onChange={(e) => update("city", e.target.value)}
             className="pl-10 text-sm"

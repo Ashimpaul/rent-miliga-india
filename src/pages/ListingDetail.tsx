@@ -23,7 +23,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock } from "lucide-react";
+import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
@@ -39,6 +39,7 @@ const ListingDetail = () => {
 
   const [passwordDialog, setPasswordDialog] = useState<"edit" | "delete" | null>(null);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [verifying, setVerifying] = useState(false);
 
   const [editing, setEditing] = useState(false);
@@ -387,7 +388,7 @@ const ListingDetail = () => {
       <Footer />
 
       {/* Password Verification Dialog */}
-      <Dialog open={passwordDialog !== null} onOpenChange={() => { setPasswordDialog(null); setPassword(""); }}>
+      <Dialog open={passwordDialog !== null} onOpenChange={() => { setPasswordDialog(null); setPassword(""); setShowPassword(false); }}>
         <DialogContent className="mx-auto max-w-[calc(100vw-2rem)] rounded-lg sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
@@ -400,15 +401,29 @@ const ListingDetail = () => {
           </DialogHeader>
           <div className="py-1 sm:py-2">
             <Label htmlFor="verify-password" className="text-xs sm:text-sm">Listing Password</Label>
-            <Input
-              id="verify-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your listing password"
-              className="text-sm"
-              onKeyDown={(e) => e.key === "Enter" && verifyPassword(passwordDialog!)}
-            />
+            <div className="relative">
+              <Input
+                id="verify-password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your listing password"
+                className="pr-10 text-sm"
+                onKeyDown={(e) => e.key === "Enter" && verifyPassword(passwordDialog!)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
           </div>
           <DialogFooter className="flex-row gap-2 sm:flex-row">
             <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => { setPasswordDialog(null); setPassword(""); }}>

@@ -42,6 +42,401 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const seedData = async () => {
+      const dataToSeed = [ { 
+   "Product Name" : "1 BHK - 1 Bathroom - 400 sqft Rent House with parking", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-400-sq-ft-in-kanakpur-silchar-iid-1836419104", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/n7eyf4vj92mk-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent House with parking", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 555 sqft Paying guest", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-apartments-555-sq-ft-in-uttar-krishnapur-part-2-silchar-iid-1836264586", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/jnfs77a9rfjs3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Paying guest", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 800 sqft Apartment for Rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-apartments-800-sq-ft-in-kanakpur-silchar-iid-1835688617", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/lgefgi8i0ylw2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Apartment for Rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 400 sqft House for rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-400-sq-ft-in-kanakpur-silchar-iid-1819292501", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/0k2vw5yz6lpy-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "House for rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 420 sqft Room rent in Silchar", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-apartments-420-sq-ft-in-rongpur-silchar-iid-1836776070", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/r7ge3tnr0kwl1-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Room rent in Silchar", 
+   "Available Colors" : "", 
+   "Price (USD)" : "3000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 800 sqft Newly build house near south point school", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-apartments-800-sq-ft-in-ambicapur-pt-xi-silchar-iid-1835881017", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/25uqfi7rhn6e-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Newly build house near south point school", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 1 Bathroom - 1200 sqft 24 hours water availability, silence area , area net and clean", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-houses-villas-1200-sq-ft-in-das-colony-silchar-iid-1836148715", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/j7ulz2gvn55a3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "24 hours water availability, silence area , area net and clean", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "Ground floor room for rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-700-sq-ft-in-tarapur-silchar-iid-1835115698", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/28sr0vl8ai831-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Ground floor room for rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "4000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 1600 sqft 2 BHK rooms in Ground floor available for rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-1600-sq-ft-in-das-colony-silchar-iid-1837401284", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/8pfx2q5x3fll2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "2 BHK rooms in Ground floor available for rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 1 Bathroom - 6000 sqft 3BHK HOUSE RENT ATTACHED KITCHEN & BATHROOM CAR PARKING AVAILABLE", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-houses-villas-6000-sq-ft-in-ambicapur-pt-xi-silchar-iid-1837400939", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/gqpr7ghnl96f1-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "3BHK HOUSE RENT ATTACHED KITCHEN & BATHROOM CAR PARKING AVAILABLE", 
+   "Available Colors" : "", 
+   "Price (USD)" : "9000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 600 sqft To let 1BHK (Family,Single/Double) Rooms Available", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-builder-floors-600-sq-ft-in-ambikapur-silchar-iid-1837343692", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/zcavgmiftuvi-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "To let 1BHK (Family,Single/Double) Rooms Available", 
+   "Available Colors" : "", 
+   "Price (USD)" : "7500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 1200 sqft Property for rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-1200-sq-ft-in-das-colony-silchar-iid-1837327872", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/w0ep1g3vgfc42-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Property for rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "7000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 950 sqft Rent ( To Let)", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-950-sq-ft-in-uttar-krishnapur-silchar-iid-1837320505", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/ik7nf91skd0y2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent ( To Let)", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 2 Bathroom - 1100 sqft Flat on Rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-apartments-1100-sq-ft-in-meherpur-beltala-silchar-iid-1837302383", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/n7eax89jk2hn1-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Flat on Rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "9000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 100 sqft Rent for Single Room", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-builder-floors-100-sq-ft-in-uttar-krishnapur-silchar-iid-1826485611", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/tv3zmpbnud0t2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent for Single Room", 
+   "Available Colors" : "", 
+   "Price (USD)" : "4000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 2 Bathroom - 450 sqft Rent for family, bachelor", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-450-sq-ft-in-subash-nagar-silchar-iid-1837159559", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/nsoc58zubsyb3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent for family, bachelor", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 2 Bathroom - 1200 sqft Flat for rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-apartments-1200-sq-ft-in-ambica-patty-silchar-iid-1837154069", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/2kmugvfq5zjr1-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Flat for rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "17500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 2 Bathroom - 220 sqft Rooms for Girl Students/Small family", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-apartments-220-sq-ft-in-gandhi-bag-silchar-iid-1836971106", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/yq01fz9u43ff3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rooms for Girl Students/Small family", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "HOUSE FOR RENT", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-houses-villas-700-sq-ft-in-das-colony-silchar-iid-1837136822", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/3ty98dw9zciv3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "HOUSE FOR RENT", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 1 Bathroom - 1500 sqft Rented house for A Family", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-houses-villas-1500-sq-ft-in-silchar-part-x-silchar-iid-1831314464", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/zrelk1jc25gq2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rented house for A Family", 
+   "Available Colors" : "", 
+   "Price (USD)" : "7500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 1500 sqft Ready to move ready made house", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-1500-sq-ft-in-sarat-pally-silchar-iid-1837070511", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/ntrtjzk5aey7-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Ready to move ready made house", 
+   "Available Colors" : "", 
+   "Price (USD)" : "4000000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 500 sqft House rent Ns avenue @6500", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-builder-floors-500-sq-ft-in-das-colony-silchar-iid-1837035451", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/9nbodzolx1bv2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "House rent Ns avenue @6500", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 900 sqft Rent Near Sagrika Resort", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-builder-floors-900-sq-ft-in-rongpur-silchar-iid-1837007743", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/e48x40cnj36m-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent Near Sagrika Resort", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 178 sqft Single Room Available @5000", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-178-sq-ft-in-janiganj-silchar-iid-1836061601", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/qh91xburgg76-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Single Room Available @5000", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 550 sqft Good for family", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-apartments-550-sq-ft-in-meherpur-beltala-silchar-iid-1836937853", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/8e9uzqr1r1253-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Good for family", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 1000 sqft Sam's Residency", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-builder-floors-1000-sq-ft-in-ambikapur-silchar-iid-1836927445", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/kri5bnr0y7as3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Sam's Residency", 
+   "Available Colors" : "", 
+   "Price (USD)" : "25000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 1 Bathroom - 2300 sqft 3 bhk house for RenT with simple and Good Family", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-houses-villas-2300-sq-ft-in-shiv-colony-silchar-iid-1836230554", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/3dinxmfjjms23-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "3 bhk house for RenT with simple and Good Family", 
+   "Available Colors" : "", 
+   "Price (USD)" : "8500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 900 sqft Well furnished at Madhyashree Lane, chankooree Road, Silchar", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-900-sq-ft-in-silchar-part-x-silchar-iid-1836850261", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/1yd7pddr6fy92-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Well furnished at Madhyashree Lane, chankooree Road, Silchar", 
+   "Available Colors" : "", 
+   "Price (USD)" : "8000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 2 Bathroom - 1800 sqft Rent at 10k for family (24*7) water avl - 2nd linkroad", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-houses-villas-1800-sq-ft-in-das-colony-silchar-iid-1836755930", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/g5me97tlrpyj2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent at 10k for family (24*7) water avl - 2nd linkroad", 
+   "Available Colors" : "", 
+   "Price (USD)" : "10000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 2 Bathroom - 1050 sqft Snehalata apartment", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-apartments-1050-sq-ft-in-ambicapur-pt-xi-silchar-iid-1830681466", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/tylg5nzyojwa2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Snehalata apartment", 
+   "Available Colors" : "", 
+   "Price (USD)" : "15000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 800 sqft 2nd link road", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-800-sq-ft-in-ambicapur-part-11-silchar-iid-1836645307", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/5ihr425fkc1b2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "2nd link road", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 800 sqft Rent for Bachelor and single family", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-800-sq-ft-in-ambikapur-part-x-silchar-iid-1836644575", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/dyhavc60xstc-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rent for Bachelor and single family", 
+   "Available Colors" : "", 
+   "Price (USD)" : "3500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 495 sqft 2 Rooms + Kitchen for Rent Suitable for Office or Home", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-houses-villas-495-sq-ft-in-kanakpur-part-2-silchar-iid-1836540079", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/xqdsaovkqmi3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "2 Rooms + Kitchen for Rent Suitable for Office or Home", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 00 sqft Rooms for Rent available", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-builder-floors-00-sq-ft-in-ambica-patty-silchar-iid-1836533869", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/bsmomg9g30lc3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Rooms for Rent available", 
+   "Available Colors" : "", 
+   "Price (USD)" : "3200", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "3 BHK - 2 Bathroom - 1500 sqft 3bhk for rent", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-3-bhk-houses-villas-1500-sq-ft-in-meherpur-beltala-silchar-iid-1836512088", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/uq4yze1z86m01-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "3bhk for rent", 
+   "Available Colors" : "", 
+   "Price (USD)" : "14000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 1 Bathroom - 200 sqft Room for rent for Student -Family", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-builder-floors-200-sq-ft-in-uttar-krishnapur-pt-iii-silchar-iid-1830391242", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/4o5ini0g4mbn1-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Room for rent for Student -Family", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 700 sqft Single Room available at chencoorie Road Silchar Shiv shankar Lane", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-700-sq-ft-in-ambikapur-silchar-iid-1836244385", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/g51p9qi5xudc3-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Single Room available at chencoorie Road Silchar Shiv shankar Lane", 
+   "Available Colors" : "", 
+   "Price (USD)" : "5000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "2 BHK - 2 Bathroom - 1300 sqft 2BHK Flat available for Rent at Silchar", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-2-bhk-apartments-1300-sq-ft-in-meherpur-beltala-silchar-iid-1836329032", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/uwd3hnpaw098-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "2BHK Flat available for Rent at Silchar", 
+   "Available Colors" : "", 
+   "Price (USD)" : "11000", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 350 sqft Single room available for rent near National Highway police post", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-350-sq-ft-in-ambikapur-silchar-iid-1835773559", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/r6g9gmuw7xqq2-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Single room available for rent near National Highway police post", 
+   "Available Colors" : "", 
+   "Price (USD)" : "3500", 
+   "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "1 BHK - 1 Bathroom - 700 sqft 1 BIG ROOM + Kitchen + Bathroom", 
+   "Product URL" : "https://www.olx.in/item/for-rent-houses-apartments-c1723-1-bhk-houses-villas-700-sq-ft-in-das-colony-silchar-iid-1836289899", 
+   "Product Image" : "https://apollo.olx.in:443/v1/files/62qxmd9hj8yn1-IN/image;s=150x0;q=50;f=webp;", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "1 BIG ROOM + Kitchen + Bathroom", 
+   "Available Colors" : "", 
+   "Price (USD)" : "4000", 
+   "Contact Detail" : "" 
+ } ];
+
+      // Map to Supabase Listing type
+      const listingsToInsert = dataToSeed.map(item => ({
+        title: item["Product Name"],
+        description: item["Product Description"] || "Rental property in Silchar",
+        rent: parseInt(item["Price (USD)"]) || 0,
+        property_type: item["Product Name"].toLowerCase().includes("pg") ? "pg" : 
+                       item["Product Name"].toLowerCase().includes("apartment") ? "apartment" :
+                       item["Product Name"].toLowerCase().includes("flat") ? "apartment" :
+                       item["Product Name"].toLowerCase().includes("room") ? "room" : "house",
+        state: "Assam",
+        city: "Silchar",
+        area: item["Product URL"].split("in-")[1]?.split("-iid")[0]?.replace(/-/g, " ") || "Silchar",
+        address: item["Product Description"],
+        owner_name: "Owner",
+        phone_number: "9612963394",
+        image1: item["Product Image"].trim(),
+        password: "password123", // dummy password for management
+        pincode: "788001" // dummy pincode
+      }));
+
+      // Check if data already exists to avoid duplicates
+      const { data: existing } = await supabase.from("listings").select("title").limit(1);
+      
+      if (!existing || existing.length === 0) {
+        const { error } = await supabase.from("listings").insert(listingsToInsert);
+        if (error) console.error("Error seeding data:", error);
+        else console.log("Successfully seeded 40 listings");
+      }
+    };
+
+    seedData();
+
     supabase
       .from("listings")
       .select("*")
@@ -55,7 +450,9 @@ const Index = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate(`/rentals?q=${encodeURIComponent(search)}`);
+    if (search.trim()) {
+      navigate(`/rentals?q=${encodeURIComponent(search.trim())}`);
+    }
   };
 
   return (

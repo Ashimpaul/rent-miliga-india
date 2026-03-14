@@ -75,7 +75,7 @@ const Header = () => {
               <img 
                 src="/logo.png" 
                 alt="RentMilega" 
-                className="h-10 w-auto object-contain mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-24" 
+                className="h-14 w-auto object-contain mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-24" 
               />
             </Link>
           </div>

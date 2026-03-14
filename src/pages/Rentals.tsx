@@ -33,7 +33,15 @@ const Rentals = () => {
 
   const filtered = useMemo(() => {
     return listings.filter((l) => {
-      if (filters.city && !l.city.toLowerCase().includes(filters.city.toLowerCase()) && !l.area.toLowerCase().includes(filters.city.toLowerCase())) return false;
+      if (filters.city) {
+        const query = filters.city.toLowerCase();
+        const matchesCity = l.city.toLowerCase().includes(query);
+        const matchesArea = l.area.toLowerCase().includes(query);
+        const matchesState = l.state.toLowerCase().includes(query);
+        const matchesTitle = l.title.toLowerCase().includes(query);
+        
+        if (!matchesCity && !matchesArea && !matchesState && !matchesTitle) return false;
+      }
       if (filters.area && !l.area.toLowerCase().includes(filters.area.toLowerCase())) return false;
       if (filters.propertyType && filters.propertyType !== "all" && l.property_type !== filters.propertyType) return false;
       if (filters.minRent && l.rent < Number(filters.minRent)) return false;

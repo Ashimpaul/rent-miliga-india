@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Crown } from "lucide-react";
+import { Loader2, Crown, Eye, EyeOff } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +30,7 @@ const PostListing = () => {
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [showPremiumDialog, setShowPremiumDialog] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [premiumReason, setPremiumReason] = useState<"images" | "property_type">("images");
   const [form, setForm] = useState({
     title: "",
@@ -219,7 +220,28 @@ const PostListing = () => {
               <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Security</legend>
               <div>
                 <Label htmlFor="password" className="text-xs sm:text-sm">Listing Password *</Label>
-                <Input id="password" type="password" value={form.password} onChange={(e) => set("password", e.target.value)} placeholder="Set a password to edit/delete later" className="text-sm" />
+                <div className="relative">
+                  <Input 
+                    id="password" 
+                    type={showPassword ? "text" : "password"} 
+                    value={form.password} 
+                    onChange={(e) => set("password", e.target.value)} 
+                    placeholder="Set a password to edit/delete later" 
+                    className="pr-10 text-sm" 
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
                 <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
                   Remember this password — you'll need it to edit or delete your listing later.
                 </p>
