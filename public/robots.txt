@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://rentmilega.com/sitemap.xml
+Sitemap: https://rentmilega.in/sitemap.xml

@@ -50,7 +50,7 @@ const Privacy = () => {
             <section>
               <h2 className="text-2xl font-bold text-foreground mb-4">5. Contact</h2>
               <p>
-                If you have questions about your privacy, please contact us at <a href="mailto:privacy@rentmilega.com" className="text-primary hover:underline">privacy@rentmilega.com</a>.
+                If you have questions about your privacy, please contact us at <a href="mailto:privacy@rentmilega.in" className="text-primary hover:underline">privacy@rentmilega.in</a>.
               </p>
             </section>
           </div>

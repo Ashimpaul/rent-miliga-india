@@ -56,7 +56,7 @@ const Terms = () => {
             <section>
               <h2 className="text-2xl font-bold text-foreground mb-4">5. Contact</h2>
               <p>
-                If you have questions about these terms, please contact us at <a href="mailto:support@rentmilega.com" className="text-primary hover:underline">support@rentmilega.com</a>.
+                If you have questions about these terms, please contact us at <a href="mailto:support@rentmilega.in" className="text-primary hover:underline">support@rentmilega.in</a>.
               </p>
             </section>
           </div>

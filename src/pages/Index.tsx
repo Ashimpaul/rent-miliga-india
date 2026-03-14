@@ -58,7 +58,7 @@ const Index = () => {
       <AdPopup 
         type="image" 
         src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80" 
-        link="https://rentmilega.com/post"
+        link="https://rentmilega.in/post"
         delay={3000}
       />
       <main className="flex-1 bg-background">

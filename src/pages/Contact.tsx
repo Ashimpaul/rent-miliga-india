@@ -36,7 +36,7 @@ const Contact = () => {
             {/* Contact Info */}
             <div className="animate-fade-up space-y-5 opacity-0 stagger-2">
               {[
-                { icon: Mail, label: "Email", value: "support@rentmilega.com" },
+                { icon: Mail, label: "Email", value: "support@rentmilega.in" },
                 { icon: Phone, label: "Phone", value: "+91 98765 43210" },
                 { icon: MapPin, label: "Location", value: "India" },
               ].map((item) => (
