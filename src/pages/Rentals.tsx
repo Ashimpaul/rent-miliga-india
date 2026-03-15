@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
 import Header from "@/components/Header";
@@ -12,13 +12,21 @@ const defaultFilters = { city: "", area: "", propertyType: "", minRent: "", maxR
 
 const Rentals = () => {
   const [searchParams] = useSearchParams();
+  const { location } = useParams();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(() => {
-    const q = searchParams.get("q") || "";
+    const q = searchParams.get("q") || location || "";
     const type = searchParams.get("type") || "";
     return { ...defaultFilters, city: q, propertyType: type };
   });
+
+  useEffect(() => {
+    // Update filters if location parameter changes (e.g. via direct link)
+    if (location) {
+      setFilters(prev => ({ ...prev, city: location }));
+    }
+  }, [location]);
 
   useEffect(() => {
     supabase
@@ -57,11 +65,15 @@ const Rentals = () => {
     }
   };
 
+  const pageTitle = filters.city 
+    ? `Rent Houses, Rooms & PGs in ${filters.city.charAt(0).toUpperCase() + filters.city.slice(1)} | RentMilega`
+    : "Browse Rental Properties in India | RentMilega";
+
   return (
     <div className="flex min-h-screen flex-col">
       <Helmet>
-        <title>Browse Rental Properties in India | RentMilega</title>
-        <meta name="description" content="Search through our extensive list of rental properties in India. Filter by city, area, rent, and property type to find your perfect match." />
+        <title>{pageTitle}</title>
+        <meta name="description" content={filters.city ? `Find the best houses, rooms, and PGs for rent in ${filters.city}. Browse verified listings on RentMilega.` : "Search through our extensive list of rental properties in India. Filter by city, area, rent, and property type."} />
       </Helmet>
       <Header />
       <main className="flex-1">
