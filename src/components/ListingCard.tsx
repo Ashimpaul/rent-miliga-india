@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Phone, MapPin, IndianRupee, Trash2 } from "lucide-react";
+import { Phone, MapPin, IndianRupee, Trash2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
@@ -102,10 +102,28 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
           </div>
         </div>
 
-        <div className="mt-2 flex gap-2">
-          <Button size="sm" className="h-8 flex-1 text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:text-sm" asChild>
-            <a href={`tel:${listing.phone_number}`}>
+        <div className="mt-2 flex gap-1.5 sm:gap-2">
+          <Button 
+            size="sm" 
+            className="h-8 flex-1 text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:text-sm" 
+            asChild
+          >
+            <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
               <Phone className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-3.5 sm:w-3.5" /> Call
+            </a>
+          </Button>
+          <Button 
+            size="sm" 
+            variant="outline"
+            className="h-8 flex-1 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:text-sm" 
+            asChild
+          >
+            <a 
+              href={`https://wa.me/${listing.phone_number.replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-3.5 sm:w-3.5" /> Chat
             </a>
           </Button>
           {isAdmin && onDelete && (
@@ -113,7 +131,10 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
               size="sm"
               variant="destructive"
               className="h-8 px-2 text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:px-3 sm:text-sm"
-              onClick={() => onDelete(listing.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                onDelete(listing.id);
+              }}
             >
               <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             </Button>

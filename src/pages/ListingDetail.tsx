@@ -23,7 +23,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff } from "lucide-react";
+import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
@@ -371,14 +371,35 @@ const ListingDetail = () => {
 
                 {/* Contact */}
                 <div className="mt-3 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-2 transition-all duration-300 hover:shadow-md sm:mt-4 sm:p-4">
-                  <h2 className="mb-2 text-sm font-semibold text-foreground sm:text-base">Contact</h2>
-                  <p className="text-xs sm:text-sm">{listing.owner_name}</p>
-                  <p className="text-xs text-muted-foreground sm:text-sm">{listing.phone_number}</p>
-                  <Button className="mt-2.5 w-full transition-all duration-300 active:scale-95 hover:shadow-md sm:mt-3" asChild>
-                    <a href={`tel:${listing.phone_number}`}>
-                      <Phone className="mr-2 h-4 w-4" /> Call Owner
-                    </a>
-                  </Button>
+                  <h2 className="mb-2 text-sm font-semibold text-foreground sm:text-base">Contact Information</h2>
+                  <div className="flex flex-col gap-1 sm:gap-1.5">
+                    <p className="text-xs font-medium sm:text-sm">{listing.owner_name}</p>
+                    <p className="text-xs text-muted-foreground sm:text-sm">{listing.phone_number}</p>
+                  </div>
+                  
+                  <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-3">
+                    <Button 
+                      className="flex-1 transition-all duration-300 active:scale-95 hover:shadow-md h-11" 
+                      asChild
+                    >
+                      <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
+                        <Phone className="mr-2 h-4 w-4" /> Call Owner
+                      </a>
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      className="flex-1 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 active:scale-95 hover:shadow-md h-11" 
+                      asChild
+                    >
+                      <a 
+                        href={`https://wa.me/${listing.phone_number.replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </>
