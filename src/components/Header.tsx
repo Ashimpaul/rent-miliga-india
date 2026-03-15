@@ -7,8 +7,8 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { useAuth } from "../contexts/AuthContext";
 
 const NAV_ITEMS = [
-  { path: "/", label: "Home", icon: Home },
-  { path: "/rentals", label: "Find Rentals", icon: Search },
+  { path: "/home", label: "Home", icon: Home },
+  { path: "/", label: "Find Rentals", icon: Search },
   { path: "/post", label: "Post Property", icon: PlusCircle },
 ];
 

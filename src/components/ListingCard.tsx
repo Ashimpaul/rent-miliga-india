@@ -22,11 +22,11 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
   }, [images.length]);
 
   return (
-    <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[130px] sm:h-auto">
+    <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[160px] sm:h-auto">
       <Link 
         to={`/listing/${listing.id}`} 
         aria-label={`View details for ${listing.title}`}
-        className="w-[120px] sm:w-full h-full sm:h-auto shrink-0 overflow-hidden relative"
+        className="w-[150px] sm:w-full h-full sm:h-auto shrink-0 overflow-hidden relative"
       >
         <div className="relative h-full sm:aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
           {images.length > 0 ? (

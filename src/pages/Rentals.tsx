@@ -2,17 +2,20 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
-import Header from "@/components/Header";
+import { Header, Home, Search, MapPin, LogOut, Plus, Loader2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import HeaderComponent from "@/components/Header";
 import Footer from "@/components/Footer";
 import ListingCard from "@/components/ListingCard";
 import SearchFilters from "@/components/SearchFilters";
-import { Loader2 } from "lucide-react";
 
 const defaultFilters = { city: "", area: "", propertyType: "", minRent: "", maxRent: "" };
 
 const Rentals = () => {
   const [searchParams] = useSearchParams();
   const { location } = useParams();
+  const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(() => {
@@ -75,8 +78,8 @@ const Rentals = () => {
         <title>{pageTitle}</title>
         <meta name="description" content={filters.city ? `Find the best houses, rooms, and PGs for rent in ${filters.city}. Browse verified listings on RentMilega.` : "Search through our extensive list of rental properties in India. Filter by city, area, rent, and property type."} />
       </Helmet>
-      <Header />
-      <main className="flex-1">
+      <HeaderComponent />
+      <main className="flex-1 pb-20 sm:pb-0">
         <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6">
           <h1 className="text-lg font-bold text-foreground sm:text-2xl">Find Rentals</h1>
           <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Browse rental listings across India</p>
@@ -103,6 +106,41 @@ const Rentals = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Mobile Bottom Navigation Bar (App Style) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
+        <Link to="/home" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <Home className="h-5 w-5" />
+          <span className="text-[10px] font-medium">HOME</span>
+        </Link>
+        <Link to="/" className="flex flex-col items-center gap-1 text-primary">
+          <Search className="h-5 w-5" />
+          <span className="text-[10px] font-bold">SEARCH</span>
+        </Link>
+        
+        {/* The Post Button is absolute and sits above this nav */}
+        <div className="w-12" /> 
+        
+        <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <MapPin className="h-5 w-5" />
+          <span className="text-[10px] font-medium">LOCATIONS</span>
+        </Link>
+        <Link to="/admin" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <LogOut className="h-5 w-5" />
+          <span className="text-[10px] font-medium">ADMIN</span>
+        </Link>
+      </div>
+
+      {/* Mobile Floating Action Button (Centered like OLX) */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] sm:hidden">
+        <Button
+          onClick={() => navigate("/post")}
+          className="h-14 w-14 rounded-full bg-white text-primary p-0 shadow-[0_8px_30px_rgb(0,0,0,0.3)] border-4 border-primary flex items-center justify-center transition-all duration-300 active:scale-90 hover:bg-primary hover:text-white group"
+        >
+          <Plus className="h-8 w-8 group-hover:rotate-90 transition-transform duration-300" />
+        </Button>
+        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[9px] font-black text-primary bg-white px-1 rounded shadow-sm">POST</span>
+      </div>
     </div>
   );
 };

@@ -717,19 +717,19 @@ const Index = () => {
       
       {/* Mobile Bottom Navigation Bar (App Style) */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
-        <Link to="/" className="flex flex-col items-center gap-1 text-primary">
+        <Link to="/home" className="flex flex-col items-center gap-1 text-muted-foreground">
           <Home className="h-5 w-5" />
-          <span className="text-[10px] font-bold">HOME</span>
+          <span className="text-[10px] font-medium">HOME</span>
         </Link>
-        <Link to="/rentals" className="flex flex-col items-center gap-1 text-muted-foreground">
+        <Link to="/" className="flex flex-col items-center gap-1 text-primary">
           <Search className="h-5 w-5" />
-          <span className="text-[10px] font-medium">SEARCH</span>
+          <span className="text-[10px] font-bold">SEARCH</span>
         </Link>
         
         {/* The Post Button is absolute and sits above this nav */}
         <div className="w-12" /> 
         
-        <Link to="/rentals" className="flex flex-col items-center gap-1 text-muted-foreground">
+        <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground">
           <MapPin className="h-5 w-5" />
           <span className="text-[10px] font-medium">LOCATIONS</span>
         </Link>
