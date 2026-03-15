@@ -1,5 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-  <rect width="24" height="24" rx="5" fill="#3b82f6" stroke="none"/>
-  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" transform="translate(2, 2) scale(0.83)"/>
-  <polyline points="9 22 9 12 15 12 15 22" transform="translate(2, 2) scale(0.83)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Three Roofs Logo Style -->
+  <!-- Left Roof -->
+  <path d="M10 60 L30 40 L50 60" fill="#4ade80" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Right Roof -->
+  <path d="M50 60 L70 40 L90 60" fill="#4ade80" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Middle Higher Roof -->
+  <path d="M30 50 L50 25 L70 50" fill="#22c55e" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+  
+  <!-- Horizontal Base Line -->
+  <line x1="10" y1="65" x2="90" y2="65" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
 </svg>
