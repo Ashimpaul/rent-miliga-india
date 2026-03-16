@@ -11,8 +11,14 @@ const Footer = () => (
         />
       </div>
       <p className="text-sm font-semibold text-foreground sm:text-base">RentMilega</p>
-      <p className="mt-1">India's simple rental listing platform</p>
-      <div className="mt-3 flex items-center justify-center gap-4">
+      <p className="mt-1">India & Nepal's simple rental listing platform</p>
+      
+      <div className="mt-4 flex flex-col items-center gap-1 text-[10px] sm:text-xs">
+        <p>Email: <a href="mailto:rentmilega@gmail.com" className="text-primary hover:underline">rentmilega@gmail.com</a></p>
+        <p>Phone: <a href="tel:9612963394" className="text-primary hover:underline">+91 96129 63394</a></p>
+      </div>
+
+      <div className="mt-4 flex items-center justify-center gap-4">
         <Link to="/help" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
           Help
         </Link>

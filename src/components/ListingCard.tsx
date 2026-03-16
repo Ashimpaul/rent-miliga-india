@@ -21,6 +21,10 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
     return () => clearInterval(interval);
   }, [images.length]);
 
+  const isNepal = (listing as any).country === "Nepal";
+  const currencySymbol = isNepal ? "NPR" : "₹";
+  const locale = isNepal ? "en-NP" : "en-IN";
+
   return (
     <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[160px] sm:h-auto">
       <Link 
@@ -57,8 +61,8 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
           
           {/* Rent Badge (Visible only on desktop as it's redundant on mobile right) */}
           <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md opacity-0 transition-all duration-500 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 z-30 pointer-events-none hidden sm:flex">
-            <IndianRupee className="h-3 w-3" />
-            {listing.rent.toLocaleString("en-IN")}
+            <span className="text-[10px] leading-none">{currencySymbol}</span>
+            {listing.rent.toLocaleString(locale)}
           </div>
 
           {/* Image Counter Indicator (Visible on mobile) */}
@@ -81,8 +85,8 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
         <div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-0.5 text-base font-bold text-primary sm:gap-1 sm:text-lg">
-              <IndianRupee className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              {listing.rent.toLocaleString("en-IN")}
+              <span className="text-xs sm:text-sm">{currencySymbol}</span>
+              {listing.rent.toLocaleString(locale)}
               <span className="text-[10px] font-normal text-muted-foreground ml-0.5">/mo</span>
             </div>
             <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-primary sm:rounded-full sm:px-2 sm:text-[10px]">

@@ -36,9 +36,9 @@ const Contact = () => {
             {/* Contact Info */}
             <div className="animate-fade-up space-y-5 opacity-0 stagger-2">
               {[
-                { icon: Mail, label: "Email", value: "support@rentmilega.in" },
-                { icon: Phone, label: "Phone", value: "+91 98765 43210" },
-                { icon: MapPin, label: "Location", value: "India" },
+                { icon: Mail, label: "Email", value: "rentmilega@gmail.com" },
+                { icon: Phone, label: "Phone", value: "+91 96129 63394" },
+                { icon: MapPin, label: "Location", value: "India & Nepal" },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent">

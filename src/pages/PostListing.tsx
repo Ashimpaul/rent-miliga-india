@@ -16,17 +16,13 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, Crown, Eye, EyeOff } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PROPERTY_TYPES, INDIAN_STATES, NEPAL_PROVINCES, COUNTRIES } from "@/lib/constants";
+import { useCountry } from "../contexts/CountryContext";
 
 const PostListing = () => {
   const navigate = useNavigate();
+  const { country: currentCountry } = useCountry();
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [showPremiumDialog, setShowPremiumDialog] = useState(false);
@@ -37,7 +33,7 @@ const PostListing = () => {
     property_type: "",
     rent: "",
     description: "",
-    country: localStorage.getItem("selected_country") || "India",
+    country: currentCountry,
     state: "",
     city: "",
     area: "",

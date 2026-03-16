@@ -8,6 +8,7 @@ import HeaderComponent from "@/components/Header";
 import Footer from "@/components/Footer";
 import ListingCard from "@/components/ListingCard";
 import SearchFilters from "@/components/SearchFilters";
+import { useCountry } from "../contexts/CountryContext";
 
 const defaultFilters = { city: "", area: "", propertyType: "", minRent: "", maxRent: "" };
 
@@ -17,21 +18,13 @@ const Rentals = () => {
   const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [country, setCountry] = useState(() => localStorage.getItem("selected_country") || "India");
+  const { country } = useCountry();
   
   const [filters, setFilters] = useState(() => {
     const q = searchParams.get("q") || location || "";
     const type = searchParams.get("type") || "";
     return { ...defaultFilters, city: q, propertyType: type };
   });
-
-  useEffect(() => {
-    const handleCountryChange = () => {
-      setCountry(localStorage.getItem("selected_country") || "India");
-    };
-    window.addEventListener("country_change", handleCountryChange);
-    return () => window.removeEventListener("country_change", handleCountryChange);
-  }, []);
 
   useEffect(() => {
     // Update filters if location parameter changes (e.g. via direct link)
@@ -50,7 +43,7 @@ const Rentals = () => {
         setListings(data || []);
         setLoading(false);
       });
-  }, []);
+  }, [country]);
 
   const filtered = useMemo(() => {
     return listings.filter((l) => {
@@ -73,7 +66,7 @@ const Rentals = () => {
       if (filters.maxRent && l.rent > Number(filters.maxRent)) return false;
       return true;
     });
-  }, [listings, filters]);
+  }, [listings, filters, country]);
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from("listings").delete().eq("id", id);

@@ -9,6 +9,7 @@ import ListingCard from "@/components/ListingCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus } from "lucide-react";
+import { useCountry } from "../contexts/CountryContext";
 
 const CATEGORIES = [
   { label: "Rooms", icon: Home, type: "room" },
@@ -49,16 +50,8 @@ const Index = () => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [country, setCountry] = useState(() => localStorage.getItem("selected_country") || "India");
+  const { country } = useCountry();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleCountryChange = () => {
-      setCountry(localStorage.getItem("selected_country") || "India");
-    };
-    window.addEventListener("country_change", handleCountryChange);
-    return () => window.removeEventListener("country_change", handleCountryChange);
-  }, []);
 
   const popularLocations = country === "Nepal" ? POPULAR_LOCATIONS_NEPAL : POPULAR_LOCATIONS_INDIA;
 
@@ -467,7 +460,7 @@ const Index = () => {
         setListings(data || []);
         setLoading(false);
       });
-  }, []);
+  }, [country]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -557,7 +550,7 @@ const Index = () => {
                     />
                   </div>
                   <span className="text-[10px] font-bold text-foreground truncate w-full text-center">
-                    ₹{l.rent.toLocaleString("en-IN")}
+                    {country === "Nepal" ? "NPR" : "₹"}{l.rent.toLocaleString(country === "Nepal" ? "en-NP" : "en-IN")}
                   </span>
                 </Link>
               ))}

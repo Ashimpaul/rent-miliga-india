@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle, Plus, MapPin, ChevronDown, Heart, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useAuth } from "../contexts/AuthContext";
+import { useCountry } from "../contexts/CountryContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,15 +32,10 @@ const Header = () => {
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const { isAdmin, logout } = useAuth();
-  
-  const [country, setCountry] = useState(() => {
-    return localStorage.getItem("selected_country") || "India";
-  });
+  const { country, setCountry } = useCountry();
 
-  const handleCountryChange = (newCountry: string) => {
+  const handleCountryChange = (newCountry: "India" | "Nepal") => {
     setCountry(newCountry);
-    localStorage.setItem("selected_country", newCountry);
-    window.dispatchEvent(new Event("country_change"));
     setOpen(false);
     
     // Redirect to home if on a specific location page that might not apply to new country

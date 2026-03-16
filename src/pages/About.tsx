@@ -18,14 +18,14 @@ const About = () => (
           About <span className="text-primary">RentMilega</span>
         </h1>
         <p className="mt-4 animate-fade-up text-sm leading-relaxed text-muted-foreground opacity-0 stagger-1 sm:text-base">
-          RentMilega is India's simple and transparent rental listing platform. We connect property owners directly with tenants — no middlemen, no hidden fees.
+          RentMilega is India & Nepal's simple and transparent rental listing platform. We connect property owners directly with tenants — no middlemen, no hidden fees.
         </p>
 
         <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-6">
           {[
             { icon: Home, title: "Simple Listings", desc: "Post or find rentals in just a few clicks." },
             { icon: Shield, title: "Trusted Platform", desc: "Verified listings and direct owner contact." },
-            { icon: Users, title: "Community First", desc: "Built for tenants and owners across India." },
+            { icon: Users, title: "Community First", desc: "Built for tenants and owners across India & Nepal." },
             { icon: Heart, title: "Free to Use", desc: "No charges for browsing or posting basic listings." },
           ].map((item, i) => (
             <div
@@ -40,7 +40,7 @@ const About = () => (
         </div>
 
         <p className="mt-8 animate-fade-up text-sm leading-relaxed text-muted-foreground opacity-0 stagger-6 sm:mt-12 sm:text-base">
-          Our mission is to make renting simple, accessible, and stress-free for everyone in India. Whether you're looking for a room, apartment, PG, or commercial space — RentMilega has you covered.
+          Our mission is to make renting simple, accessible, and stress-free for everyone in India & Nepal. Whether you're looking for a room, apartment, PG, or commercial space — RentMilega has you covered.
         </p>
       </div>
     </main>
