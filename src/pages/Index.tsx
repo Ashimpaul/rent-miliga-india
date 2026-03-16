@@ -695,7 +695,7 @@ const Index = () => {
                 Post Your Property for <span className="text-primary italic">Rent</span>
               </h2>
               <p className="mx-auto mt-4 max-w-2xl animate-fade-up text-sm text-white/70 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light sm:mt-8">
-                Whether you're in Silchar, Guwahati, or anywhere in India, join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
+                Whether you're in India, Nepal, or anywhere in between, join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
               </p>
               <div className="mt-8 flex animate-fade-up flex-col items-center justify-center gap-3 opacity-0 stagger-2 sm:flex-row sm:mt-12 sm:gap-4">
                 <Button

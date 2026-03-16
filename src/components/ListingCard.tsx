@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Phone, MapPin, IndianRupee, Trash2, MessageCircle } from "lucide-react";
+import { Phone, MapPin, MessageCircle, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import WatermarkedImage from "./WatermarkedImage";
+import { toast } from "sonner";
 
-const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: string) => void }) => {
+const ListingCard = ({ listing }: { listing: Listing }) => {
   const images = [listing.image1, listing.image2, listing.image3].filter(Boolean) as string[];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { isAdmin } = useAuth();
+  // const { isAdmin } = useAuth(); // Hidden on card as requested
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -24,6 +25,28 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
   const isNepal = (listing as any).country === "Nepal";
   const currencySymbol = isNepal ? "NPR" : "₹";
   const locale = isNepal ? "en-NP" : "en-IN";
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}/listing/${listing.id}`;
+    const shareData = {
+      title: `${listing.title} | RentMilega`,
+      text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${listing.rent.toLocaleString()}/mo.`,
+      url: url,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
+    }
+  };
 
   return (
     <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[160px] sm:h-auto">
@@ -89,9 +112,20 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
               {listing.rent.toLocaleString(locale)}
               <span className="text-[10px] font-normal text-muted-foreground ml-0.5">/mo</span>
             </div>
-            <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-primary sm:rounded-full sm:px-2 sm:text-[10px]">
-              {listing.property_type}
-            </span>
+            <div className="flex items-center gap-1">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
+                onClick={handleShare}
+                title="Share Listing"
+              >
+                <Share2 className="h-3.5 w-3.5" />
+              </Button>
+              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-primary sm:rounded-full sm:px-2 sm:text-[10px]">
+                {listing.property_type}
+              </span>
+            </div>
           </div>
           
           <Link to={`/listing/${listing.id}`}>
@@ -130,19 +164,6 @@ const ListingCard = ({ listing, onDelete }: { listing: Listing; onDelete?: (id: 
               <MessageCircle className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-3.5 sm:w-3.5" /> Chat
             </a>
           </Button>
-          {isAdmin && onDelete && (
-            <Button
-              size="sm"
-              variant="destructive"
-              className="h-8 px-2 text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:px-3 sm:text-sm"
-              onClick={(e) => {
-                e.preventDefault();
-                onDelete(listing.id);
-              }}
-            >
-              <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-            </Button>
-          )}
         </div>
       </div>
     </div>

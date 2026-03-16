@@ -23,7 +23,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle } from "lucide-react";
+import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { PROPERTY_TYPES, INDIAN_STATES, NEPAL_PROVINCES, COUNTRIES } from "@/lib/constants";
@@ -101,6 +101,26 @@ const ListingDetail = () => {
     if (error) { toast.error("Failed to delete listing"); return; }
     toast.success("Listing deleted successfully");
     navigate("/");
+  };
+
+  const handleShare = async () => {
+    if (!listing) return;
+    const shareData = {
+      title: `${listing.title} | RentMilega`,
+      text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${listing.rent.toLocaleString()}/mo.`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -195,6 +215,14 @@ const ListingDetail = () => {
             </Link>
             {!editing && (
               <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 text-xs sm:flex-none sm:text-sm bg-primary/5 border-primary/20 hover:bg-primary/10"
+                  onClick={handleShare}
+                >
+                  <Share2 className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5 text-primary" /> Share
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"

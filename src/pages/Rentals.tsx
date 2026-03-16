@@ -68,13 +68,6 @@ const Rentals = () => {
     });
   }, [listings, filters, country]);
 
-  const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("listings").delete().eq("id", id);
-    if (!error) {
-      setListings((prev) => prev.filter((l) => l.id !== id));
-    }
-  };
-
   const pageTitle = filters.city 
     ? `Rent Houses, Rooms & PGs in ${filters.city.charAt(0).toUpperCase() + filters.city.slice(1)} | RentMilega`
     : `Browse Rental Properties in ${country} | RentMilega`;
@@ -106,7 +99,7 @@ const Rentals = () => {
           ) : (
             <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((l) => (
-                <ListingCard key={l.id} listing={l} onDelete={handleDelete} />
+                <ListingCard key={l.id} listing={l} />
               ))}
             </div>
           )}
