@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSearchParams, useParams } from "react-router-dom";
+import { useSearchParams, useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
-import { Header, Home, Search, MapPin, LogOut, Plus, Loader2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Home, Search, MapPin, LogOut, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeaderComponent from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -18,11 +17,21 @@ const Rentals = () => {
   const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [country, setCountry] = useState(() => localStorage.getItem("selected_country") || "India");
+  
   const [filters, setFilters] = useState(() => {
     const q = searchParams.get("q") || location || "";
     const type = searchParams.get("type") || "";
     return { ...defaultFilters, city: q, propertyType: type };
   });
+
+  useEffect(() => {
+    const handleCountryChange = () => {
+      setCountry(localStorage.getItem("selected_country") || "India");
+    };
+    window.addEventListener("country_change", handleCountryChange);
+    return () => window.removeEventListener("country_change", handleCountryChange);
+  }, []);
 
   useEffect(() => {
     // Update filters if location parameter changes (e.g. via direct link)
@@ -32,6 +41,7 @@ const Rentals = () => {
   }, [location]);
 
   useEffect(() => {
+    setLoading(true);
     supabase
       .from("listings")
       .select("*")
@@ -44,6 +54,10 @@ const Rentals = () => {
 
   const filtered = useMemo(() => {
     return listings.filter((l) => {
+      // Country Filter
+      const listingCountry = (l as any).country || "India";
+      if (listingCountry !== country) return false;
+
       if (filters.city) {
         const query = filters.city.toLowerCase();
         const matchesCity = l.city.toLowerCase().includes(query);
@@ -70,19 +84,19 @@ const Rentals = () => {
 
   const pageTitle = filters.city 
     ? `Rent Houses, Rooms & PGs in ${filters.city.charAt(0).toUpperCase() + filters.city.slice(1)} | RentMilega`
-    : "Browse Rental Properties in India | RentMilega";
+    : `Browse Rental Properties in ${country} | RentMilega`;
 
   return (
     <div className="flex min-h-screen flex-col">
       <Helmet>
         <title>{pageTitle}</title>
-        <meta name="description" content={filters.city ? `Find the best houses, rooms, and PGs for rent in ${filters.city}. Browse verified listings on RentMilega.` : "Search through our extensive list of rental properties in India. Filter by city, area, rent, and property type."} />
+        <meta name="description" content={filters.city ? `Find the best houses, rooms, and PGs for rent in ${filters.city}. Browse verified listings on RentMilega.` : `Search through our extensive list of rental properties in ${country}. Filter by city, area, rent, and property type.`} />
       </Helmet>
       <HeaderComponent />
       <main className="flex-1 pb-20 sm:pb-0">
         <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6">
-          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Find Rentals</h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Browse rental listings across India</p>
+          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Find Rentals in {country}</h1>
+          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Browse rental listings across {country}</p>
 
           <div className="mt-3 sm:mt-4">
             <SearchFilters filters={filters} onChange={setFilters} />
@@ -121,7 +135,7 @@ const Rentals = () => {
         {/* The Post Button is absolute and sits above this nav */}
         <div className="w-12" /> 
         
-        <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground">
+        <Link to="/rentals" className="flex flex-col items-center gap-1 text-muted-foreground">
           <MapPin className="h-5 w-5" />
           <span className="text-[10px] font-medium">LOCATIONS</span>
         </Link>

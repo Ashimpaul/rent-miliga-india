@@ -25,7 +25,7 @@ const STEPS = [
   { num: 3, title: "Connect", desc: "Contact the property owner directly and move into your new home!" },
 ];
 
-const POPULAR_LOCATIONS = [
+const POPULAR_LOCATIONS_INDIA = [
   "Silchar",
   "Guwahati",
   "Dibrugarh",
@@ -35,11 +35,32 @@ const POPULAR_LOCATIONS = [
   "Hailakandi",
 ];
 
+const POPULAR_LOCATIONS_NEPAL = [
+  "Kathmandu",
+  "Pokhara",
+  "Lalitpur",
+  "Bharatpur",
+  "Biratnagar",
+  "Birgunj",
+  "Dharan",
+];
+
 const Index = () => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [country, setCountry] = useState(() => localStorage.getItem("selected_country") || "India");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleCountryChange = () => {
+      setCountry(localStorage.getItem("selected_country") || "India");
+    };
+    window.addEventListener("country_change", handleCountryChange);
+    return () => window.removeEventListener("country_change", handleCountryChange);
+  }, []);
+
+  const popularLocations = country === "Nepal" ? POPULAR_LOCATIONS_NEPAL : POPULAR_LOCATIONS_INDIA;
 
   useEffect(() => {
     const seedData = async () => {
@@ -437,11 +458,11 @@ const Index = () => {
 
     seedData();
 
+    setLoading(true);
     supabase
       .from("listings")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(8)
       .then(({ data }) => {
         setListings(data || []);
         setLoading(false);
@@ -455,11 +476,16 @@ const Index = () => {
     }
   };
 
+  const filteredListings = listings.filter(l => {
+    const listingCountry = (l as any).country || "India";
+    return listingCountry === country;
+  });
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <Helmet>
-        <title>Find Houses, Rooms & PG for Rent in Assam & India | RentMilega</title>
-        <meta name="description" content="RentMilega helps you find houses, rooms, PGs and flats for rent across Silchar, Guwahati, and all of India. Post or find rental listings easily." />
+        <title>RentMilega | Find & Post Rental Listings in {country}</title>
+        <meta name="description" content={`Find the best houses, rooms, and PGs for rent in ${country}. Verified listings with direct owner contact.`} />
       </Helmet>
       <Header />
       {/* <AdPopup 
@@ -468,7 +494,7 @@ const Index = () => {
         link="https://rentmilega.in/post"
         delay={3000}
       /> */}
-      <main className="flex-1 bg-background">
+      <main className="flex-1 pb-20 sm:pb-0">
         {/* Hero - Optimized for mobile/desktop split */}
         <section 
           className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-zinc-950 sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
@@ -478,7 +504,7 @@ const Index = () => {
         >
           <div className="relative z-10 mx-auto w-full max-w-3xl px-4 py-6 text-center sm:py-0">
             <h1 className="animate-fade-up text-2xl font-bold tracking-tight text-white sm:text-5xl md:text-7xl">
-              Find Houses and Rooms for <span className="text-primary italic">Rent in India</span>
+              Find Houses and Rooms for <span className="text-primary italic">Rent in {country}</span>
             </h1>
             <p className="mt-3 animate-fade-up text-xs text-white/80 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light sm:mt-4">
               RentMilega is a premier rental platform helping people find houses, rooms, flats and PG accommodations across Assam and beyond.
@@ -514,14 +540,14 @@ const Index = () => {
         </section>
 
         {/* Mobile: Top Deals Scroller (OLX Style circular icons) */}
-        {!loading && listings.length > 0 && (
+        {!loading && filteredListings.length > 0 && (
           <div className="bg-muted/30 py-6 sm:hidden border-b border-border">
             <div className="px-4 mb-3 flex justify-between items-center">
-              <h2 className="text-sm font-bold">Top Deals in Silchar</h2>
+              <h2 className="text-sm font-bold">Top Deals in {country === "Nepal" ? "Kathmandu" : "Silchar"}</h2>
               <Link to="/rentals" className="text-xs text-primary font-semibold">View all</Link>
             </div>
             <div className="flex gap-4 px-4 overflow-x-auto no-scrollbar">
-              {listings.slice(0, 6).map((l) => (
+              {filteredListings.slice(0, 6).map((l) => (
                 <Link key={l.id} to={`/listing/${l.id}`} className="flex flex-col items-center gap-1.5 w-20 shrink-0">
                   <div className="w-20 h-20 rounded-full border-2 border-primary/30 p-0.5 overflow-hidden bg-card">
                     <img 
@@ -557,20 +583,22 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Popular Locations */}
-        <section className="py-8 border-b border-border bg-muted/30 sm:py-12">
+        {/* Featured Locations */}
+        <section className="bg-muted/30 py-8 sm:py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-lg font-bold mb-4 text-center sm:text-2xl sm:mb-6">Popular Rental Locations</h2>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-              {POPULAR_LOCATIONS.map((city) => (
+            <div className="mb-8 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-foreground sm:text-3xl">Popular Locations in {country}</h2>
+              <Link to="/rentals" className="text-xs font-semibold text-primary hover:underline sm:text-sm">View All</Link>
+            </div>
+            <div className="flex flex-wrap gap-2 sm:gap-4">
+              {popularLocations.map((loc) => (
                 <Button
-                  key={city}
+                  key={loc}
                   variant="outline"
-                  size="sm"
-                  className="rounded-full bg-card hover:bg-primary hover:text-white transition-colors"
-                  onClick={() => navigate(`/rentals?q=${encodeURIComponent(city)}`)}
+                  className="h-10 rounded-full border-border bg-card px-4 text-xs font-medium hover:border-primary hover:bg-primary/5 hover:text-primary sm:h-12 sm:px-6 sm:text-sm"
+                  asChild
                 >
-                  {city}
+                  <Link to={`/rentals?q=${loc}`}>{loc}</Link>
                 </Button>
               ))}
             </div>
@@ -597,13 +625,13 @@ const Index = () => {
               <div className="flex justify-center py-20">
                 <Loader2 className="h-12 w-12 animate-spin text-primary/50" />
               </div>
-            ) : listings.length === 0 ? (
+            ) : filteredListings.length === 0 ? (
               <p className="animate-fade-in py-20 text-center text-muted-foreground text-lg italic">
-                No listings yet. Be the first to post one!
+                No listings yet in {country}. Be the first to post one!
               </p>
             ) : (
               <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {listings.map((l, i) => (
+                {filteredListings.map((l, i) => (
                   <div key={l.id} className="animate-slide-up opacity-0" style={{ animationDelay: `${i * 0.1}s` }}>
                     <ListingCard listing={l} />
                   </div>
@@ -729,7 +757,7 @@ const Index = () => {
         {/* The Post Button is absolute and sits above this nav */}
         <div className="w-12" /> 
         
-        <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground">
+        <Link to="/rentals" className="flex flex-col items-center gap-1 text-muted-foreground">
           <MapPin className="h-5 w-5" />
           <span className="text-[10px] font-medium">LOCATIONS</span>
         </Link>

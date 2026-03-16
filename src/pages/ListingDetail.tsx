@@ -26,7 +26,7 @@ import {
 import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
-import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
+import { PROPERTY_TYPES, INDIAN_STATES, NEPAL_PROVINCES, COUNTRIES } from "@/lib/constants";
 import WatermarkedImage from "@/components/WatermarkedImage";
 
 const ListingDetail = () => {
@@ -45,7 +45,7 @@ const ListingDetail = () => {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({
     title: "", property_type: "", rent: "", description: "",
-    state: "", city: "", area: "", address: "", pincode: "",
+    country: "India", state: "", city: "", area: "", address: "", pincode: "",
     owner_name: "", phone_number: "", google_map_link: "",
   });
   const [saving, setSaving] = useState(false);
@@ -60,6 +60,7 @@ const ListingDetail = () => {
     setEditForm({
       title: listing?.title || "", property_type: listing?.property_type || "",
       rent: String(listing?.rent || ""), description: listing?.description || "",
+      country: (listing as any)?.country || "India",
       state: listing?.state || "", city: listing?.city || "",
       area: listing?.area || "", address: listing?.address || "",
       pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
@@ -67,6 +68,9 @@ const ListingDetail = () => {
     });
     setEditing(true);
   };
+
+  const statesList = editForm.country === "Nepal" ? NEPAL_PROVINCES : INDIAN_STATES;
+  const currencySymbol = editForm.country === "Nepal" ? "NPR" : "₹";
 
   const verifyPassword = async (action: "edit" | "delete") => {
     if (!id || !password) return;
@@ -109,6 +113,7 @@ const ListingDetail = () => {
       const { error } = await supabase.from("listings").update({
         title: editForm.title, property_type: editForm.property_type,
         rent: Number(editForm.rent), description: editForm.description || null,
+        country: editForm.country,
         state: editForm.state, city: editForm.city, area: editForm.area,
         address: editForm.address || null, pincode: editForm.pincode || null,
         owner_name: editForm.owner_name, phone_number: editForm.phone_number,
@@ -232,7 +237,7 @@ const ListingDetail = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="edit-rent" className="text-xs sm:text-sm">Monthly Rent (₹) *</Label>
+                  <Label htmlFor="edit-rent" className="text-xs sm:text-sm">Monthly Rent ({currencySymbol}) *</Label>
                   <Input id="edit-rent" type="number" value={editForm.rent} onChange={(e) => setEdit("rent", e.target.value)} className="text-sm" />
                 </div>
                 <div>
@@ -245,26 +250,41 @@ const ListingDetail = () => {
                 <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Location</legend>
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <div>
-                    <Label htmlFor="edit-state" className="text-xs sm:text-sm">State *</Label>
-                    <Select value={editForm.state} onValueChange={(v) => setEdit("state", v)}>
-                      <SelectTrigger id="edit-state" className="text-sm">
-                        <SelectValue placeholder="Select state" />
+                    <Label htmlFor="edit-country" className="text-xs sm:text-sm">Country *</Label>
+                    <Select value={editForm.country} onValueChange={(v) => setEdit("country", v)}>
+                      <SelectTrigger id="edit-country" className="text-sm">
+                        <SelectValue placeholder="Select country" />
                       </SelectTrigger>
                       <SelectContent>
-                        {INDIAN_STATES.map((s) => (
-                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        {COUNTRIES.map((c) => (
+                          <SelectItem key={c} value={c}>{c}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
+                    <Label htmlFor="edit-state" className="text-xs sm:text-sm">{editForm.country === "Nepal" ? "Province" : "State"} *</Label>
+                    <Select value={editForm.state} onValueChange={(v) => setEdit("state", v)}>
+                      <SelectTrigger id="edit-state" className="text-sm">
+                        <SelectValue placeholder={`Select ${editForm.country === "Nepal" ? "province" : "state"}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {statesList.map((s) => (
+                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <div>
                     <Label htmlFor="edit-city" className="text-xs sm:text-sm">City *</Label>
                     <Input id="edit-city" value={editForm.city} onChange={(e) => setEdit("city", e.target.value)} className="text-sm" />
                   </div>
-                </div>
-                <div>
-                  <Label htmlFor="edit-area" className="text-xs sm:text-sm">Area / Locality *</Label>
-                  <Input id="edit-area" value={editForm.area} onChange={(e) => setEdit("area", e.target.value)} className="text-sm" />
+                  <div>
+                    <Label htmlFor="edit-area" className="text-xs sm:text-sm">Area / Locality *</Label>
+                    <Input id="edit-area" value={editForm.area} onChange={(e) => setEdit("area", e.target.value)} className="text-sm" />
+                  </div>
                 </div>
                 <div>
                   <Label htmlFor="edit-address" className="text-xs sm:text-sm">Address</Label>
@@ -349,7 +369,8 @@ const ListingDetail = () => {
                     <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
                   </h2>
                   <div className="grid grid-cols-1 gap-1.5 text-xs sm:grid-cols-2 sm:gap-2 sm:text-sm">
-                    <div><span className="text-muted-foreground">State:</span> {listing.state}</div>
+                    <div><span className="text-muted-foreground">Country:</span> {(listing as any).country || "India"}</div>
+                    <div><span className="text-muted-foreground">{(listing as any).country === "Nepal" ? "Province" : "State"}:</span> {listing.state}</div>
                     <div><span className="text-muted-foreground">City:</span> {listing.city}</div>
                     <div><span className="text-muted-foreground">Area:</span> {listing.area}</div>
                     {listing.pincode && <div><span className="text-muted-foreground">Pincode:</span> {listing.pincode}</div>}

@@ -23,7 +23,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { PROPERTY_TYPES, INDIAN_STATES } from "@/lib/constants";
+import { PROPERTY_TYPES, INDIAN_STATES, NEPAL_PROVINCES, COUNTRIES } from "@/lib/constants";
 
 const PostListing = () => {
   const navigate = useNavigate();
@@ -37,6 +37,7 @@ const PostListing = () => {
     property_type: "",
     rent: "",
     description: "",
+    country: localStorage.getItem("selected_country") || "India",
     state: "",
     city: "",
     area: "",
@@ -56,8 +57,17 @@ const PostListing = () => {
       setShowPremiumDialog(true);
       return;
     }
+    // Reset state if country changes
+    if (key === "country") {
+      setForm(f => ({ ...f, country: value, state: "" }));
+      return;
+    }
     setForm((f) => ({ ...f, [key]: value }));
   };
+
+  const statesList = form.country === "Nepal" ? NEPAL_PROVINCES : INDIAN_STATES;
+  const currencySymbol = form.country === "Nepal" ? "NPR" : "₹";
+  const phonePlaceholder = form.country === "Nepal" ? "+977" : "+91";
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -99,6 +109,7 @@ const PostListing = () => {
         property_type: form.property_type,
         rent: Number(form.rent),
         description: form.description || null,
+        country: form.country,
         state: form.state,
         city: form.city,
         area: form.area,
@@ -150,7 +161,7 @@ const PostListing = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="rent" className="text-xs sm:text-sm">Monthly Rent (₹) *</Label>
+                <Label htmlFor="rent" className="text-xs sm:text-sm">Monthly Rent ({currencySymbol}) *</Label>
                 <Input id="rent" type="number" value={form.rent} onChange={(e) => set("rent", e.target.value)} placeholder="e.g. 8000" className="text-sm" />
               </div>
               <div>
@@ -164,26 +175,41 @@ const PostListing = () => {
               <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Location</legend>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <div>
-                  <Label htmlFor="state" className="text-xs sm:text-sm">State *</Label>
-                  <Select value={form.state} onValueChange={(v) => set("state", v)}>
-                    <SelectTrigger id="state" className="text-sm">
-                      <SelectValue placeholder="Select state" />
+                  <Label htmlFor="country-select" className="text-xs sm:text-sm">Country *</Label>
+                  <Select value={form.country} onValueChange={(v) => set("country", v)}>
+                    <SelectTrigger id="country-select" className="text-sm">
+                      <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                     <SelectContent>
-                      {INDIAN_STATES.map((s) => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      {COUNTRIES.map((c) => (
+                        <SelectItem key={c} value={c}>{c}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
+                  <Label htmlFor="state" className="text-xs sm:text-sm">{form.country === "Nepal" ? "Province" : "State"} *</Label>
+                  <Select value={form.state} onValueChange={(v) => set("state", v)}>
+                    <SelectTrigger id="state" className="text-sm">
+                      <SelectValue placeholder={`Select ${form.country === "Nepal" ? "province" : "state"}`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statesList.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <div>
                   <Label htmlFor="city" className="text-xs sm:text-sm">City *</Label>
                   <Input id="city" value={form.city} onChange={(e) => set("city", e.target.value)} className="text-sm" />
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="area" className="text-xs sm:text-sm">Area / Locality *</Label>
-                <Input id="area" value={form.area} onChange={(e) => set("area", e.target.value)} className="text-sm" />
+                <div>
+                  <Label htmlFor="area" className="text-xs sm:text-sm">Area / Locality *</Label>
+                  <Input id="area" value={form.area} onChange={(e) => set("area", e.target.value)} className="text-sm" />
+                </div>
               </div>
               <div>
                 <Label htmlFor="address" className="text-xs sm:text-sm">Address</Label>
@@ -210,9 +236,9 @@ const PostListing = () => {
                 <Input id="owner" value={form.owner_name} onChange={(e) => set("owner_name", e.target.value)} className="text-sm" />
               </div>
               <div>
-                <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number *</Label>
-                <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder="+919876543210" className="text-sm" />
-              </div>
+                  <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number *</Label>
+                  <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder={`e.g. ${phonePlaceholder}9876543210`} className="text-sm" />
+                </div>
             </fieldset>
 
             {/* Password */}

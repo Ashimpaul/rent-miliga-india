@@ -1,10 +1,16 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle, Plus, MapPin, ChevronDown, Heart } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle, Plus, MapPin, ChevronDown, Heart, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useAuth } from "../contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NAV_ITEMS = [
   { path: "/home", label: "Home", icon: Home },
@@ -20,10 +26,27 @@ const SIDEBAR_EXTRA_ITEMS = [
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = (path: string) => location.pathname === path;
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const { isAdmin, logout } = useAuth();
+  
+  const [country, setCountry] = useState(() => {
+    return localStorage.getItem("selected_country") || "India";
+  });
+
+  const handleCountryChange = (newCountry: string) => {
+    setCountry(newCountry);
+    localStorage.setItem("selected_country", newCountry);
+    window.dispatchEvent(new Event("country_change"));
+    setOpen(false);
+    
+    // Redirect to home if on a specific location page that might not apply to new country
+    if (location.pathname.startsWith("/rentals/")) {
+      navigate("/");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 animate-fade-in border-b border-border bg-card/95 backdrop-blur-md">
@@ -40,6 +63,28 @@ const Header = () => {
               <SheetContent side="left" className="w-64 pt-10">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <nav className="flex flex-col gap-2">
+                  <div className="px-2 pb-4">
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Select Country</p>
+                    <div className="flex gap-2">
+                      <Button 
+                        variant={country === "India" ? "default" : "outline"} 
+                        size="sm" 
+                        className="flex-1 h-8 text-xs"
+                        onClick={() => handleCountryChange("India")}
+                      >
+                        India
+                      </Button>
+                      <Button 
+                        variant={country === "Nepal" ? "default" : "outline"} 
+                        size="sm" 
+                        className="flex-1 h-8 text-xs"
+                        onClick={() => handleCountryChange("Nepal")}
+                      >
+                        Nepal
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="border-t border-border my-2" />
                   {NAV_ITEMS.map((item, i) => (
                     <Button
                       key={item.path}
@@ -89,10 +134,44 @@ const Header = () => {
                 className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 sm:h-24 mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal" 
               />
             </Link>
+            
+            <div className="ml-6 hidden lg:block">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-9 gap-2 border-primary/20 hover:border-primary/50 transition-colors">
+                    <Globe className="h-4 w-4 text-primary" />
+                    <span className="font-semibold">{country}</span>
+                    <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-[150px]">
+                  <DropdownMenuItem onClick={() => handleCountryChange("India")} className="cursor-pointer">
+                    India
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleCountryChange("Nepal")} className="cursor-pointer">
+                    Nepal
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
 
           {/* Desktop Nav */}
           <nav className="hidden items-center gap-1 sm:flex">
+            <div className="mr-2 lg:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-8 gap-1.5">
+                    <Globe className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-xs font-bold">{country}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => handleCountryChange("India")}>India</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleCountryChange("Nepal")}>Nepal</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             {NAV_ITEMS.map((item) => (
               <Button
                 key={item.path}
@@ -128,11 +207,19 @@ const Header = () => {
 
           {/* Mobile: Right Actions (Location & Theme) */}
           <div className="flex items-center gap-1 sm:hidden">
-            <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground">
-              <MapPin className="h-3 w-3 text-primary" />
-              <span>India</span>
-              <ChevronDown className="h-3 w-3" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground">
+                  <MapPin className="h-3 w-3 text-primary" />
+                  <span>{country}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[120px]">
+                <DropdownMenuItem onClick={() => handleCountryChange("India")} className="text-xs">India</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleCountryChange("Nepal")} className="text-xs">Nepal</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -143,7 +230,7 @@ const Header = () => {
         <div className="mt-2 sm:hidden pb-1">
           <Link to="/rentals" className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg px-3 h-10 text-muted-foreground transition-all active:scale-95">
             <Search className="h-4 w-4" />
-            <span className="text-sm">For Rent: Houses & Apartments near you...</span>
+            <span className="text-sm">For Rent: Houses & PGs in {country}...</span>
           </Link>
         </div>
       </div>

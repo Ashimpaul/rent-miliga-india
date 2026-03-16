@@ -38,3 +38,15 @@ export const INDIAN_STATES = [
   "Lakshadweep",
   "Puducherry"
 ];
+
+export const NEPAL_PROVINCES = [
+  "Koshi Province",
+  "Madhesh Province",
+  "Bagmati Province",
+  "Gandaki Province",
+  "Lumbini Province",
+  "Karnali Province",
+  "Sudurpashchim Province"
+];
+
+export const COUNTRIES = ["India", "Nepal"];
