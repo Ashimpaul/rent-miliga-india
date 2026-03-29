@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Lock, LogOut, ArrowLeft, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import { Lock, LogOut, ArrowLeft, ShieldCheck, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AdminBlogManagement from "@/components/AdminBlogManagement";
 
 const Admin = () => {
+  const { login, isAdmin, logout } = useAuth();
+  console.log("Admin page render. isAdmin:", isAdmin);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,7 +22,7 @@ const Admin = () => {
     const success = login(password);
     if (success) {
       toast.success("Admin login successful");
-      navigate("/");
+      navigate("/admin");
     } else {
       toast.error("Incorrect password");
       setPassword("");
@@ -29,8 +32,8 @@ const Admin = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-md space-y-6 animate-fade-up">
+      <main className="flex-1 flex flex-col items-center py-12 px-4">
+        <div className="w-full max-w-4xl space-y-6 animate-fade-up">
           <div className="text-center space-y-2">
             <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
               <ShieldCheck className="h-6 w-6 text-primary" />
@@ -38,35 +41,52 @@ const Admin = () => {
             <h1 className="text-2xl font-bold tracking-tight">Admin Portal</h1>
             <p className="text-muted-foreground">
               {isAdmin 
-                ? "You are currently logged in as an administrator." 
+                ? "Manage your website content and settings." 
                 : "Enter your administrator password to continue."}
             </p>
           </div>
 
           {isAdmin ? (
-            <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-4">
-              <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg border border-primary/10">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-sm font-medium">Administrator Access Active</span>
+            <div className="w-full space-y-8" data-testid="admin-dashboard">
+              <div className="flex flex-col items-center justify-center space-y-4 bg-primary/5 border border-primary/10 p-6 rounded-2xl">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+                  <h2 className="text-lg font-bold">Administrator Session Active</h2>
+                </div>
+                <div className="flex gap-3">
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/">
+                      <ArrowLeft className="mr-2 h-4 w-4" /> Homepage
+                    </Link>
+                  </Button>
+                  <Button variant="destructive" size="sm" onClick={logout}>
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                  </Button>
+                </div>
               </div>
-              
-              <div className="grid grid-cols-1 gap-3 pt-2">
-                <Button asChild variant="outline" className="w-full">
-                  <Link to="/">
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Go to Homepage
-                  </Link>
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  className="w-full"
-                  onClick={() => {
-                    logout();
-                    toast.success("Logged out successfully");
-                  }}
-                >
-                  <LogOut className="mr-2 h-4 w-4" /> Logout from Admin
-                </Button>
-              </div>
+
+              <Tabs defaultValue="blog" className="w-full">
+                <div className="flex justify-center">
+                  <TabsList className="grid w-full max-w-md grid-cols-2">
+                    <TabsTrigger value="blog">Manage Blog</TabsTrigger>
+                    <TabsTrigger value="general">Site Settings</TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="blog" className="mt-8 animate-fade-up">
+                  <React.Suspense fallback={<div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+                    <AdminBlogManagement />
+                  </React.Suspense>
+                </TabsContent>
+
+                <TabsContent value="general" className="mt-8 animate-fade-up">
+                  <div className="bg-card border border-border rounded-xl p-8 shadow-sm text-center">
+                    <ShieldCheck className="h-12 w-12 text-primary mx-auto mb-4 opacity-20" />
+                    <h3 className="text-xl font-bold mb-2">General Settings</h3>
+                    <p className="text-muted-foreground">Additional website settings will appear here in future updates.</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           ) : (
             <div className="bg-card border border-border rounded-xl p-6 shadow-sm">

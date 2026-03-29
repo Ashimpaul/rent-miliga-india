@@ -27,16 +27,24 @@ const Footer = () => (
           About Us
         </Link>
         <span className="text-border">•</span>
+        <Link to="/blogs" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
+          Blog
+        </Link>
+        <span className="text-border">•</span>
         <Link to="/contact" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
           Contact Us
         </Link>
         <span className="text-border">•</span>
-        <Link to="/terms" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
-          Terms
+        <Link to="/help" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
+          Help
         </Link>
         <span className="text-border">•</span>
         <Link to="/privacy" className="text-xs font-medium text-primary transition-colors hover:text-primary/80 sm:text-sm">
           Privacy
+        </Link>
+        <span className="text-border">•</span>
+        <Link to="/admin" className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded transition-colors hover:bg-primary/10 sm:text-sm">
+          Admin Portal
         </Link>
       </div>
       <p className="mt-2 sm:mt-3">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle, Plus, MapPin, ChevronDown, Heart, Globe } from "lucide-react";
+import { Home, Search, PlusCircle, Moon, Sun, Menu, LogOut, Info, PhoneCall, HelpCircle, Plus, MapPin, ChevronDown, Heart, Globe, BookOpen, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -16,11 +16,14 @@ import {
 const NAV_ITEMS = [
   { path: "/home", label: "Home", icon: Home },
   { path: "/", label: "Find Rentals", icon: Search },
+  { path: "/blogs", label: "Blog", icon: BookOpen },
   { path: "/post", label: "Post Property", icon: PlusCircle },
 ];
 
 const SIDEBAR_EXTRA_ITEMS = [
   { path: "/about", label: "About Us", icon: Info },
+  { path: "/blogs", label: "Blog", icon: BookOpen },
+  { path: "/admin", label: "Admin Panel", icon: ShieldCheck },
   { path: "/contact", label: "Contact Us", icon: PhoneCall },
   { path: "/help", label: "Help & FAQ", icon: HelpCircle },
 ];
@@ -94,6 +97,18 @@ const Header = () => {
                       </Link>
                     </Button>
                   ))}
+                  {isAdmin && (
+                    <Button
+                      variant={isActive("/admin") ? "default" : "ghost"}
+                      className="justify-start text-primary font-bold"
+                      asChild
+                      onClick={() => setOpen(false)}
+                    >
+                      <Link to="/admin">
+                        <ShieldCheck className="mr-2 h-4 w-4" /> Admin Dashboard
+                      </Link>
+                    </Button>
+                  )}
                   <div className="my-2 border-t border-border" />
                   {SIDEBAR_EXTRA_ITEMS.map((item) => (
                     <Button
@@ -182,8 +197,15 @@ const Header = () => {
               </Button>
             ))}
             {isAdmin && (
-              <Button variant="ghost" size="sm" onClick={logout}>
-                <LogOut className="mr-1.5 h-3.5 w-3.5" /> Logout
+              <Button
+                variant={isActive("/admin") ? "secondary" : "ghost"}
+                size="sm"
+                className="transition-all duration-200 text-primary font-bold"
+                asChild
+              >
+                <Link to="/admin">
+                  <ShieldCheck className="mr-1.5 h-3.5 w-3.5" /> Admin
+                </Link>
               </Button>
             )}
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>

@@ -8,7 +8,8 @@ import ListingCard from "@/components/ListingCard";
 // import AdPopup from "@/components/AdPopup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus } from "lucide-react";
+import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus, Calendar, BookOpen } from "lucide-react";
+import { format } from "date-fns";
 import { useCountry } from "../contexts/CountryContext";
 
 const CATEGORIES = [
@@ -49,13 +50,38 @@ const POPULAR_LOCATIONS_NEPAL = [
 const Index = () => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState<Listing[]>([]);
+  const [blogs, setBlogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [blogsLoading, setBlogsLoading] = useState(true);
   const { country } = useCountry();
   const navigate = useNavigate();
 
   const popularLocations = country === "Nepal" ? POPULAR_LOCATIONS_NEPAL : POPULAR_LOCATIONS_INDIA;
 
   useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("blogs")
+          .select("id, title, slug, excerpt, image_url, created_at")
+          .eq("is_published", true)
+          .order("created_at", { ascending: false })
+          .limit(3);
+
+        if (error) {
+          console.error("Error fetching blogs for home:", error);
+        } else {
+          setBlogs(data || []);
+        }
+      } catch (err) {
+        console.error("Blog fetch exception:", err);
+      } finally {
+        setBlogsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+
     const seedData = async () => {
       const dataToSeed = [ { 
    "Product Name" : "1 BHK - 1 Bathroom - 400 sqft Rent House with parking", 
@@ -633,6 +659,63 @@ const Index = () => {
             )}
           </div>
         </section>
+
+        {/* Latest from Blog */}
+        {blogs.length > 0 && (
+          <section className="py-12 sm:py-32 border-t border-border/50">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-end justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-center">
+                <div>
+                  <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                    Latest News & Tips
+                  </h2>
+                  <p className="mt-3 text-base text-muted-foreground sm:text-lg">Stay updated with rental insights and real estate trends</p>
+                </div>
+                <Button variant="link" size="lg" className="group text-lg font-bold p-0 h-auto" asChild>
+                  <Link to="/blogs" className="flex items-center">
+                    View All Blog Posts <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+              </div>
+              
+              <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                {blogs.map((blog, i) => (
+                  <Link 
+                    key={blog.id} 
+                    to={`/blog/${blog.slug}`} 
+                    className="group animate-fade-up opacity-0" 
+                    style={{ animationDelay: `${i * 0.1}s` }}
+                  >
+                    <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md h-full flex flex-col">
+                      <div className="aspect-video relative overflow-hidden">
+                        <img
+                          src={blog.image_url || "/placeholder.svg"}
+                          alt={blog.title}
+                          className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-6 flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                          <Calendar className="h-3 w-3" />
+                          {format(new Date(blog.created_at), "MMM d, yyyy")}
+                        </div>
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                          {blog.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
+                          {blog.excerpt || "Read the latest update from RentMilega..."}
+                        </p>
+                        <div className="mt-auto flex items-center text-primary font-bold text-sm">
+                          Read More <ArrowRight className="ml-1.5 h-4 w-4" />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Browse by Category */}
         <section className="py-12 sm:py-32 border-t border-border/50 bg-muted/5">
