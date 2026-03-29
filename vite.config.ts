@@ -14,25 +14,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === "production" && 
-      obfuscator({
-        controlFlowFlattening: true,
-        deadCodeInjection: true,
-        debugProtection: true,
-        debugProtectionInterval: 4000,
-        disableConsoleOutput: true,
-        identifierNamesGenerator: "hexadecimal",
-        log: false,
-        numbersToExpressions: true,
-        renameGlobals: false,
-        selfDefending: true,
-        simplify: true,
-        splitStrings: true,
-        stringArray: true,
-        stringArrayEncoding: ["base64"],
-        stringArrayThreshold: 0.75,
-        unicodeEscapeSequence: false,
-      }),
+    mode === "production" && obfuscator({}),
   ].filter(Boolean),
   resolve: {
     alias: {
