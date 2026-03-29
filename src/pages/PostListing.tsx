@@ -55,7 +55,7 @@ const PostListing = () => {
     }
     // Reset state if country changes
     if (key === "country") {
-      setForm(f => ({ ...f, country: value, state: "" }));
+      setForm(f => ({ ...f, country: value as "India" | "Nepal", state: "" }));
       return;
     }
     setForm((f) => ({ ...f, [key]: value }));

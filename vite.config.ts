@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "production" && 
       obfuscator({
-        compact: true,
         controlFlowFlattening: true,
         deadCodeInjection: true,
         debugProtection: true,
