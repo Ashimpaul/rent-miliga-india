@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
-import { Home, Search, MapPin, LogOut, Plus, Loader2, BookOpen } from "lucide-react";
+import { Home, Search, MapPin, LogOut, Plus, Loader2, BookOpen, AlertCircle, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeaderComponent from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,18 +20,36 @@ const Rentals = () => {
   const [loading, setLoading] = useState(true);
   const { country } = useCountry();
   
+  const searchError = searchParams.get("error");
+  const isNearbySearch = searchParams.get("nearMe") === "true";
+
   const [filters, setFilters] = useState(() => {
     const q = searchParams.get("q") || location || "";
     const type = searchParams.get("type") || "";
+    
+    const propertyTypes = ["room", "apartment", "house", "pg", "hostel", "homestay", "commercial"];
+    const lowercaseQ = q.toLowerCase().trim();
+    
+    if (propertyTypes.includes(lowercaseQ)) {
+      return { ...defaultFilters, city: "", propertyType: lowercaseQ };
+    }
+    
     return { ...defaultFilters, city: q, propertyType: type };
   });
 
   useEffect(() => {
-    // Update filters if location parameter changes (e.g. via direct link)
-    if (location) {
-      setFilters(prev => ({ ...prev, city: location }));
+    const q = searchParams.get("q") || location || "";
+    const type = searchParams.get("type") || "";
+    
+    const propertyTypes = ["room", "apartment", "house", "pg", "hostel", "homestay", "commercial"];
+    const lowercaseQ = q.toLowerCase().trim();
+    
+    if (propertyTypes.includes(lowercaseQ)) {
+      setFilters(prev => ({ ...prev, city: "", propertyType: lowercaseQ }));
+    } else {
+      setFilters(prev => ({ ...prev, city: q, propertyType: type }));
     }
-  }, [location]);
+  }, [searchParams, location]);
 
   useEffect(() => {
     setLoading(true);
@@ -46,19 +64,27 @@ const Rentals = () => {
   }, [country]);
 
   const filtered = useMemo(() => {
+    // If the search specifically failed to find a location, don't show any results 
+    // to avoid confusing the user with results from other cities.
+    if (searchError) return [];
+
     return listings.filter((l) => {
       // Country Filter
       const listingCountry = (l as any).country || "India";
       if (listingCountry !== country) return false;
 
       if (filters.city) {
-        const query = filters.city.toLowerCase();
-        const matchesCity = l.city.toLowerCase().includes(query);
-        const matchesArea = l.area.toLowerCase().includes(query);
-        const matchesState = l.state.toLowerCase().includes(query);
-        const matchesTitle = l.title.toLowerCase().includes(query);
+        const query = filters.city.toLowerCase().trim();
+        const matchesCity = l.city.toLowerCase() === query;
+        const matchesArea = l.area.toLowerCase() === query;
         
-        if (!matchesCity && !matchesArea && !matchesState && !matchesTitle) return false;
+        // Don't match the entire state unless the query IS the state name
+        const matchesState = l.state.toLowerCase() === query;
+        
+        // Also allow partial matches but ONLY if they are very specific to the city name
+        const partialCity = l.city.toLowerCase().includes(query) && query.length > 3;
+        
+        if (!matchesCity && !matchesArea && !matchesState && !partialCity) return false;
       }
       if (filters.area && !l.area.toLowerCase().includes(filters.area.toLowerCase())) return false;
       if (filters.propertyType && filters.propertyType !== "all" && l.property_type !== filters.propertyType) return false;
@@ -66,7 +92,7 @@ const Rentals = () => {
       if (filters.maxRent && l.rent > Number(filters.maxRent)) return false;
       return true;
     });
-  }, [listings, filters, country]);
+  }, [listings, filters, country, searchError]);
 
   const pageTitle = filters.city 
     ? `Rent Houses, Rooms & PGs in ${filters.city.charAt(0).toUpperCase() + filters.city.slice(1)} | RentMilega`
@@ -88,14 +114,79 @@ const Rentals = () => {
             <SearchFilters filters={filters} onChange={setFilters} />
           </div>
 
+          {(filters.city || filters.propertyType) && (
+            <div className="mt-4 flex flex-wrap gap-2 animate-fade-up">
+              {filters.city && (
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-xs font-bold text-primary uppercase tracking-wider">
+                  <MapPin className="h-3 w-3" />
+                  {filters.city}
+                </div>
+              )}
+              {filters.propertyType && filters.propertyType !== "all" && (
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-muted border border-border rounded-full text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                  <Home className="h-3 w-3" />
+                  {filters.propertyType}
+                </div>
+              )}
+              {isNearbySearch && (
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-full text-xs font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">
+                  <Navigation className="h-3 w-3" />
+                  Near My Location
+                </div>
+              )}
+            </div>
+          )}
+
+          {searchError && (
+            <div className="mt-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl flex items-start gap-3 animate-fade-up">
+              <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-bold text-destructive">Location Error</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {searchError === "location_denied" 
+                    ? "Location access was denied. Please type your city name manually in the filter above."
+                    : "We couldn't determine your exact location. Please enter your city manually."}
+                </p>
+              </div>
+            </div>
+          )}
+
           {loading ? (
             <div className="flex justify-center py-12 sm:py-20">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : filtered.length === 0 ? (
-            <p className="py-12 text-center text-muted-foreground sm:py-20">
-              No listings found. Be the first to post one!
-            </p>
+            <div className="py-12 text-center sm:py-20">
+              <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                <Search className="h-8 w-8 text-muted-foreground/50" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground">No listings found</h3>
+              <p className="text-muted-foreground mt-1 max-w-xs mx-auto">
+                We couldn't find any {filters.propertyType || 'rentals'} in {filters.city || 'your current area'}.
+              </p>
+              <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setFilters(defaultFilters)}
+                >
+                  Clear all filters
+                </Button>
+                {!filters.city && (
+                  <Button 
+                    className="gap-2"
+                    onClick={() => {
+                      const searchFiltersElement = document.querySelector('button[title="Search near my current location"]');
+                      if (searchFiltersElement instanceof HTMLButtonElement) {
+                        searchFiltersElement.click();
+                      }
+                    }}
+                  >
+                    <Navigation className="h-4 w-4" />
+                    Search Near Me
+                  </Button>
+                )}
+              </div>
+            </div>
           ) : (
             <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((l) => (

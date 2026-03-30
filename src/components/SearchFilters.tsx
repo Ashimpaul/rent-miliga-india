@@ -8,8 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X, MapPin } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "homestay", "commercial"];
 
@@ -37,9 +38,74 @@ type Props = {
 
 const SearchFilters = ({ filters, onChange }: Props) => {
   const [expanded, setExpanded] = useState(false);
+  const [locating, setLocating] = useState(false);
 
-  const update = (key: keyof Filters, value: string) =>
-    onChange({ ...filters, [key]: value });
+  const update = (key: keyof Filters, value: string) => {
+    const query = value.toLowerCase();
+    const nearMeKeywords = ["near me", "nearby", "around me", "my location"];
+    const containsNearMe = nearMeKeywords.some(k => query.includes(k));
+
+    if (key === "city" && containsNearMe) {
+      // Extract property type from the query if present
+      let propertyType = filters.propertyType;
+      let cleanQuery = query;
+      nearMeKeywords.forEach(k => { cleanQuery = cleanQuery.replace(k, "").trim(); });
+
+      if (cleanQuery.includes("pg")) propertyType = "pg";
+      else if (cleanQuery.includes("room")) propertyType = "room";
+      else if (cleanQuery.includes("house")) propertyType = "house";
+      else if (cleanQuery.includes("apartment") || cleanQuery.includes("flat")) propertyType = "apartment";
+      else if (cleanQuery.includes("hostel")) propertyType = "hostel";
+      else if (cleanQuery.includes("homestay")) propertyType = "homestay";
+      else if (cleanQuery.includes("commercial")) propertyType = "commercial";
+
+      handleNearMe(propertyType);
+    } else {
+      onChange({ ...filters, [key]: value });
+    }
+  };
+
+  const handleNearMe = (propertyTypeOverride?: string) => {
+    if (!("geolocation" in navigator)) {
+      toast.error("Geolocation not supported");
+      return;
+    }
+
+    setLocating(true);
+    toast.info("Getting your location...");
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`);
+          const data = await res.json();
+          const addr = data.address || {};
+          const locationName = addr.city || addr.town || addr.village || addr.municipality || addr.suburb || addr.state_district || "";
+          
+          if (locationName) {
+            toast.success(`Found: ${locationName}`);
+            onChange({ 
+              ...filters, 
+              city: locationName,
+              propertyType: propertyTypeOverride || filters.propertyType 
+            });
+          } else {
+            toast.error("Could not determine your city accurately.");
+          }
+        } catch (err) {
+          toast.error("Location detection failed");
+        } finally {
+          setLocating(false);
+        }
+      },
+      (error) => {
+        setLocating(false);
+        toast.error("Location access denied");
+      },
+      { timeout: 10000 }
+    );
+  };
 
   const activeCount = [
     filters.city,
@@ -59,11 +125,19 @@ const SearchFilters = ({ filters, onChange }: Props) => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search city, area or state..."
+            placeholder="Search city or type 'near me'..."
             value={filters.city}
             onChange={(e) => update("city", e.target.value)}
-            className="pl-10 text-sm"
+            className="pl-10 pr-10 text-sm"
           />
+          <button
+            onClick={handleNearMe}
+            disabled={locating}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
+            title="Search near my current location"
+          >
+            <MapPin className={`h-4 w-4 ${locating ? 'animate-bounce' : ''}`} />
+          </button>
         </div>
         <Button
           variant={expanded ? "default" : "outline"}

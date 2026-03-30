@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus, Calendar, BookOpen, Bed } from "lucide-react";
 import { format } from "date-fns";
 import { useCountry } from "../contexts/CountryContext";
+import { toast } from "sonner";
 
 const CATEGORIES = [
   { label: "Rooms", icon: Home, type: "room" },
@@ -444,28 +445,51 @@ const Index = () => {
    "Available Colors" : "", 
    "Price (USD)" : "4000", 
    "Contact Detail" : "" 
+ }, { 
+   "Product Name" : "Modern 2 BHK Flat in Guwahati near Zoo Road", 
+   "Product URL" : "https://www.olx.in/item/guwahati-zoo-road-flat-rent-iid-123456", 
+   "Product Image" : "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Spacious 2 BHK flat with modern amenities in the heart of Guwahati.", 
+   "Available Colors" : "", 
+   "Price (USD)" : "15000", 
+   "Contact Detail" : "",
+   "City": "Guwahati"
+ }, { 
+   "Product Name" : "1 BHK Paying Guest for Girls in Guwahati GS Road", 
+   "Product URL" : "https://www.olx.in/item/guwahati-gs-road-pg-rent-iid-123457", 
+   "Product Image" : "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80", 
+   "Product Rating (Max 5)" : "", 
+   "Product Description" : "Safe and affordable PG for girls on GS Road, Guwahati. Food included.", 
+   "Available Colors" : "", 
+   "Price (USD)" : "6500", 
+   "Contact Detail" : "",
+   "City": "Guwahati"
  } ];
 
       // Map to Supabase Listing type
-      const listingsToInsert = dataToSeed.map(item => ({
-        title: item["Product Name"],
-        description: item["Product Description"] || "Rental property in Silchar",
-        rent: parseInt(item["Price (USD)"]) || 0,
-        property_type: item["Product Name"].toLowerCase().includes("pg") ? "pg" : 
-                       item["Product Name"].toLowerCase().includes("homestay") ? "homestay" :
-                       item["Product Name"].toLowerCase().includes("apartment") ? "apartment" :
-                       item["Product Name"].toLowerCase().includes("flat") ? "apartment" :
-                       item["Product Name"].toLowerCase().includes("room") ? "room" : "house",
-        state: "Assam",
-        city: "Silchar",
-        area: item["Product URL"].split("in-")[1]?.split("-iid")[0]?.replace(/-/g, " ") || "Silchar",
-        address: item["Product Description"],
-        owner_name: "Owner",
-        phone_number: "9612963394",
-        image1: item["Product Image"].trim(),
-        password: "password123", // dummy password for management
-        pincode: "788001" // dummy pincode
-      }));
+      const listingsToInsert = dataToSeed.map(item => {
+        const cityName = (item as any).City || "Silchar";
+        return {
+          title: item["Product Name"],
+          description: item["Product Description"] || `Rental property in ${cityName}`,
+          rent: parseInt(item["Price (USD)"]) || 0,
+          property_type: item["Product Name"].toLowerCase().includes("pg") ? "pg" : 
+                         item["Product Name"].toLowerCase().includes("homestay") ? "homestay" :
+                         item["Product Name"].toLowerCase().includes("apartment") ? "apartment" :
+                         item["Product Name"].toLowerCase().includes("flat") ? "apartment" :
+                         item["Product Name"].toLowerCase().includes("room") ? "room" : "house",
+          state: "Assam",
+          city: cityName,
+          area: item["Product URL"].split("in-")[1]?.split("-iid")[0]?.replace(/-/g, " ") || cityName,
+          address: item["Product Description"],
+          owner_name: "Owner",
+          phone_number: "9612963394",
+          image1: item["Product Image"].trim(),
+          password: "password123", // dummy password for management
+          pincode: cityName === "Guwahati" ? "781001" : "788001"
+        };
+      });
 
       // Check if data already exists to avoid duplicates
       const { data: existing } = await supabase.from("listings").select("title").limit(1);
@@ -490,10 +514,75 @@ const Index = () => {
       });
   }, [country]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (search.trim()) {
-      navigate(`/rentals?q=${encodeURIComponent(search.trim())}`);
+    if (!search.trim()) return;
+
+    const query = search.toLowerCase();
+    const nearMeKeywords = ["near me", "nearby", "around me", "my location"];
+    const containsNearMe = nearMeKeywords.some(k => query.includes(k));
+
+    if (containsNearMe) {
+      toast.info("Detecting your location...", { icon: "📍" });
+      
+      let propertyType = "";
+      let cleanQuery = query;
+      nearMeKeywords.forEach(k => { cleanQuery = cleanQuery.replace(k, "").trim(); });
+      
+      const propertyTypes = ["pg", "room", "house", "apartment", "hostel", "homestay", "commercial"];
+      propertyType = propertyTypes.find(t => cleanQuery.includes(t)) || "";
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+              // Using a slightly different geocoding endpoint or parameters might help
+              const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=12`);
+              const data = await res.json();
+              const addr = data.address || {};
+              
+              // Prioritize city-level names
+              const city = addr.city || addr.town || addr.village || addr.municipality;
+              const district = addr.state_district || addr.county;
+              const locationName = city || district || "";
+              
+              if (locationName) {
+                // IMPORTANT: Use both q (city) and type to ensure strict filtering
+                const params = new URLSearchParams();
+                params.set("q", locationName);
+                if (propertyType) params.set("type", propertyType);
+                params.set("nearMe", "true"); // Mark this as a nearby search
+                
+                toast.success(`Location found: ${locationName}`);
+                navigate(`/rentals?${params.toString()}`);
+              } else {
+                toast.error("Could not pinpoint your city. Please type it manually.");
+                navigate(`/rentals?error=location_not_found&type=${propertyType}`);
+              }
+            } catch (err) {
+              toast.error("Location service busy. Please try again.");
+              navigate(`/rentals?error=location_not_found&type=${propertyType}`);
+            }
+          },
+          (error) => {
+            toast.error("Location permission required for 'near me' search.");
+            navigate(`/rentals?error=location_denied&type=${propertyType}`);
+          },
+          { timeout: 8000, enableHighAccuracy: true }
+        );
+      } else {
+        toast.error("Geolocation is not supported by your browser.");
+        navigate(`/rentals?error=unsupported&type=${propertyType}`);
+      }
+    } else {
+      // Normal search: if it's just "PG", search as type, not city
+      const potentialType = ["pg", "room", "apartment", "house", "hostel", "homestay", "commercial"].find(t => query === t);
+      if (potentialType) {
+        navigate(`/rentals?type=${potentialType}`);
+      } else {
+        navigate(`/rentals?q=${encodeURIComponent(search.trim())}`);
+      }
     }
   };
 
@@ -619,7 +708,7 @@ const Index = () => {
                   className="h-10 rounded-full border-border bg-card px-4 text-xs font-medium hover:border-primary hover:bg-primary/5 hover:text-primary sm:h-12 sm:px-6 sm:text-sm"
                   asChild
                 >
-                  <Link to={`/rentals?q=${loc}`}>{loc}</Link>
+                  <Link to={`/rentals?q=${encodeURIComponent(loc)}`}>{loc}</Link>
                 </Button>
               ))}
             </div>

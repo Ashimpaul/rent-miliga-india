@@ -35,6 +35,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const { isAdmin, logout } = useAuth();
   const { country, setCountry } = useCountry();
+  const [currentCity, setCurrentCity] = useState<string>("");
 
   const handleCountryChange = (newCountry: "India" | "Nepal") => {
     setCountry(newCountry);
@@ -45,6 +46,15 @@ const Header = () => {
       navigate("/");
     }
   };
+
+  const handleCitySelect = (city: string) => {
+    setCurrentCity(city);
+    navigate(`/rentals?q=${encodeURIComponent(city)}`);
+  };
+
+  const INDIAN_CITIES = ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Tezpur"];
+  const NEPAL_CITIES = ["Kathmandu", "Pokhara", "Lalitpur", "Bharatpur"];
+  const cities = country === "India" ? INDIAN_CITIES : NEPAL_CITIES;
 
   return (
     <header className="sticky top-0 z-50 animate-fade-in border-b border-border bg-card/95 backdrop-blur-md">
@@ -145,7 +155,7 @@ const Header = () => {
               />
             </Link>
             
-            <div className="ml-6 hidden lg:block">
+            <div className="ml-6 hidden lg:flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="h-9 gap-2 border-primary/20 hover:border-primary/50 transition-colors">
@@ -161,6 +171,23 @@ const Header = () => {
                   <DropdownMenuItem onClick={() => handleCountryChange("Nepal")} className="cursor-pointer">
                     Nepal
                   </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-9 gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <MapPin className="h-4 w-4" />
+                    <span className="font-medium">{currentCity || "Select City"}</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-[180px]">
+                  {cities.map((city) => (
+                    <DropdownMenuItem key={city} onClick={() => handleCitySelect(city)} className="cursor-pointer">
+                      {city}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -228,11 +255,19 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground">
                   <MapPin className="h-3 w-3 text-primary" />
-                  <span>{country}</span>
+                  <span>{currentCity || country}</span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[120px]">
+              <DropdownMenuContent align="end" className="w-[150px]">
+                <div className="px-2 py-1.5 text-[10px] font-bold text-muted-foreground uppercase">Cities</div>
+                {cities.map((city) => (
+                  <DropdownMenuItem key={city} onClick={() => handleCitySelect(city)} className="text-xs">
+                    {city}
+                  </DropdownMenuItem>
+                ))}
+                <div className="my-1 border-t border-border" />
+                <div className="px-2 py-1.5 text-[10px] font-bold text-muted-foreground uppercase">Countries</div>
                 <DropdownMenuItem onClick={() => handleCountryChange("India")} className="text-xs">India</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleCountryChange("Nepal")} className="text-xs">Nepal</DropdownMenuItem>
               </DropdownMenuContent>

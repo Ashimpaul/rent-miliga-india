@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Crown, Eye, EyeOff } from "lucide-react";
+import { Loader2, Crown, Eye, EyeOff, MapPin } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PROPERTY_TYPES, INDIAN_STATES, NEPAL_PROVINCES, COUNTRIES } from "@/lib/constants";
 import { useCountry } from "../contexts/CountryContext";
@@ -44,6 +44,50 @@ const PostListing = () => {
     google_map_link: "",
     password: "",
   });
+  const [locating, setLocating] = useState(false);
+
+  const handleUseCurrentLocation = () => {
+    if (!("geolocation" in navigator)) {
+      toast.error("Geolocation not supported");
+      return;
+    }
+
+    setLocating(true);
+    toast.info("Getting your location...");
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18`);
+          const data = await res.json();
+          
+          const city = data.address?.city || data.address?.town || data.address?.village || "";
+          const area = data.address?.suburb || data.address?.neighbourhood || data.address?.road || "";
+          const address = data.display_name || "";
+          const pincode = data.address?.postcode || "";
+          
+          setForm(prev => ({
+            ...prev,
+            city: city || prev.city,
+            area: area || prev.area,
+            address: address || prev.address,
+            pincode: pincode || prev.pincode
+          }));
+          
+          toast.success("Location details filled!");
+        } catch (err) {
+          toast.error("Could not fetch location details");
+        } finally {
+          setLocating(false);
+        }
+      },
+      (error) => {
+        setLocating(false);
+        toast.error("Location access denied");
+      }
+    );
+  };
 
   const PREMIUM_TYPES = ["commercial", "apartment"];
 
@@ -168,7 +212,20 @@ const PostListing = () => {
 
             {/* Location */}
             <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Location</legend>
+              <div className="flex items-center justify-between px-2">
+                <legend className="text-xs font-semibold text-foreground sm:text-sm">Location</legend>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-7 text-[10px] gap-1 px-2 border-primary/20 hover:bg-primary/5 text-primary"
+                  onClick={handleUseCurrentLocation}
+                  disabled={locating}
+                >
+                  <MapPin className={`h-3 w-3 ${locating ? 'animate-bounce' : ''}`} />
+                  {locating ? "Locating..." : "Use My Location"}
+                </Button>
+              </div>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <div>
                   <Label htmlFor="country-select" className="text-xs sm:text-sm">Country *</Label>
