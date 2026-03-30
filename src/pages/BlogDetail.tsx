@@ -96,31 +96,27 @@ const BlogDetail = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-12 max-w-4xl">
-        <div className="mb-8">
-          <Link to="/blogs" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center mb-6">
+      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl overflow-x-hidden">
+        <div className="mb-6 md:mb-8">
+          <Link to="/blogs" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center mb-4 md:mb-6">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to All Posts
           </Link>
-          <h1 className="text-4xl font-extrabold mb-4 leading-tight">{blog.title}</h1>
-          <div className="flex items-center justify-between flex-wrap gap-4 py-4 border-y border-border">
-            <div className="flex items-center gap-6">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-4 leading-tight text-center md:text-left">{blog.title}</h1>
+          <div className="flex items-center justify-center md:justify-between flex-wrap gap-4 py-4 border-y border-border">
+            <div className="flex items-center flex-wrap justify-center gap-4 md:gap-6">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{format(new Date(blog.created_at), "MMMM d, yyyy")}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{blog.author || "Admin"}</span>
+                <span className="text-xs md:text-sm font-medium">{format(new Date(blog.created_at), "MMMM d, yyyy")}</span>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleShare} className="text-muted-foreground hover:text-primary">
+            <Button variant="ghost" size="sm" onClick={handleShare} className="text-muted-foreground hover:text-primary h-8 text-xs md:text-sm">
               <Share2 className="mr-2 h-4 w-4" /> Share Post
             </Button>
           </div>
         </div>
 
         {blog.image_url && (
-          <div className="mb-12 rounded-2xl overflow-hidden shadow-lg border border-border bg-muted aspect-video">
+          <div className="mb-8 md:mb-12 rounded-xl md:rounded-2xl overflow-hidden shadow-lg border border-border bg-muted aspect-video">
             <img
               src={blog.image_url}
               alt={blog.title}
@@ -129,16 +125,16 @@ const BlogDetail = () => {
           </div>
         )}
 
-        <div className="prose prose-lg max-w-none mb-12 dark:prose-invert">
+        <div className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-12 dark:prose-invert">
           {blog.content.split("\n").map((para, i) => (
             para.trim() ? <p key={i}>{para}</p> : <br key={i} />
           ))}
         </div>
 
         {blog.video_url && (
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold mb-4">Watch Video</h3>
-            <div className="aspect-video rounded-2xl overflow-hidden border border-border shadow-lg">
+          <div className="mb-8 md:mb-12">
+            <h3 className="text-xl md:text-2xl font-bold mb-4 text-center md:text-left">Watch Video</h3>
+            <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden border border-border shadow-lg">
               <iframe
                 className="w-full h-full"
                 src={blog.video_url.includes("youtube.com") || blog.video_url.includes("youtu.be") 
@@ -152,17 +148,8 @@ const BlogDetail = () => {
           </div>
         )}
 
-        <div className="mt-16 pt-8 border-t border-border flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary">
-              {blog.author?.[0] || "A"}
-            </div>
-            <div>
-              <p className="font-bold">{blog.author || "Admin"}</p>
-              <p className="text-xs text-muted-foreground">Editor & Contributor</p>
-            </div>
-          </div>
-          <Button asChild variant="outline">
+        <div className="mt-8 md:mt-16 pt-8 border-t border-border flex justify-end items-center">
+          <Button asChild variant="outline" size="sm" className="w-full sm:w-auto h-10">
             <Link to="/blogs">View More Posts</Link>
           </Button>
         </div>

@@ -49,11 +49,11 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
   };
 
   return (
-    <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[160px] sm:h-auto">
+    <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[180px] sm:h-auto">
       <Link 
         to={`/listing/${listing.id}`} 
         aria-label={`View details for ${listing.title}`}
-        className="w-[150px] sm:w-full h-full sm:h-auto shrink-0 overflow-hidden relative"
+        className="w-[180px] sm:w-full h-full sm:h-auto shrink-0 overflow-hidden relative"
       >
         <div className="relative h-full sm:aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
           {images.length > 0 ? (
@@ -107,10 +107,10 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
       <div className="flex-1 p-3 sm:p-4 transition-colors duration-300 group-hover:bg-accent/5 flex flex-col justify-between overflow-hidden">
         <div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-0.5 text-base font-bold text-primary sm:gap-1 sm:text-lg">
-              <span className="text-xs sm:text-sm">{currencySymbol}</span>
+            <div className="flex items-center gap-0.5 text-lg font-black text-primary sm:gap-1 sm:text-2xl">
+              <span className="text-sm sm:text-base font-bold">{currencySymbol}</span>
               {listing.rent.toLocaleString(locale)}
-              <span className="text-[10px] font-normal text-muted-foreground ml-0.5">/mo</span>
+              <span className="text-[10px] font-normal text-muted-foreground ml-1">/mo</span>
             </div>
             <div className="flex items-center gap-1">
               <Button

@@ -11,7 +11,7 @@ import {
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useState } from "react";
 
-const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "commercial"];
+const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "homestay", "commercial"];
 
 const RENT_RANGES = [
   { label: "Any", min: "", max: "" },

@@ -8,7 +8,7 @@ import ListingCard from "@/components/ListingCard";
 // import AdPopup from "@/components/AdPopup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus, Calendar, BookOpen } from "lucide-react";
+import { Search, Home, Building2, Hotel, Building, Store, Loader2, ArrowRight, PlusCircle, MapPin, LogOut, Plus, Calendar, BookOpen, Bed } from "lucide-react";
 import { format } from "date-fns";
 import { useCountry } from "../contexts/CountryContext";
 
@@ -18,6 +18,7 @@ const CATEGORIES = [
   { label: "Houses", icon: Home, type: "house" },
   { label: "PG", icon: Hotel, type: "pg" },
   { label: "Hostels", icon: Building, type: "hostel" },
+  { label: "Homestays", icon: Bed, type: "homestay" },
   { label: "Commercial", icon: Store, type: "commercial" },
 ];
 
@@ -451,6 +452,7 @@ const Index = () => {
         description: item["Product Description"] || "Rental property in Silchar",
         rent: parseInt(item["Price (USD)"]) || 0,
         property_type: item["Product Name"].toLowerCase().includes("pg") ? "pg" : 
+                       item["Product Name"].toLowerCase().includes("homestay") ? "homestay" :
                        item["Product Name"].toLowerCase().includes("apartment") ? "apartment" :
                        item["Product Name"].toLowerCase().includes("flat") ? "apartment" :
                        item["Product Name"].toLowerCase().includes("room") ? "room" : "house",
@@ -513,24 +515,24 @@ const Index = () => {
         link="https://rentmilega.in/post"
         delay={3000}
       /> */}
-      <main className="flex-1 pb-20 sm:pb-0">
+      <main className="flex-1 pb-20 sm:pb-0 overflow-x-hidden">
         {/* Hero - Optimized for mobile/desktop split */}
         <section 
-          className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-zinc-950 sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
+          className="relative flex min-h-[50vh] items-center justify-center overflow-hidden bg-zinc-950 sm:min-h-[500px] md:min-h-[650px] bg-fixed bg-cover bg-center"
           style={{ 
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80")' 
           }}
         >
-          <div className="relative z-10 mx-auto w-full max-w-3xl px-4 py-6 text-center sm:py-0">
-            <h1 className="animate-fade-up text-2xl font-bold tracking-tight text-white sm:text-5xl md:text-7xl">
+          <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-8 text-center sm:py-0">
+            <h1 className="animate-fade-up text-3xl font-extrabold tracking-tight text-white sm:text-5xl md:text-7xl leading-tight">
               Find Houses and Rooms for <span className="text-primary italic">Rent in {country}</span>
             </h1>
-            <p className="mt-3 animate-fade-up text-xs text-white/80 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light sm:mt-4">
+            <p className="mt-4 animate-fade-up text-sm text-white/90 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light sm:mt-6 max-w-2xl mx-auto">
               RentMilega is a premier rental platform helping people find houses, rooms, flats and PG accommodations across Assam and beyond.
             </p>
             
             {/* Desktop Only Search Form */}
-            <form onSubmit={handleSearch} className="hidden sm:flex mt-12 animate-fade-up flex-col gap-2 opacity-0 stagger-3 sm:flex-row backdrop-blur-md bg-white/5 p-1.5 rounded-xl border border-white/10 shadow-2xl">
+            <form onSubmit={handleSearch} className="hidden sm:flex mt-12 animate-fade-up flex-col gap-2 opacity-0 stagger-3 sm:flex-row backdrop-blur-md bg-white/5 p-1.5 rounded-xl border border-white/10 shadow-2xl max-w-2xl mx-auto">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
                 <Input
@@ -545,11 +547,11 @@ const Index = () => {
               </Button>
             </form>
             
-            <div className="mt-6 flex animate-fade-up flex-col items-center justify-center gap-4 opacity-0 stagger-4 sm:flex-row sm:mt-8">
+            <div className="mt-8 flex animate-fade-up flex-col items-center justify-center gap-4 opacity-0 stagger-4 sm:flex-row sm:mt-10">
               <Button
                 onClick={() => navigate("/post")}
                 size="lg"
-                className="h-11 w-full rounded-lg bg-white text-primary px-6 text-sm font-black shadow-2xl transition-all duration-300 hover:scale-[1.05] active:scale-95 sm:h-14 sm:w-auto sm:rounded-xl sm:text-lg sm:px-8 group border-2 border-white/20 hover:bg-primary hover:text-white"
+                className="h-12 w-full rounded-xl bg-white text-primary px-6 text-sm font-black shadow-2xl transition-all duration-300 hover:scale-[1.05] active:scale-95 sm:h-14 sm:w-auto sm:rounded-xl sm:text-lg sm:px-8 group border-2 border-white/20 hover:bg-primary hover:text-white"
               >
                 <PlusCircle className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-90 sm:h-6 sm:w-6" />
                 Post Your Property Free
@@ -664,16 +666,16 @@ const Index = () => {
         {blogs.length > 0 && (
           <section className="py-12 sm:py-32 border-t border-border/50">
             <div className="container mx-auto px-4">
-              <div className="flex flex-col items-end justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-center">
-                <div>
+              <div className="flex flex-col items-center justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-center text-center sm:text-left">
+                <div className="w-full">
                   <h2 className="animate-fade-up text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                     Latest News & Tips
                   </h2>
-                  <p className="mt-3 text-base text-muted-foreground sm:text-lg">Stay updated with rental insights and real estate trends</p>
+                  <p className="mt-3 text-base text-muted-foreground sm:text-lg max-w-xl mx-auto sm:mx-0">Stay updated with rental insights and real estate trends</p>
                 </div>
                 <Button variant="link" size="lg" className="group text-lg font-bold p-0 h-auto" asChild>
                   <Link to="/blogs" className="flex items-center">
-                    View All Blog Posts <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                    View All Blog <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
                 </Button>
               </div>
@@ -699,11 +701,11 @@ const Index = () => {
                           <Calendar className="h-3 w-3" />
                           {format(new Date(blog.created_at), "MMM d, yyyy")}
                         </div>
-                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-1">
                           {blog.title}
                         </h3>
-                        <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
-                          {blog.excerpt || "Read the latest update from RentMilega..."}
+                        <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-1">
+                          {blog.excerpt || "Stay updated with the latest rental insights and trends from the RentMilega blog."}
                         </p>
                         <div className="mt-auto flex items-center text-primary font-bold text-sm">
                           Read More <ArrowRight className="ml-1.5 h-4 w-4" />
@@ -837,9 +839,9 @@ const Index = () => {
           <MapPin className="h-5 w-5" />
           <span className="text-[10px] font-medium">LOCATIONS</span>
         </Link>
-        <Link to="/admin" className="flex flex-col items-center gap-1 text-muted-foreground">
-          <LogOut className="h-5 w-5" />
-          <span className="text-[10px] font-medium">ADMIN</span>
+        <Link to="/blogs" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <BookOpen className="h-5 w-5" />
+          <span className="text-[10px] font-medium">BLOG</span>
         </Link>
       </div>
 

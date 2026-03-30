@@ -1,4 +1,4 @@
-export const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "commercial"];
+export const PROPERTY_TYPES = ["room", "apartment", "house", "pg", "hostel", "homestay", "commercial"];
 
 export const INDIAN_STATES = [
   "Andhra Pradesh",

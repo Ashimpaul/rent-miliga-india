@@ -273,11 +273,35 @@ const PostListing = () => {
             {/* Images */}
             <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
               <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Images</legend>
-              <div>
-                <Label htmlFor="images" className="text-xs sm:text-sm">Upload Images (1-3) *</Label>
-                <Input id="images" type="file" accept="image/*" multiple onChange={handleImages} className="text-sm" />
+              <div className="space-y-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="images" className="text-xs sm:text-sm">Upload Photos (1-3) *</Label>
+                  <p className="text-[10px] text-muted-foreground sm:text-xs">Higher quality photos attract more tenants. Max 3 free.</p>
+                  <Input 
+                    id="images" 
+                    type="file" 
+                    accept="image/*" 
+                    multiple 
+                    onChange={handleImages} 
+                    className="text-sm h-11 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" 
+                  />
+                </div>
+                
                 {images.length > 0 && (
-                  <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">{images.length} image(s) selected (max 3 free)</p>
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                    {images.map((file, i) => (
+                      <div key={i} className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-muted">
+                        <img 
+                          src={URL.createObjectURL(file)} 
+                          alt="Preview" 
+                          className="h-full w-full object-cover" 
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="text-white text-[10px] font-bold">Photo {i + 1}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             </fieldset>

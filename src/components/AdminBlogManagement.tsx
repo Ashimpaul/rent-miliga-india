@@ -424,11 +424,11 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
 
   if (editingBlog) {
     return (
-      <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-6 animate-fade-up">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">{editingBlog.id ? "Edit Blog Post" : "New Blog Post"}</h2>
-          <Button variant="ghost" size="sm" onClick={() => setEditingBlog(null)}>
-            <X className="h-4 w-4 mr-2" /> Cancel
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm space-y-6 animate-fade-up">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <h2 className="text-lg md:text-xl font-bold">{editingBlog.id ? "Edit Blog Post" : "New Blog Post"}</h2>
+          <Button variant="ghost" size="sm" onClick={() => setEditingBlog(null)} className="h-8 w-8 p-0">
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
@@ -447,6 +447,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                   }));
                 }}
                 placeholder="Blog title"
+                className="h-10"
               />
             </div>
             
@@ -456,6 +457,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                 value={editingBlog.slug || ""} 
                 onChange={(e) => setEditingBlog(prev => ({ ...prev, slug: e.target.value }))}
                 placeholder="blog-post-url"
+                className="h-10"
               />
             </div>
 
@@ -464,6 +466,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
               <Input 
                 value={editingBlog.author || ""} 
                 onChange={(e) => setEditingBlog(prev => ({ ...prev, author: e.target.value }))}
+                className="h-10"
               />
             </div>
 
@@ -473,7 +476,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                 value={editingBlog.excerpt || ""} 
                 onChange={(e) => setEditingBlog(prev => ({ ...prev, excerpt: e.target.value }))}
                 placeholder="A brief summary of the post..."
-                className="h-20"
+                className="h-20 text-sm"
               />
             </div>
           </div>
@@ -486,6 +489,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                   value={editingBlog.image_url || ""} 
                   onChange={(e) => setEditingBlog(prev => ({ ...prev, image_url: e.target.value }))}
                   placeholder="Image URL or upload below"
+                  className="h-10 text-sm"
                 />
               </div>
               <div className="mt-2">
@@ -494,12 +498,12 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                   accept="image/*" 
                   onChange={handleImageUpload} 
                   disabled={uploading}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-xs h-9 py-1"
                 />
-                {uploading && <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2"><Loader2 className="h-3 w-3 animate-spin" /> Uploading...</p>}
+                {uploading && <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-2"><Loader2 className="h-3 w-3 animate-spin" /> Uploading...</p>}
               </div>
               {editingBlog.image_url && (
-                <div className="mt-2 aspect-video rounded-lg overflow-hidden border border-border bg-muted">
+                <div className="mt-2 aspect-video rounded-lg overflow-hidden border border-border bg-muted max-w-[200px] md:max-w-full mx-auto md:mx-0">
                   <img src={editingBlog.image_url} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               )}
@@ -511,16 +515,17 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                 value={editingBlog.video_url || ""} 
                 onChange={(e) => setEditingBlog(prev => ({ ...prev, video_url: e.target.value }))}
                 placeholder="YouTube or Vimeo URL"
+                className="h-10 text-sm"
               />
             </div>
 
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center justify-between mt-4">
               <div className="space-y-0.5">
-                <label htmlFor="is_published" className="text-sm font-bold flex items-center gap-2">
+                <label htmlFor="is_published" className="text-sm font-bold flex items-center gap-2 cursor-pointer">
                   <Globe className="h-4 w-4 text-primary" />
                   Publish Post
                 </label>
-                <p className="text-xs text-muted-foreground">Make this post visible to everyone on the blog page.</p>
+                <p className="text-[10px] text-muted-foreground">Make this post visible to everyone.</p>
               </div>
               <input 
                 type="checkbox" 
@@ -539,13 +544,13 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
             value={editingBlog.content || ""} 
             onChange={(e) => setEditingBlog(prev => ({ ...prev, content: e.target.value }))}
             placeholder="Write your blog content here..."
-            className="min-h-[300px] font-sans"
+            className="min-h-[250px] md:min-h-[400px] font-sans text-sm leading-relaxed"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-border">
-          <Button variant="outline" onClick={() => setEditingBlog(null)}>Cancel</Button>
-          <Button onClick={handleSave} disabled={isSaving}>
+        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-border">
+          <Button variant="outline" onClick={() => setEditingBlog(null)} className="w-full sm:w-auto">Cancel</Button>
+          <Button onClick={handleSave} disabled={isSaving} className="w-full sm:w-auto">
             {isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : <><Save className="mr-2 h-4 w-4" /> Save Post</>}
           </Button>
         </div>
@@ -557,32 +562,32 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h2 className="text-xl font-bold">Manage Blog Posts</h2>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" asChild>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <Button variant="outline" size="sm" asChild className="flex-1 sm:flex-none">
             <Link to="/blogs" target="_blank">
-              <Globe className="mr-2 h-4 w-4" /> View Blog Site
+              <Globe className="mr-1.5 h-3.5 w-3.5" /> View Blog
             </Link>
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setShowTroubleshoot(true)}>
-            Troubleshoot
+          <Button variant="outline" size="sm" onClick={() => setShowTroubleshoot(true)} className="flex-1 sm:flex-none">
+            Fix Issues
           </Button>
-          <Button onClick={handleCreateNew}>
-            <Plus className="mr-2 h-4 w-4" /> New Post
+          <Button onClick={handleCreateNew} size="sm" className="w-full sm:w-auto">
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> New Post
           </Button>
         </div>
       </div>
 
       {blogs.length > 0 && unpublishedCount > 0 && (
-        <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 flex items-start gap-3">
+        <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 md:p-4 flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-          <div className="text-sm">
+          <div className="text-xs md:text-sm">
             <p className="font-bold text-amber-800 dark:text-amber-300">
               You have {unpublishedCount} unpublished post{unpublishedCount > 1 ? 's' : ''}
             </p>
             <p className="text-amber-700/80 dark:text-amber-400/80">
-              Posts marked as "Draft" are not visible to the public. Click the lock icon below to publish them.
+              Posts marked as "Draft" are hidden. Click the lock icon to publish.
             </p>
           </div>
         </div>
@@ -593,11 +598,11 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : blogs.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-3">
           {blogs.map((blog) => (
-            <div key={blog.id} className="bg-card border border-border rounded-xl p-4 flex items-center justify-between hover:shadow-sm transition-shadow">
-              <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded bg-muted overflow-hidden flex-shrink-0">
+            <div key={blog.id} className="bg-card border border-border rounded-xl p-3 md:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:shadow-sm transition-shadow">
+              <div className="flex items-center gap-3 md:gap-4 w-full sm:w-auto">
+                <div className="h-10 w-10 md:h-12 md:w-12 rounded bg-muted overflow-hidden flex-shrink-0">
                   {blog.image_url ? (
                     <img src={blog.image_url} alt="" className="h-full w-full object-cover" />
                   ) : (
@@ -606,13 +611,13 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                     </div>
                   )}
                 </div>
-                <div>
-                  <h3 className="font-bold line-clamp-1">{blog.title}</h3>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold text-sm md:text-base line-clamp-1">{blog.title}</h3>
+                  <div className="flex items-center gap-2 md:gap-3 text-[10px] md:text-xs text-muted-foreground mt-0.5">
                     <span>{format(new Date(blog.created_at), "MMM d, yyyy")}</span>
                     <button 
                       onClick={() => togglePublish(blog)}
-                      className={`flex items-center gap-1 px-2 py-0.5 rounded-full transition-colors ${
+                      className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full transition-colors ${
                         blog.is_published 
                           ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
                           : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
@@ -620,24 +625,24 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                       title={blog.is_published ? "Click to unpublish" : "Click to publish"}
                     >
                       {blog.is_published ? (
-                        <><Globe className="h-3 w-3" /> Published</>
+                        <><Globe className="h-2.5 w-2.5" /> Published</>
                       ) : (
-                        <><Lock className="h-3 w-3" /> Draft (Hidden)</>
+                        <><Lock className="h-2.5 w-2.5" /> Draft</>
                       )}
                     </button>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" asChild title="View Public Post">
+              <div className="flex items-center justify-end gap-1 md:gap-2 w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0">
+                <Button variant="ghost" size="icon" asChild title="View Public Post" className="h-8 w-8">
                   <Link to={`/blog/${blog.slug}`}>
                     <Globe className="h-4 w-4" />
                   </Link>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => handleEdit(blog)} title="Edit Post">
+                <Button variant="ghost" size="icon" onClick={() => handleEdit(blog)} title="Edit Post" className="h-8 w-8">
                   <Edit className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(blog.id)} title="Delete Post">
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(blog.id)} title="Delete Post">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase, type Listing } from "@/lib/supabase";
-import { Home, Search, MapPin, LogOut, Plus, Loader2 } from "lucide-react";
+import { Home, Search, MapPin, LogOut, Plus, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeaderComponent from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -125,9 +125,9 @@ const Rentals = () => {
           <MapPin className="h-5 w-5" />
           <span className="text-[10px] font-medium">LOCATIONS</span>
         </Link>
-        <Link to="/admin" className="flex flex-col items-center gap-1 text-muted-foreground">
-          <LogOut className="h-5 w-5" />
-          <span className="text-[10px] font-medium">ADMIN</span>
+        <Link to="/blogs" className="flex flex-col items-center gap-1 text-muted-foreground">
+          <BookOpen className="h-5 w-5" />
+          <span className="text-[10px] font-medium">BLOG</span>
         </Link>
       </div>
 

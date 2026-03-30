@@ -379,13 +379,16 @@ const ListingDetail = () => {
               )}
 
               {/* Details */}
-              <div className="mt-4 animate-fade-up sm:mt-6">
-                <h1 className="text-lg font-bold text-foreground sm:text-2xl">{listing.title}</h1>
-                <div className="mt-1.5 flex items-center gap-1 text-lg font-bold text-primary sm:mt-2 sm:text-2xl">
-                  <IndianRupee className="h-4 w-4 sm:h-5 sm:w-5" />
-                  {listing.rent.toLocaleString("en-IN")}/mo
+              <div className="mt-4 animate-fade-up sm:mt-8">
+                <h1 className="text-xl font-extrabold text-foreground sm:text-3xl leading-tight">{listing.title}</h1>
+                <div className="mt-2.5 flex items-center gap-1 text-2xl font-black text-primary sm:mt-4 sm:text-4xl">
+                  <span className="text-lg sm:text-2xl font-bold">{currencySymbol}</span>
+                  {listing.rent.toLocaleString("en-IN")}
+                  <span className="text-xs sm:text-sm font-normal text-muted-foreground ml-1.5">/ month</span>
                 </div>
-                <p className="mt-1 text-xs capitalize text-muted-foreground sm:text-sm">{listing.property_type}</p>
+                <div className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary sm:mt-3 sm:px-4 sm:py-1.5 sm:text-sm">
+                  {listing.property_type}
+                </div>
 
                 {listing.description && (
                   <p className="mt-3 text-sm text-foreground sm:mt-4">{listing.description}</p>

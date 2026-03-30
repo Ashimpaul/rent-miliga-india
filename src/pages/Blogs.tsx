@@ -67,21 +67,14 @@ const Blogs = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto mb-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">Our Blog</h1>
-          <p className="text-muted-foreground text-lg md:text-xl">
-            Latest news, updates, and rental tips from the RentMilega team.
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto space-y-24">
+      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 overflow-x-hidden">
+        <div className="max-w-4xl mx-auto space-y-16 md:space-y-24">
           {loading ? (
             <div className="space-y-12">
               {[1, 2].map((i) => (
                 <div key={i} className="animate-pulse space-y-4">
-                  <div className="h-8 bg-muted rounded w-3/4" />
-                  <div className="h-4 bg-muted rounded w-1/4" />
+                  <div className="h-8 bg-muted rounded w-3/4 mx-auto md:mx-0" />
+                  <div className="h-4 bg-muted rounded w-1/4 mx-auto md:mx-0" />
                   <div className="aspect-video bg-muted rounded-2xl" />
                   <div className="space-y-2">
                     <div className="h-4 bg-muted rounded" />
@@ -91,38 +84,34 @@ const Blogs = () => {
               ))}
             </div>
           ) : error ? (
-            <div className="text-center py-20 bg-muted/50 rounded-2xl border border-dashed border-border">
+            <div className="text-center py-12 md:py-20 bg-muted/50 rounded-2xl border border-dashed border-border px-4">
               <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
-              <h2 className="text-2xl font-semibold mb-2">Error Loading Blogs</h2>
-              <p className="text-muted-foreground mb-6">{error}</p>
+              <h2 className="text-xl md:text-2xl font-semibold mb-2">Error Loading Blogs</h2>
+              <p className="text-muted-foreground mb-6 text-sm md:text-base">{error}</p>
               <Button onClick={() => window.location.reload()}>Try Again</Button>
             </div>
           ) : blogs.length > 0 ? (
             blogs.map((blog) => (
               <article key={blog.id} className="animate-fade-up">
-                <div className="mb-8">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                <div className="mb-6 md:mb-8 text-center md:text-left">
+                  <h2 className="text-2xl md:text-4xl font-bold mb-4 leading-tight">
                     {blog.title}
                   </h2>
-                  <div className="flex items-center justify-between flex-wrap gap-4 py-4 border-y border-border">
-                    <div className="flex items-center gap-6">
+                  <div className="flex items-center justify-center md:justify-between flex-wrap gap-4 py-4 border-y border-border">
+                    <div className="flex items-center flex-wrap justify-center gap-4 md:gap-6">
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm font-medium">{format(new Date(blog.created_at), "MMMM d, yyyy")}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm font-medium">{blog.author || "Admin"}</span>
+                        <span className="text-xs md:text-sm font-medium">{format(new Date(blog.created_at), "MMMM d, yyyy")}</span>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => handleShare(blog)} className="text-muted-foreground hover:text-primary">
+                    <Button variant="ghost" size="sm" onClick={() => handleShare(blog)} className="text-muted-foreground hover:text-primary h-8 text-xs md:text-sm">
                       <Share2 className="mr-2 h-4 w-4" /> Share
                     </Button>
                   </div>
                 </div>
 
                 {blog.image_url && (
-                  <div className="mb-10 rounded-2xl overflow-hidden shadow-md border border-border bg-muted aspect-video">
+                  <div className="mb-8 md:mb-10 rounded-xl md:rounded-2xl overflow-hidden shadow-md border border-border bg-muted aspect-video">
                     <img
                       src={blog.image_url}
                       alt={blog.title}
@@ -131,19 +120,19 @@ const Blogs = () => {
                   </div>
                 )}
 
-                <div className="prose prose-lg max-w-none mb-10 dark:prose-invert">
+                <div className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-10 dark:prose-invert">
                   {blog.content.split("\n").map((para, i) => (
                     para.trim() ? <p key={i}>{para}</p> : <br key={i} />
                   ))}
                 </div>
 
                 {blog.video_url && (
-                  <div className="mb-10">
-                    <div className="flex items-center gap-2 mb-4 text-primary">
-                      <PlayCircle className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">Watch Related Video</h3>
+                  <div className="mb-8 md:mb-10">
+                    <div className="flex items-center justify-center md:justify-start gap-2 mb-4 text-primary">
+                      <PlayCircle className="h-5 w-5 md:h-6 md:w-6" />
+                      <h3 className="text-lg md:text-xl font-bold">Watch Related Video</h3>
                     </div>
-                    <div className="aspect-video rounded-2xl overflow-hidden border border-border shadow-md">
+                    <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden border border-border shadow-md">
                       <iframe
                         className="w-full h-full"
                         src={blog.video_url.includes("youtube.com") || blog.video_url.includes("youtu.be") 
@@ -157,18 +146,8 @@ const Blogs = () => {
                   </div>
                 )}
 
-                <div className="mt-12 pt-8 border-t border-border flex justify-between items-center">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary">
-                      {blog.author?.[0] || "A"}
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm">{blog.author || "Admin"}</p>
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Editor</p>
-                    </div>
-                  </div>
-                  <div className="h-px bg-border flex-1 mx-8 hidden sm:block" />
-                  <div className="text-xs text-muted-foreground font-mono">
+                <div className="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-border flex justify-end items-center">
+                  <div className="text-[10px] md:text-xs text-muted-foreground font-mono">
                     END OF POST
                   </div>
                 </div>

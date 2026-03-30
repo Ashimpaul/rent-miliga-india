@@ -23,7 +23,6 @@ const NAV_ITEMS = [
 const SIDEBAR_EXTRA_ITEMS = [
   { path: "/about", label: "About Us", icon: Info },
   { path: "/blogs", label: "Blog", icon: BookOpen },
-  { path: "/admin", label: "Admin Panel", icon: ShieldCheck },
   { path: "/contact", label: "Contact Us", icon: PhoneCall },
   { path: "/help", label: "Help & FAQ", icon: HelpCircle },
 ];
@@ -131,7 +130,7 @@ const Header = () => {
               <img 
                 src="/logo.png" 
                 alt="RentMilega" 
-                className="h-14 w-auto object-contain mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-24" 
+                className="h-10 w-auto object-contain mix-blend-multiply dark:brightness-0 dark:invert dark:mix-blend-normal sm:h-24" 
               />
             </Link>
           </div>
