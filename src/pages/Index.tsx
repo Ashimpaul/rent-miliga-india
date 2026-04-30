@@ -509,7 +509,7 @@ const Index = () => {
       .select("*")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
-        setListings(data || []);
+        setListings((data as any) || []);
         setLoading(false);
       });
   }, [country]);

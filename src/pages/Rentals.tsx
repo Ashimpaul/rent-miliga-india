@@ -58,7 +58,7 @@ const Rentals = () => {
       .select("*")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
-        setListings(data || []);
+        setListings((data as any) || []);
         setLoading(false);
       });
   }, [country]);
@@ -75,21 +75,21 @@ const Rentals = () => {
 
       if (filters.city) {
         const query = filters.city.toLowerCase().trim();
-        const matchesCity = l.city.toLowerCase() === query;
-        const matchesArea = l.area.toLowerCase() === query;
+        const matchesCity = l.city?.toLowerCase() === query;
+        const matchesArea = l.area?.toLowerCase() === query;
         
         // Don't match the entire state unless the query IS the state name
-        const matchesState = l.state.toLowerCase() === query;
+        const matchesState = l.state?.toLowerCase() === query;
         
         // Also allow partial matches but ONLY if they are very specific to the city name
-        const partialCity = l.city.toLowerCase().includes(query) && query.length > 3;
+        const partialCity = l.city?.toLowerCase().includes(query) && query.length > 3;
         
         if (!matchesCity && !matchesArea && !matchesState && !partialCity) return false;
       }
-      if (filters.area && !l.area.toLowerCase().includes(filters.area.toLowerCase())) return false;
+      if (filters.area && !l.area?.toLowerCase().includes(filters.area.toLowerCase())) return false;
       if (filters.propertyType && filters.propertyType !== "all" && l.property_type !== filters.propertyType) return false;
-      if (filters.minRent && l.rent < Number(filters.minRent)) return false;
-      if (filters.maxRent && l.rent > Number(filters.maxRent)) return false;
+      if (filters.minRent && Number(l.rent) < Number(filters.minRent)) return false;
+      if (filters.maxRent && Number(l.rent) > Number(filters.maxRent)) return false;
       return true;
     });
   }, [listings, filters, country, searchError]);

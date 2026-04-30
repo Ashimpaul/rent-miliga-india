@@ -125,11 +125,20 @@ const BlogDetail = () => {
           </div>
         )}
 
-        <div className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-12 dark:prose-invert">
-          {blog.content.split("\n").map((para, i) => (
-            para.trim() ? <p key={i}>{para}</p> : <br key={i} />
-          ))}
-        </div>
+        <div 
+          className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-12 dark:prose-invert blog-content"
+          dangerouslySetInnerHTML={{ __html: blog.content || "" }}
+        />
+
+        <style>{`
+          .blog-content h1 { font-size: 2.25rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; }
+          .blog-content h2 { font-size: 1.875rem; font-weight: 700; margin-top: 1.75rem; margin-bottom: 0.75rem; }
+          .blog-content p { margin-bottom: 1.25rem; line-height: 1.75; }
+          .blog-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+          .blog-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+          .blog-content img { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 2rem auto; display: block; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+          .blog-content a { color: hsl(var(--primary)); text-decoration: underline; }
+        `}</style>
 
         {blog.video_url && (
           <div className="mb-8 md:mb-12">

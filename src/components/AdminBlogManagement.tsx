@@ -5,8 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, Save, X, Image as ImageIcon, Globe, Lock, Loader2, AlertTriangle, Copy, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
+/*
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import LinkExtension from '@tiptap/extension-link';
+import Color from '@tiptap/extension-color';
+import TextStyle from '@tiptap/extension-text-style';
+import TiptapImage from '@tiptap/extension-image';
+import Underline from '@tiptap/extension-underline';
+import Placeholder from '@tiptap/extension-placeholder';
+*/
+import { 
+  Bold, Italic, Underline as UnderlineIcon, Link as LinkIcon, 
+  List, ListOrdered, Heading1, Heading2, Type, 
+  AlignLeft, AlignCenter, AlignRight, Undo, Redo,
+  Image as ImageIcon, Plus, Edit, Trash2, Save, X, Globe, Lock, Loader2, AlertTriangle, Copy, CheckCircle2
+} from "lucide-react";
 
 interface Blog {
   id: string;
@@ -29,11 +44,55 @@ const AdminBlogManagement = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showTroubleshoot, setShowTroubleshoot] = useState(false);
+  
+  console.log("AdminBlogManagement render. editingBlog:", editingBlog?.title || "none");
   const [testStatus, setTestStatus] = useState<{
     listings: string;
     blogs: string;
     storage: string;
   } | null>(null);
+
+  /*
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextStyle,
+      Color,
+      TiptapImage.configure({
+        HTMLAttributes: {
+          class: 'rounded-lg max-w-full h-auto mx-auto my-4 shadow-md',
+        },
+      }),
+      LinkExtension.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'text-primary underline cursor-pointer',
+        },
+      }),
+      Placeholder.configure({
+        placeholder: 'Start writing your blog content here...',
+      }),
+    ],
+    content: editingBlog?.content || '',
+    onUpdate: ({ editor }) => {
+      setEditingBlog(prev => prev ? { ...prev, content: editor.getHTML() } : null);
+    },
+  });
+
+  // Update editor content when editingBlog changes
+  useEffect(() => {
+    if (editor && editingBlog) {
+      const currentContent = editor.getHTML();
+      const targetContent = editingBlog.content || '';
+      
+      // Only update if the content is actually different to avoid cursor jumping
+      if (currentContent !== targetContent && targetContent !== '<p></p>') {
+        editor.commands.setContent(targetContent);
+      }
+    }
+  }, [editingBlog?.id, !!editingBlog, editor]);
+  */
 
   useEffect(() => {
     fetchBlogs();
@@ -202,7 +261,7 @@ const AdminBlogManagement = () => {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isInline: boolean = false) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -217,39 +276,32 @@ const AdminBlogManagement = () => {
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
     const filePath = `${fileName}`;
 
-    console.log("Starting image upload to 'blog-media' bucket:", filePath);
-
     try {
-      const { error: uploadError, data } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("blog-media")
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+        .upload(filePath, file);
 
       if (uploadError) {
-        console.error("Supabase Storage Upload Error:", uploadError);
-        // If error is 'bucket not found', give specific advice
-        if (uploadError.message.includes("not found") || (uploadError as any).status === 404) {
-          toast.error("Bucket 'blog-media' not found. Please create it manually in Supabase Storage.");
-        } else {
-          toast.error(`Upload failed: ${uploadError.message}`);
-        }
+        toast.error(`Upload failed: ${uploadError.message}`);
       } else {
-        console.log("Upload successful, getting public URL...");
         const { data: { publicUrl } } = supabase.storage
           .from("blog-media")
           .getPublicUrl(filePath);
         
-        console.log("Public URL generated:", publicUrl);
-        setEditingBlog(prev => ({ ...prev, image_url: publicUrl }));
-        toast.success("Image uploaded successfully");
+        if (isInline && editor) {
+          editor.commands.setImage({ src: publicUrl });
+          toast.success("Image inserted into blog");
+        } else {
+          setEditingBlog(prev => ({ ...prev, image_url: publicUrl }));
+          toast.success("Featured image uploaded");
+        }
       }
     } catch (err: any) {
-      console.error("Unexpected upload exception:", err);
       toast.error(`Upload error: ${err.message}`);
     } finally {
       setUploading(false);
+      // Reset input
+      e.target.value = '';
     }
   };
 
@@ -424,7 +476,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
 
   if (editingBlog) {
     return (
-      <div className="bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm space-y-6 animate-fade-up">
+      <div key={editingBlog.id || "new-post"} className="bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm space-y-6 animate-fade-up">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <h2 className="text-lg md:text-xl font-bold">{editingBlog.id ? "Edit Blog Post" : "New Blog Post"}</h2>
           <Button variant="ghost" size="sm" onClick={() => setEditingBlog(null)} className="h-8 w-8 p-0">
@@ -539,13 +591,16 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Content</label>
+          <label className="text-sm font-medium">Content (HTML Support)</label>
           <Textarea 
             value={editingBlog.content || ""} 
             onChange={(e) => setEditingBlog(prev => ({ ...prev, content: e.target.value }))}
-            placeholder="Write your blog content here..."
-            className="min-h-[250px] md:min-h-[400px] font-sans text-sm leading-relaxed"
+            placeholder="Write your blog content here. You can use HTML tags like <b>, <i>, <h1>, <img src='...'> etc."
+            className="min-h-[400px] font-mono text-sm leading-relaxed"
           />
+          <p className="text-[10px] text-muted-foreground italic">
+            Note: Rich text editor is temporarily disabled to ensure stability. You can still use HTML.
+          </p>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-border">

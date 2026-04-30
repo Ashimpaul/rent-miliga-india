@@ -53,7 +53,7 @@ const ListingDetail = () => {
   useEffect(() => {
     if (!id) return;
     supabase.from("listings").select("*").eq("id", id).single()
-      .then(({ data }) => { setListing(data); setLoading(false); });
+      .then(({ data }) => { setListing(data as any); setLoading(false); });
   }, [id]);
 
   const startEditing = () => {
@@ -140,7 +140,7 @@ const ListingDetail = () => {
       }).eq("id", id);
       if (error) throw error;
       const { data } = await supabase.from("listings").select("*").eq("id", id).single();
-      setListing(data);
+      setListing(data as any);
       setEditing(false);
       toast.success("Listing updated successfully");
     } catch (err: any) {
@@ -151,6 +151,8 @@ const ListingDetail = () => {
   };
 
   const setEdit = (key: string, value: string) => setEditForm((f) => ({ ...f, [key]: value }));
+
+  const statesList = INDIAN_STATES;
 
   if (loading) {
     return (
@@ -203,7 +205,7 @@ const ListingDetail = () => {
     <div className="flex min-h-screen flex-col">
       <Helmet>
         <title>{listing.title} for Rent in {listing.city}, {listing.state} | RentMilega</title>
-        <meta name="description" content={`${listing.title} for rent in ${listing.area}, ${listing.city}, ${listing.state}. Rent: ₹${listing.rent.toLocaleString("en-IN")}/mo. ${listing.description?.substring(0, 150)}`} />
+        <meta name="description" content={`${listing.title} for rent in ${listing.area}, ${listing.city}, ${listing.state}. Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}/mo. ${listing.description?.substring(0, 150)}`} />
         <script type="application/ld+json">
           {JSON.stringify(jsonLd)}
         </script>
@@ -385,7 +387,7 @@ const ListingDetail = () => {
                 <h1 className="text-xl font-extrabold text-foreground sm:text-3xl leading-tight">{listing.title}</h1>
                 <div className="mt-2.5 flex items-center gap-1 text-2xl font-black text-primary sm:mt-4 sm:text-4xl">
                   <span className="text-lg sm:text-2xl font-bold">{currencySymbol}</span>
-                  {listing.rent.toLocaleString("en-IN")}
+                  {Number(listing.rent).toLocaleString("en-IN")}
                   <span className="text-xs sm:text-sm font-normal text-muted-foreground ml-1.5">/ month</span>
                 </div>
                 <div className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary sm:mt-3 sm:px-4 sm:py-1.5 sm:text-sm">

@@ -35,7 +35,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
     const url = `${window.location.origin}/listing/${listing.id}`;
     const shareData = {
       title: `${listing.title} | RentMilega`,
-      text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${listing.rent.toLocaleString()}/mo.`,
+      text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${Number(listing.rent).toLocaleString()}/mo.`,
       url: url,
     };
 
@@ -95,7 +95,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           {/* Rent Badge (Visible only on desktop as it's redundant on mobile right) */}
           <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md opacity-0 transition-all duration-500 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 z-30 pointer-events-none hidden sm:flex">
             <span className="text-[10px] leading-none">{currencySymbol}</span>
-            {listing.rent.toLocaleString(locale)}
+            {Number(listing.rent).toLocaleString(locale)}
           </div>
 
           {/* Image Counter Indicator (Visible on mobile) */}
@@ -119,7 +119,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-0.5 text-lg font-black text-primary sm:gap-1 sm:text-2xl">
               <span className="text-sm sm:text-base font-bold">{currencySymbol}</span>
-              {listing.rent.toLocaleString(locale)}
+              {Number(listing.rent).toLocaleString(locale)}
               <span className="text-[10px] font-normal text-muted-foreground ml-1">/mo</span>
             </div>
             <div className="flex items-center gap-1">
