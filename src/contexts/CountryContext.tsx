@@ -11,15 +11,14 @@ const CountryContext = createContext<CountryContextType | undefined>(undefined);
 
 export const CountryProvider = ({ children }: { children: ReactNode }) => {
   const [country, setCountryState] = useState<Country>(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("selected_country") as Country) || "India";
-    }
+    // Forcing India for now as per request
     return "India";
   });
 
   const setCountry = (newCountry: Country) => {
-    setCountryState(newCountry);
-    localStorage.setItem("selected_country", newCountry);
+    // Disable country switching for now
+    setCountryState("India");
+    localStorage.setItem("selected_country", "India");
   };
 
   return (

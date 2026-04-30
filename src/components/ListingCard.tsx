@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Phone, MapPin, MessageCircle, Share2 } from "lucide-react";
+import { Phone, MapPin, MessageCircle, Share2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,7 +8,10 @@ import WatermarkedImage from "./WatermarkedImage";
 import { toast } from "sonner";
 
 const ListingCard = ({ listing }: { listing: Listing }) => {
-  const images = [listing.image1, listing.image2, listing.image3].filter(Boolean) as string[];
+  const images = [
+    listing.image1, listing.image2, listing.image3, listing.image4, listing.image5,
+    listing.image6, listing.image7, listing.image8, listing.image9, listing.image10
+  ].filter(Boolean) as string[];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // const { isAdmin } = useAuth(); // Hidden on card as requested
 
@@ -77,6 +80,13 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               alt="Placeholder"
               imageClassName="h-full w-full object-cover"
             />
+          )}
+
+          {listing.is_premium && (
+            <div className="absolute top-2 left-2 z-30 flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white shadow-lg sm:top-3 sm:left-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
+              <Crown className="h-2 w-2 sm:h-3 sm:w-3" />
+              Featured
+            </div>
           )}
           
           {/* Overlay Gradient (Hidden on mobile for clarity) */}

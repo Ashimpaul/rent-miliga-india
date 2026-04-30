@@ -17,6 +17,16 @@ export type Listing = {
   image1: string | null;
   image2: string | null;
   image3: string | null;
+  image4: string | null;
+  image5: string | null;
+  image6: string | null;
+  image7: string | null;
+  image8: string | null;
+  image9: string | null;
+  image10: string | null;
+  is_premium: boolean;
+  expires_at: string | null;
+  plan_type: string;
   google_map_link: string | null;
   password: string;
   created_at: string;

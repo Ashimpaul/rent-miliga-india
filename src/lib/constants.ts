@@ -39,6 +39,7 @@ export const INDIAN_STATES = [
   "Puducherry"
 ];
 
+/* 
 export const NEPAL_PROVINCES = [
   "Koshi Province",
   "Madhesh Province",
@@ -48,5 +49,6 @@ export const NEPAL_PROVINCES = [
   "Karnali Province",
   "Sudurpashchim Province"
 ];
+*/
 
-export const COUNTRIES = ["India", "Nepal"];
+export const COUNTRIES = ["India"];

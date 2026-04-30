@@ -37,7 +37,8 @@ const Header = () => {
   const { country, setCountry } = useCountry();
 
   const handleCountryChange = (newCountry: "India" | "Nepal") => {
-    setCountry(newCountry);
+    // Disable country switching for now
+    setCountry("India");
     setOpen(false);
     
     // Redirect to home if on a specific location page that might not apply to new country
@@ -65,20 +66,12 @@ const Header = () => {
                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Select Country</p>
                     <div className="flex gap-2">
                       <Button 
-                        variant={country === "India" ? "default" : "outline"} 
+                        variant="default" 
                         size="sm" 
-                        className="flex-1 h-8 text-xs"
+                        className="flex-1 h-8 text-xs cursor-default"
                         onClick={() => handleCountryChange("India")}
                       >
                         India
-                      </Button>
-                      <Button 
-                        variant={country === "Nepal" ? "default" : "outline"} 
-                        size="sm" 
-                        className="flex-1 h-8 text-xs"
-                        onClick={() => handleCountryChange("Nepal")}
-                      >
-                        Nepal
                       </Button>
                     </div>
                   </div>
@@ -146,42 +139,15 @@ const Header = () => {
             </Link>
             
             <div className="ml-6 hidden lg:block">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-9 gap-2 border-primary/20 hover:border-primary/50 transition-colors">
-                    <Globe className="h-4 w-4 text-primary" />
-                    <span className="font-semibold">{country}</span>
-                    <ChevronDown className="h-3 w-3 text-muted-foreground" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-[150px]">
-                  <DropdownMenuItem onClick={() => handleCountryChange("India")} className="cursor-pointer">
-                    India
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleCountryChange("Nepal")} className="cursor-pointer">
-                    Nepal
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button variant="outline" size="sm" className="h-9 gap-2 border-primary/20 hover:border-primary/50 transition-colors cursor-default">
+                <Globe className="h-4 w-4 text-primary" />
+                <span className="font-semibold">{country}</span>
+              </Button>
             </div>
           </div>
 
           {/* Desktop Nav */}
           <nav className="hidden items-center gap-1 sm:flex">
-            <div className="mr-2 lg:hidden">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 gap-1.5">
-                    <Globe className="h-3.5 w-3.5 text-primary" />
-                    <span className="text-xs font-bold">{country}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => handleCountryChange("India")}>India</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleCountryChange("Nepal")}>Nepal</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
             {NAV_ITEMS.map((item) => (
               <Button
                 key={item.path}
@@ -224,19 +190,10 @@ const Header = () => {
 
           {/* Mobile: Right Actions (Location & Theme) */}
           <div className="flex items-center gap-1 sm:hidden">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground">
-                  <MapPin className="h-3 w-3 text-primary" />
-                  <span>{country}</span>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[120px]">
-                <DropdownMenuItem onClick={() => handleCountryChange("India")} className="text-xs">India</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleCountryChange("Nepal")} className="text-xs">Nepal</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground border border-border rounded-md">
+              <MapPin className="h-3 w-3 text-primary" />
+              <span>{country}</span>
+            </div>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>

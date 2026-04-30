@@ -26,7 +26,7 @@ import {
 import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
-import { PROPERTY_TYPES, INDIAN_STATES, NEPAL_PROVINCES, COUNTRIES } from "@/lib/constants";
+import { PROPERTY_TYPES, INDIAN_STATES, COUNTRIES } from "@/lib/constants";
 import WatermarkedImage from "@/components/WatermarkedImage";
 
 const ListingDetail = () => {
@@ -69,8 +69,7 @@ const ListingDetail = () => {
     setEditing(true);
   };
 
-  const statesList = editForm.country === "Nepal" ? NEPAL_PROVINCES : INDIAN_STATES;
-  const currencySymbol = editForm.country === "Nepal" ? "NPR" : "₹";
+  const currencySymbol = "₹";
 
   const verifyPassword = async (action: "edit" | "delete") => {
     if (!id || !password) return;
@@ -176,7 +175,10 @@ const ListingDetail = () => {
     );
   }
 
-  const images = [listing.image1, listing.image2, listing.image3].filter(Boolean) as string[];
+  const images = [
+    listing.image1, listing.image2, listing.image3, listing.image4, listing.image5,
+    listing.image6, listing.image7, listing.image8, listing.image9, listing.image10
+  ].filter(Boolean) as string[];
 
   // Structured Data for SEO
   const jsonLd = {
