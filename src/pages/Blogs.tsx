@@ -99,9 +99,9 @@ const Blogs = () => {
                   </h2>
                   <div className="flex items-center justify-center md:justify-between flex-wrap gap-4 py-4 border-y border-border">
                     <div className="flex items-center flex-wrap justify-center gap-4 md:gap-6">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-xs md:text-sm font-medium">{format(new Date(blog.created_at), "MMMM d, yyyy")}</span>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                        <Calendar className="h-3 w-3" />
+                        <span className="text-xs md:text-sm font-medium">{blog.created_at ? format(new Date(blog.created_at), "MMMM d, yyyy") : "Recently"}</span>
                       </div>
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => handleShare(blog)} className="text-muted-foreground hover:text-primary h-8 text-xs md:text-sm">
@@ -121,7 +121,7 @@ const Blogs = () => {
                 )}
 
                 <div className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-10 dark:prose-invert">
-                  {blog.content.split("\n").map((para, i) => (
+                  {(blog.content || "").split("\n").map((para, i) => (
                     para.trim() ? <p key={i}>{para}</p> : <br key={i} />
                   ))}
                 </div>
@@ -135,10 +135,10 @@ const Blogs = () => {
                     <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden border border-border shadow-md">
                       <iframe
                         className="w-full h-full"
-                        src={blog.video_url.includes("youtube.com") || blog.video_url.includes("youtu.be") 
-                          ? blog.video_url.replace("watch?v=", "embed/").split("&")[0] 
-                          : blog.video_url}
-                        title="Blog Video"
+                        src={(blog.video_url || "").includes("youtube.com") || (blog.video_url || "").includes("youtu.be") 
+                          ? blog.video_url!.replace("watch?v=", "embed/").split("&")[0] 
+                          : blog.video_url || ""}
+                        title="Blog video content"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       />

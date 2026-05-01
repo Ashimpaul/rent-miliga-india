@@ -25,9 +25,8 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const isNepal = (listing as any).country === "Nepal";
-  const currencySymbol = isNepal ? "NPR" : "₹";
-  const locale = isNepal ? "en-NP" : "en-IN";
+  const currencySymbol = "₹";
+  const locale = "en-IN";
 
   const handleShare = async (e: React.MouseEvent) => {
     e.preventDefault();

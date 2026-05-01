@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useAuth } from "../contexts/AuthContext";
-import { useCountry } from "../contexts/CountryContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,18 +33,6 @@ const Header = () => {
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const { isAdmin, logout } = useAuth();
-  const { country, setCountry } = useCountry();
-
-  const handleCountryChange = (newCountry: "India" | "Nepal") => {
-    // Disable country switching for now
-    setCountry("India");
-    setOpen(false);
-    
-    // Redirect to home if on a specific location page that might not apply to new country
-    if (location.pathname.startsWith("/rentals/")) {
-      navigate("/");
-    }
-  };
 
   return (
     <header className="sticky top-0 z-50 animate-fade-in border-b border-border bg-card/95 backdrop-blur-md">
@@ -62,20 +49,6 @@ const Header = () => {
               <SheetContent side="left" className="w-64 pt-10">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <nav className="flex flex-col gap-2">
-                  <div className="px-2 pb-4">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Select Country</p>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="default" 
-                        size="sm" 
-                        className="flex-1 h-8 text-xs cursor-default"
-                        onClick={() => handleCountryChange("India")}
-                      >
-                        India
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="border-t border-border my-2" />
                   {NAV_ITEMS.map((item, i) => (
                     <Button
                       key={item.path}
@@ -141,7 +114,7 @@ const Header = () => {
             <div className="ml-6 hidden lg:block">
               <Button variant="outline" size="sm" className="h-9 gap-2 border-primary/20 hover:border-primary/50 transition-colors cursor-default">
                 <Globe className="h-4 w-4 text-primary" />
-                <span className="font-semibold">{country}</span>
+                <span className="font-semibold">India</span>
               </Button>
             </div>
           </div>
@@ -192,7 +165,7 @@ const Header = () => {
           <div className="flex items-center gap-1 sm:hidden">
             <div className="flex items-center gap-1 px-2 h-8 text-[11px] font-semibold text-muted-foreground border border-border rounded-md">
               <MapPin className="h-3 w-3 text-primary" />
-              <span>{country}</span>
+              <span>India</span>
             </div>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggle}>
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -204,7 +177,7 @@ const Header = () => {
         <div className="mt-2 sm:hidden pb-1">
           <Link to="/rentals" className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg px-3 h-10 text-muted-foreground transition-all active:scale-95">
             <Search className="h-4 w-4" />
-            <span className="text-sm">For Rent: Houses & PGs in {country}...</span>
+            <span className="text-sm">For Rent: Houses & PGs in India...</span>
           </Link>
         </div>
       </div>

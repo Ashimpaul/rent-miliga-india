@@ -669,7 +669,7 @@ CREATE POLICY "Delete Access" ON storage.objects FOR DELETE TO anon, authenticat
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-sm md:text-base line-clamp-1">{blog.title}</h3>
                   <div className="flex items-center gap-2 md:gap-3 text-[10px] md:text-xs text-muted-foreground mt-0.5">
-                    <span>{format(new Date(blog.created_at), "MMM d, yyyy")}</span>
+                    <span>{blog.created_at ? format(new Date(blog.created_at), "MMM d, yyyy") : "Draft"}</span>
                     <button 
                       onClick={() => togglePublish(blog)}
                       className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full transition-colors ${

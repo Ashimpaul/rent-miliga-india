@@ -61,17 +61,28 @@ export type Database = {
           address: string | null
           area: string
           city: string
+          country: string
           created_at: string
           description: string | null
+          expires_at: string | null
           google_map_link: string | null
           id: string
           image1: string | null
           image2: string | null
           image3: string | null
+          image4: string | null
+          image5: string | null
+          image6: string | null
+          image7: string | null
+          image8: string | null
+          image9: string | null
+          image10: string | null
+          is_premium: boolean
           owner_name: string
           password: string
           phone_number: string
           pincode: string | null
+          plan_type: string
           property_type: string
           rent: number
           state: string
@@ -81,17 +92,28 @@ export type Database = {
           address?: string | null
           area: string
           city: string
+          country?: string
           created_at?: string
           description?: string | null
+          expires_at?: string | null
           google_map_link?: string | null
           id?: string
           image1?: string | null
           image2?: string | null
           image3?: string | null
+          image4?: string | null
+          image5?: string | null
+          image6?: string | null
+          image7?: string | null
+          image8?: string | null
+          image9?: string | null
+          image10?: string | null
+          is_premium?: boolean
           owner_name: string
           password?: string
           phone_number: string
           pincode?: string | null
+          plan_type?: string
           property_type: string
           rent: number
           state: string
@@ -101,17 +123,28 @@ export type Database = {
           address?: string | null
           area?: string
           city?: string
+          country?: string
           created_at?: string
           description?: string | null
+          expires_at?: string | null
           google_map_link?: string | null
           id?: string
           image1?: string | null
           image2?: string | null
           image3?: string | null
+          image4?: string | null
+          image5?: string | null
+          image6?: string | null
+          image7?: string | null
+          image8?: string | null
+          image9?: string | null
+          image10?: string | null
+          is_premium?: boolean
           owner_name?: string
           password?: string
           phone_number?: string
           pincode?: string | null
+          plan_type?: string
           property_type?: string
           rent?: number
           state?: string

@@ -18,12 +18,10 @@ import { toast } from "sonner";
 import { Loader2, Crown, Eye, EyeOff, MapPin, Calendar } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PROPERTY_TYPES, INDIAN_STATES, COUNTRIES } from "@/lib/constants";
-import { useCountry } from "../contexts/CountryContext";
 import { initializePayment } from "@/lib/razorpay";
 
 const PostListing = () => {
   const navigate = useNavigate();
-  const { country: currentCountry } = useCountry();
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [showPremiumDialog, setShowPremiumDialog] = useState(false);
@@ -36,7 +34,6 @@ const PostListing = () => {
     property_type: "",
     rent: "",
     description: "",
-    country: currentCountry,
     state: "",
     city: "",
     area: "",
@@ -185,7 +182,6 @@ const PostListing = () => {
           property_type: form.property_type,
           rent: Number(form.rent),
           description: form.description || null,
-          country: form.country,
           state: form.state,
           city: form.city,
           area: form.area,
@@ -195,19 +191,9 @@ const PostListing = () => {
           phone_number: form.phone_number,
           google_map_link: form.google_map_link || null,
           password: form.password,
-          is_premium: isPremium,
-          plan_type: plan,
-          expires_at: expires_at,
           image1: urls[0] || null,
           image2: urls[1] || null,
           image3: urls[2] || null,
-          image4: urls[3] || null,
-          image5: urls[4] || null,
-          image6: urls[5] || null,
-          image7: urls[6] || null,
-          image8: urls[7] || null,
-          image9: urls[8] || null,
-          image10: urls[9] || null,
         });
         if (error) throw error;
         toast.success("Listing posted successfully!");

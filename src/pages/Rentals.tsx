@@ -8,7 +8,6 @@ import HeaderComponent from "@/components/Header";
 import Footer from "@/components/Footer";
 import ListingCard from "@/components/ListingCard";
 import SearchFilters from "@/components/SearchFilters";
-import { useCountry } from "../contexts/CountryContext";
 
 const defaultFilters = { city: "", area: "", propertyType: "", minRent: "", maxRent: "" };
 
@@ -18,7 +17,6 @@ const Rentals = () => {
   const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const { country } = useCountry();
   
   const searchError = searchParams.get("error");
   const isNearbySearch = searchParams.get("nearMe") === "true";
@@ -61,7 +59,7 @@ const Rentals = () => {
         setListings((data as any) || []);
         setLoading(false);
       });
-  }, [country]);
+  }, []);
 
   const filtered = useMemo(() => {
     // If the search specifically failed to find a location, don't show any results 
@@ -69,10 +67,6 @@ const Rentals = () => {
     if (searchError) return [];
 
     return listings.filter((l) => {
-      // Country Filter
-      const listingCountry = (l as any).country || "India";
-      if (listingCountry !== country) return false;
-
       if (filters.city) {
         const query = filters.city.toLowerCase().trim();
         const matchesCity = l.city?.toLowerCase() === query;
@@ -92,23 +86,23 @@ const Rentals = () => {
       if (filters.maxRent && Number(l.rent) > Number(filters.maxRent)) return false;
       return true;
     });
-  }, [listings, filters, country, searchError]);
+  }, [listings, filters, searchError]);
 
-  const pageTitle = filters.city 
+  const pageTitle = filters.city && typeof filters.city === "string" && filters.city.length > 0
     ? `Rent Houses, Rooms & PGs in ${filters.city.charAt(0).toUpperCase() + filters.city.slice(1)} | RentMilega`
-    : `Browse Rental Properties in ${country} | RentMilega`;
+    : `Browse Rental Properties | RentMilega`;
 
   return (
     <div className="flex min-h-screen flex-col">
       <Helmet>
         <title>{pageTitle}</title>
-        <meta name="description" content={filters.city ? `Find the best houses, rooms, and PGs for rent in ${filters.city}. Browse verified listings on RentMilega.` : `Search through our extensive list of rental properties in ${country}. Filter by city, area, rent, and property type.`} />
+        <meta name="description" content={filters.city ? `Find the best houses, rooms, and PGs for rent in ${filters.city}. Browse verified listings on RentMilega.` : `Search through our extensive list of rental properties. Filter by city, area, rent, and property type.`} />
       </Helmet>
       <HeaderComponent />
       <main className="flex-1 pb-20 sm:pb-0">
         <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6">
-          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Find Rentals in {country}</h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Browse rental listings across {country}</p>
+          <h1 className="text-lg font-bold text-foreground sm:text-2xl">Find Rentals in India</h1>
+          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">Browse rental listings across India</p>
 
           <div className="mt-3 sm:mt-4">
             <SearchFilters filters={filters} onChange={setFilters} />

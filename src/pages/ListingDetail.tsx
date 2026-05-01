@@ -45,7 +45,7 @@ const ListingDetail = () => {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({
     title: "", property_type: "", rent: "", description: "",
-    country: "India", state: "", city: "", area: "", address: "", pincode: "",
+    state: "", city: "", area: "", address: "", pincode: "",
     owner_name: "", phone_number: "", google_map_link: "",
   });
   const [saving, setSaving] = useState(false);
@@ -60,7 +60,6 @@ const ListingDetail = () => {
     setEditForm({
       title: listing?.title || "", property_type: listing?.property_type || "",
       rent: String(listing?.rent || ""), description: listing?.description || "",
-      country: (listing as any)?.country || "India",
       state: listing?.state || "", city: listing?.city || "",
       area: listing?.area || "", address: listing?.address || "",
       pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
@@ -132,7 +131,6 @@ const ListingDetail = () => {
       const { error } = await supabase.from("listings").update({
         title: editForm.title, property_type: editForm.property_type,
         rent: Number(editForm.rent), description: editForm.description || null,
-        country: editForm.country,
         state: editForm.state, city: editForm.city, area: editForm.area,
         address: editForm.address || null, pincode: editForm.pincode || null,
         owner_name: editForm.owner_name, phone_number: editForm.phone_number,
@@ -280,28 +278,15 @@ const ListingDetail = () => {
 
               <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
                 <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Location</legend>
-                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <div className="grid grid-cols-1 gap-2 sm:gap-3">
                   <div>
-                    <Label htmlFor="edit-country" className="text-xs sm:text-sm">Country *</Label>
-                    <Select value={editForm.country} onValueChange={(v) => setEdit("country", v)}>
-                      <SelectTrigger id="edit-country" className="text-sm">
-                        <SelectValue placeholder="Select country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {COUNTRIES.map((c) => (
-                          <SelectItem key={c} value={c}>{c}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="edit-state" className="text-xs sm:text-sm">{editForm.country === "Nepal" ? "Province" : "State"} *</Label>
+                    <Label htmlFor="edit-state" className="text-xs sm:text-sm">State *</Label>
                     <Select value={editForm.state} onValueChange={(v) => setEdit("state", v)}>
                       <SelectTrigger id="edit-state" className="text-sm">
-                        <SelectValue placeholder={`Select ${editForm.country === "Nepal" ? "province" : "state"}`} />
+                        <SelectValue placeholder="Select state" />
                       </SelectTrigger>
                       <SelectContent>
-                        {statesList.map((s) => (
+                        {INDIAN_STATES.map((s) => (
                           <SelectItem key={s} value={s}>{s}</SelectItem>
                         ))}
                       </SelectContent>
@@ -404,8 +389,8 @@ const ListingDetail = () => {
                     <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
                   </h2>
                   <div className="grid grid-cols-1 gap-1.5 text-xs sm:grid-cols-2 sm:gap-2 sm:text-sm">
-                    <div><span className="text-muted-foreground">Country:</span> {(listing as any).country || "India"}</div>
-                    <div><span className="text-muted-foreground">{(listing as any).country === "Nepal" ? "Province" : "State"}:</span> {listing.state}</div>
+                    <div><span className="text-muted-foreground">Country:</span> India</div>
+                    <div><span className="text-muted-foreground">State:</span> {listing.state}</div>
                     <div><span className="text-muted-foreground">City:</span> {listing.city}</div>
                     <div><span className="text-muted-foreground">Area:</span> {listing.area}</div>
                     {listing.pincode && <div><span className="text-muted-foreground">Pincode:</span> {listing.pincode}</div>}
