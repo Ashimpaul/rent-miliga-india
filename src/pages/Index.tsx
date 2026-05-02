@@ -38,16 +38,6 @@ const POPULAR_LOCATIONS_INDIA = [
   "Hailakandi",
 ];
 
-const POPULAR_LOCATIONS_NEPAL = [
-  "Kathmandu",
-  "Pokhara",
-  "Lalitpur",
-  "Bharatpur",
-  "Biratnagar",
-  "Birgunj",
-  "Dharan",
-];
-
 const Index = () => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState<Listing[]>([]);
@@ -175,12 +165,6 @@ const Index = () => {
         <meta name="description" content={`Find the best houses, rooms, and PGs for rent in India. Verified listings with direct owner contact.`} />
       </Helmet>
       <Header />
-      {/* <AdPopup 
-        type="image" 
-        src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80" 
-        link="https://rentmilega.in/post"
-        delay={3000}
-      /> */}
       <main className="flex-1 pb-20 sm:pb-0 overflow-x-hidden">
         {/* Hero - Optimized for mobile/desktop split */}
         <section 
@@ -189,13 +173,29 @@ const Index = () => {
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80")' 
           }}
         >
-          <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-8 text-center sm:py-0">
-            <h1 className="animate-fade-up text-3xl font-extrabold tracking-tight text-white sm:text-5xl md:text-7xl leading-tight">
+          <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center sm:py-0">
+            <h1 className="animate-fade-up text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-7xl leading-tight">
               Find Houses and Rooms for <span className="text-primary italic">Rent in India</span>
             </h1>
-            <p className="mt-4 animate-fade-up text-sm text-white/90 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light sm:mt-6 max-w-2xl mx-auto">
+            <p className="mt-6 animate-fade-up text-base text-white/90 opacity-0 stagger-2 sm:text-xl md:text-2xl font-light max-w-2xl mx-auto">
               RentMilega is a premier rental platform helping people find houses, rooms, flats and PG accommodations across Assam and beyond.
             </p>
+            
+            {/* Mobile Search Form (Visible on mobile) */}
+            <form onSubmit={handleSearch} className="flex sm:hidden mt-8 animate-fade-up flex-col gap-3 opacity-0 stagger-3 w-full">
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search by city (e.g. Silchar)..."
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:ring-primary text-lg pl-12 rounded-xl backdrop-blur-sm"
+                />
+              </div>
+              <Button type="submit" size="lg" className="h-14 w-full gap-2 rounded-xl text-lg font-bold shadow-xl">
+                Search
+              </Button>
+            </form>
             
             {/* Desktop Only Search Form */}
             <form onSubmit={handleSearch} className="hidden sm:flex mt-12 animate-fade-up flex-col gap-2 opacity-0 stagger-3 sm:flex-row backdrop-blur-md bg-white/5 p-1.5 rounded-xl border border-white/10 shadow-2xl max-w-2xl mx-auto">
@@ -228,22 +228,22 @@ const Index = () => {
 
         {/* Mobile: Top Deals Scroller (OLX Style circular icons) */}
         {!loading && filteredListings.length > 0 && (
-          <div className="bg-muted/30 py-6 sm:hidden border-b border-border">
-            <div className="px-4 mb-3 flex justify-between items-center">
-              <h2 className="text-sm font-bold">Top Deals in Silchar</h2>
-              <Link to="/rentals" className="text-xs text-primary font-semibold">View all</Link>
+          <div className="bg-muted/30 py-8 sm:hidden border-b border-border">
+            <div className="px-4 mb-4 flex justify-between items-center">
+              <h2 className="text-lg font-bold">Top Deals in Silchar</h2>
+              <Link to="/rentals" className="text-sm text-primary font-bold">View all</Link>
             </div>
-            <div className="flex gap-4 px-4 overflow-x-auto no-scrollbar">
+            <div className="flex gap-6 px-4 overflow-x-auto no-scrollbar pb-2">
               {filteredListings.slice(0, 6).map((l) => (
-                <Link key={l.id} to={`/listing/${l.id}`} className="flex flex-col items-center gap-1.5 w-20 shrink-0">
-                  <div className="w-20 h-20 rounded-full border-2 border-primary/30 p-0.5 overflow-hidden bg-card">
+                <Link key={l.id} to={`/listing/${l.id}`} className="flex flex-col items-center gap-2 w-24 shrink-0">
+                  <div className="w-24 h-24 rounded-full border-4 border-primary/20 p-1 overflow-hidden bg-card shadow-md">
                     <img 
                       src={l.image1 || "/placeholder.svg"} 
                       alt="" 
                       className="w-full h-full object-cover rounded-full"
                     />
                   </div>
-                  <span className="text-[10px] font-bold text-foreground truncate w-full text-center">
+                  <span className="text-xs font-black text-foreground truncate w-full text-center">
                     ₹{l.rent.toLocaleString("en-IN")}
                   </span>
                 </Link>
@@ -252,23 +252,26 @@ const Index = () => {
           </div>
         )}
 
-        {/* Mobile Horizontal Category Scroller (OLX Style) */}
-        <div className="bg-card py-4 sm:hidden overflow-x-auto no-scrollbar border-b border-border">
-          <div className="flex gap-4 px-4 min-w-max">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.type}
-                onClick={() => navigate(`/rentals?type=${cat.type}`)}
-                className="flex flex-col items-center gap-1.5"
-              >
-                <div className="w-16 h-16 rounded-full bg-primary/5 border-2 border-primary/20 flex items-center justify-center transition-all active:scale-95">
-                  <cat.icon className="h-7 w-7 text-primary" />
-                </div>
-                <span className="text-[11px] font-semibold text-muted-foreground">{cat.label}</span>
-              </button>
-            ))}
+        {/* Categories */}
+        <section className="py-12 sm:py-24">
+          <div className="container mx-auto px-4">
+            <h2 className="mb-8 text-center text-2xl font-black text-foreground sm:mb-12 sm:text-4xl">Browse by Category</h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-7 sm:gap-6">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.type}
+                  onClick={() => navigate(`/rentals?type=${cat.type}`)}
+                  className="group flex flex-col items-center gap-3 rounded-2xl bg-card p-4 border border-border transition-all duration-300 hover:border-primary hover:shadow-xl active:scale-95"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white sm:h-16 sm:w-16">
+                    <cat.icon className="h-7 w-7 sm:h-8 sm:w-8" />
+                  </div>
+                  <span className="text-sm font-bold sm:text-base">{cat.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* Featured Locations */}
         <section className="bg-muted/30 py-8 sm:py-16">
@@ -385,32 +388,6 @@ const Index = () => {
           </section>
         )}
 
-        {/* Browse by Category */}
-        <section className="py-12 sm:py-32 border-t border-border/50 bg-muted/5">
-          <div className="container mx-auto px-4">
-            <div className="text-center max-w-2xl mx-auto">
-              <h2 className="animate-fade-up text-2xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-                Browse by Category
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-lg sm:mt-4">Find the specific type of property that fits your needs</p>
-            </div>
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6 sm:mt-16">
-              {CATEGORIES.map((cat, i) => (
-                <button
-                  key={cat.type}
-                  onClick={() => navigate(`/rentals?type=${cat.type}`)}
-                  className={`group flex animate-scale-up flex-col items-center gap-4 rounded-2xl border border-border bg-card p-5 opacity-0 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/50 hover:shadow-xl hover:bg-primary/[0.02] stagger-${i + 1} sm:rounded-3xl sm:p-8 sm:gap-6`}
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted/50 transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-6 sm:h-20 sm:w-20 sm:rounded-2xl">
-                    <cat.icon className="h-6 w-6 transition-transform duration-500 group-hover:scale-110 sm:h-10 sm:w-10" />
-                  </div>
-                  <span className="text-sm font-bold tracking-tight text-foreground sm:text-lg">{cat.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* How It Works */}
         <section className="py-12 sm:py-32 border-t border-border/50">
           <div className="container mx-auto px-4">
@@ -446,7 +423,7 @@ const Index = () => {
                 Post Your Property for <span className="text-primary italic">Rent</span>
               </h2>
               <p className="mx-auto mt-4 max-w-2xl animate-fade-up text-sm text-white/70 opacity-0 stagger-1 sm:text-xl leading-relaxed font-light sm:mt-8">
-                Whether you're in India, Nepal, or anywhere in between, join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
+                Join thousands of owners who found their perfect tenants through RentMilega. Post your property — it's completely free!
               </p>
               <div className="mt-8 flex animate-fade-up flex-col items-center justify-center gap-3 opacity-0 stagger-2 sm:flex-row sm:mt-12 sm:gap-4">
                 <Button
@@ -488,7 +465,7 @@ const Index = () => {
       <Footer />
       
       {/* Mobile Bottom Navigation Bar (App Style) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
         <Link to="/home" className="flex flex-col items-center gap-1 text-muted-foreground">
           <Home className="h-5 w-5" />
           <span className="text-[10px] font-medium">HOME</span>
@@ -512,7 +489,7 @@ const Index = () => {
       </div>
 
       {/* Mobile Floating Action Button (Centered like OLX) */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] sm:hidden">
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 sm:hidden">
         <Button
           onClick={() => navigate("/post")}
           className="h-14 w-14 rounded-full bg-white text-primary p-0 shadow-[0_8px_30px_rgb(0,0,0,0.3)] border-4 border-primary flex items-center justify-center transition-all duration-300 active:scale-90 hover:bg-primary hover:text-white group"

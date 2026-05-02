@@ -193,7 +193,7 @@ const Rentals = () => {
       <Footer />
 
       {/* Mobile Bottom Navigation Bar (App Style) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-t border-border sm:hidden h-16 flex items-center justify-around px-2 pb-safe">
         <Link to="/home" className="flex flex-col items-center gap-1 text-muted-foreground">
           <Home className="h-5 w-5" />
           <span className="text-[10px] font-medium">HOME</span>
@@ -217,7 +217,7 @@ const Rentals = () => {
       </div>
 
       {/* Mobile Floating Action Button (Centered like OLX) */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] sm:hidden">
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 sm:hidden">
         <Button
           onClick={() => navigate("/post")}
           className="h-14 w-14 rounded-full bg-white text-primary p-0 shadow-[0_8px_30px_rgb(0,0,0,0.3)] border-4 border-primary flex items-center justify-center transition-all duration-300 active:scale-90 hover:bg-primary hover:text-white group"

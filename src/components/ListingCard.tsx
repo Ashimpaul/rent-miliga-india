@@ -51,13 +51,13 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
   };
 
   return (
-    <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-row sm:flex-col h-[180px] sm:h-auto">
+    <div className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] flex flex-col h-auto">
       <Link 
         to={`/listing/${listing.id}`} 
         aria-label={`View details for ${listing.title}`}
-        className="w-[180px] sm:w-full h-full sm:h-auto shrink-0 overflow-hidden relative"
+        className="w-full shrink-0 overflow-hidden relative"
       >
-        <div className="relative h-full sm:aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
+        <div className="relative aspect-[4/3] overflow-hidden">
           {images.length > 0 ? (
             images.map((img, index) => (
               <div
@@ -113,56 +113,56 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         </div>
       </Link>
       
-      <div className="flex-1 p-3 sm:p-4 transition-colors duration-300 group-hover:bg-accent/5 flex flex-col justify-between overflow-hidden">
+      <div className="flex-1 p-4 transition-colors duration-300 group-hover:bg-accent/5 flex flex-col justify-between overflow-hidden">
         <div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-0.5 text-lg font-black text-primary sm:gap-1 sm:text-2xl">
+            <div className="flex items-center gap-1 text-xl font-black text-primary sm:text-2xl">
               <span className="text-sm sm:text-base font-bold">{currencySymbol}</span>
               {Number(listing.rent).toLocaleString(locale)}
-              <span className="text-[10px] font-normal text-muted-foreground ml-1">/mo</span>
+              <span className="text-xs font-normal text-muted-foreground ml-1">/mo</span>
             </div>
             <div className="flex items-center gap-1">
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
+                className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                 onClick={handleShare}
                 title="Share Listing"
               >
-                <Share2 className="h-3.5 w-3.5" />
+                <Share2 className="h-4 w-4" />
               </Button>
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-primary sm:rounded-full sm:px-2 sm:text-[10px]">
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
                 {listing.property_type}
               </span>
             </div>
           </div>
           
           <Link to={`/listing/${listing.id}`}>
-            <h3 className="mt-1 text-sm font-semibold text-foreground line-clamp-1 transition-colors duration-200 hover:text-primary sm:text-base sm:font-bold sm:mt-2">
+            <h3 className="mt-2 text-base font-bold text-foreground line-clamp-1 transition-colors duration-200 hover:text-primary sm:text-lg">
               {listing.title}
             </h3>
           </Link>
           
-          <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground sm:mt-1.5 sm:gap-1.5 sm:text-sm">
-            <MapPin className="h-2.5 w-2.5 shrink-0 text-primary sm:h-3.5 sm:w-3.5" />
+          <div className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground sm:text-sm">
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" />
             <span className="truncate">{listing.area}, {listing.city}</span>
           </div>
         </div>
 
-        <div className="mt-2 flex gap-1.5 sm:gap-2">
+        <div className="mt-4 flex gap-2">
           <Button 
             size="sm" 
-            className="h-8 flex-1 text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:text-sm" 
+            className="h-10 flex-1 text-xs font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:text-sm" 
             asChild
           >
             <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
-              <Phone className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-3.5 sm:w-3.5" /> Call
+              <Phone className="mr-1.5 h-3.5 w-3.5" /> Call
             </a>
           </Button>
           <Button 
             size="sm" 
             variant="outline"
-            className="h-8 flex-1 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white text-[10px] font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:h-10 sm:text-sm" 
+            className="h-10 flex-1 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white text-xs font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:text-sm" 
             asChild
           >
             <a 
@@ -170,7 +170,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MessageCircle className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-3.5 sm:w-3.5" /> Chat
+              <MessageCircle className="mr-1.5 h-3.5 w-3.5" /> Chat
             </a>
           </Button>
         </div>

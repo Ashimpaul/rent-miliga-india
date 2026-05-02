@@ -191,9 +191,20 @@ const PostListing = () => {
           phone_number: form.phone_number,
           google_map_link: form.google_map_link || null,
           password: form.password,
+          country: "India",
+          is_premium: isPremium,
+          plan_type: plan,
+          expires_at: expires_at,
           image1: urls[0] || null,
           image2: urls[1] || null,
           image3: urls[2] || null,
+          image4: urls[3] || null,
+          image5: urls[4] || null,
+          image6: urls[5] || null,
+          image7: urls[6] || null,
+          image8: urls[7] || null,
+          image9: urls[8] || null,
+          image10: urls[9] || null,
         });
         if (error) throw error;
         toast.success("Listing posted successfully!");
@@ -230,118 +241,123 @@ const PostListing = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-muted/30">
       <Header />
       <main className="flex-1">
-        <div className="container mx-auto max-w-2xl px-3 py-5 sm:px-4 sm:py-8">
-          <h1 className="animate-fade-up text-lg font-bold text-foreground sm:text-2xl">Post a Rental Listing</h1>
-          <p className="animate-fade-up mt-1 text-xs text-muted-foreground opacity-0 stagger-1 sm:text-sm">Fill in the details to list your property</p>
+        <div className="container mx-auto max-w-2xl px-4 py-8 sm:py-12">
+          <div className="mb-8 text-center sm:text-left">
+            <h1 className="animate-fade-up text-3xl font-black text-foreground sm:text-4xl">Post a Rental Listing</h1>
+            <p className="animate-fade-up mt-2 text-base text-muted-foreground opacity-0 stagger-1 sm:text-lg">Fill in the details to list your property</p>
+          </div>
 
-          <form onSubmit={handleSubmit} className="mt-4 animate-fade-up space-y-4 opacity-0 stagger-2 sm:mt-6 sm:space-y-6">
+          <form onSubmit={handleSubmit} className="animate-fade-up space-y-6 opacity-0 stagger-2 sm:space-y-10">
             {/* Property Info */}
-            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Property Information</legend>
-              <div>
-                <Label htmlFor="title" className="text-xs sm:text-sm">Title *</Label>
-                <Input id="title" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="e.g. Spacious 2BHK near Metro" className="text-sm" />
+            <fieldset className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-sm sm:space-y-6 sm:p-8">
+              <legend className="px-4 text-sm font-bold uppercase tracking-widest text-primary sm:text-base">Property Information</legend>
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-sm font-bold sm:text-base">Title *</Label>
+                <Input id="title" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="e.g. Spacious 2BHK near Metro" className="h-12 text-base rounded-xl" />
               </div>
-              <div>
-                <Label className="text-xs sm:text-sm">Property Type *</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-bold sm:text-base">Property Type *</Label>
                 <Select value={form.property_type} onValueChange={(v) => set("property_type", v)}>
-                  <SelectTrigger className="text-sm"><SelectValue placeholder="Select type" /></SelectTrigger>
+                  <SelectTrigger className="h-12 text-base rounded-xl">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
                   <SelectContent>
                     {PROPERTY_TYPES.map((t) => (
-                      <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>
+                      <SelectItem key={t} value={t} className="capitalize py-3">{t}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label htmlFor="rent" className="text-xs sm:text-sm">Monthly Rent ({currencySymbol}) *</Label>
-                <Input id="rent" type="number" value={form.rent} onChange={(e) => set("rent", e.target.value)} placeholder="e.g. 8000" className="text-sm" />
+              <div className="space-y-2">
+                <Label htmlFor="rent" className="text-sm font-bold sm:text-base">Monthly Rent ({currencySymbol}) *</Label>
+                <Input id="rent" type="number" value={form.rent} onChange={(e) => set("rent", e.target.value)} placeholder="0" className="h-12 text-base rounded-xl" />
               </div>
-              <div>
-                <Label htmlFor="desc" className="text-xs sm:text-sm">Description</Label>
-                <Textarea id="desc" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Brief description of the property" rows={3} className="text-sm" />
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-sm font-bold sm:text-base">Description</Label>
+                <Textarea id="description" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Tell us more about the property, amenities, etc." rows={5} className="text-base rounded-xl" />
               </div>
             </fieldset>
 
             {/* Location */}
-            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <div className="flex items-center justify-between px-2">
-                <legend className="text-xs font-semibold text-foreground sm:text-sm">Location</legend>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-7 text-[10px] gap-1 px-2 border-primary/20 hover:bg-primary/5 text-primary"
-                  onClick={handleUseCurrentLocation}
-                  disabled={locating}
-                >
-                  <MapPin className={`h-3 w-3 ${locating ? 'animate-bounce' : ''}`} />
-                  {locating ? "Locating..." : "Use My Location"}
-                </Button>
+            <fieldset className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-sm sm:space-y-6 sm:p-8">
+              <legend className="px-4 text-sm font-bold uppercase tracking-widest text-primary sm:text-base">Location</legend>
+              
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={handleUseCurrentLocation}
+                disabled={locating}
+                className="w-full h-12 gap-2 border-primary/20 hover:bg-primary/5 text-primary font-bold rounded-xl"
+              >
+                {locating ? <Loader2 className="h-5 w-5 animate-spin" /> : <MapPin className="h-5 w-5" />}
+                {locating ? "Getting Location..." : "Use My Current Location"}
+              </Button>
+              
+              <div className="space-y-2">
+                <Label htmlFor="state" className="text-sm font-bold sm:text-base">State *</Label>
+                <Select value={form.state} onValueChange={(v) => set("state", v)}>
+                  <SelectTrigger id="state" className="h-12 text-base rounded-xl">
+                    <SelectValue placeholder="Select state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {INDIAN_STATES.map((s) => (
+                      <SelectItem key={s} value={s} className="py-3">{s}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              <div className="grid grid-cols-1 gap-2 sm:gap-3">
-                <div>
-                  <Label htmlFor="state" className="text-xs sm:text-sm">State *</Label>
-                  <Select value={form.state} onValueChange={(v) => set("state", v)}>
-                    <SelectTrigger id="state" className="text-sm">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {INDIAN_STATES.map((s) => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="city" className="text-sm font-bold sm:text-base">City *</Label>
+                  <Input id="city" value={form.city} onChange={(e) => set("city", e.target.value)} placeholder="e.g. Silchar" className="h-12 text-base rounded-xl" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="area" className="text-sm font-bold sm:text-base">Area / Locality *</Label>
+                  <Input id="area" value={form.area} onChange={(e) => set("area", e.target.value)} placeholder="e.g. Tarapur" className="h-12 text-base rounded-xl" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                <div>
-                  <Label htmlFor="city" className="text-xs sm:text-sm">City *</Label>
-                  <Input id="city" value={form.city} onChange={(e) => set("city", e.target.value)} className="text-sm" />
-                </div>
-                <div>
-                  <Label htmlFor="area" className="text-xs sm:text-sm">Area / Locality *</Label>
-                  <Input id="area" value={form.area} onChange={(e) => set("area", e.target.value)} className="text-sm" />
-                </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="address" className="text-sm font-bold sm:text-base">Address</Label>
+                <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="Full address" className="h-12 text-base rounded-xl" />
               </div>
-              <div>
-                <Label htmlFor="address" className="text-xs sm:text-sm">Address</Label>
-                <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} className="text-sm" />
+              
+              <div className="space-y-2">
+                <Label htmlFor="pincode" className="text-sm font-bold sm:text-base">Pincode</Label>
+                <Input id="pincode" value={form.pincode} onChange={(e) => set("pincode", e.target.value)} maxLength={6} placeholder="6-digit pincode" className="h-12 text-base rounded-xl" />
               </div>
-              <div>
-                <Label htmlFor="pincode" className="text-xs sm:text-sm">Pincode</Label>
-                <Input id="pincode" value={form.pincode} onChange={(e) => set("pincode", e.target.value)} maxLength={6} className="text-sm" />
-              </div>
-              <div>
-                <Label htmlFor="google_map_link" className="text-xs sm:text-sm">Google Maps Link</Label>
-                <Input id="google_map_link" value={form.google_map_link} onChange={(e) => set("google_map_link", e.target.value)} placeholder="Paste Google Maps link" className="text-sm" />
-                <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
+              
+              <div className="space-y-2">
+                <Label htmlFor="google_map_link" className="text-sm font-bold sm:text-base">Google Maps Link</Label>
+                <Input id="google_map_link" value={form.google_map_link} onChange={(e) => set("google_map_link", e.target.value)} placeholder="Paste Google Maps link" className="h-12 text-base rounded-xl" />
+                <p className="mt-1 text-xs text-muted-foreground">
                   Open Google Maps → Find your property → Click "Share" → Copy link
                 </p>
               </div>
             </fieldset>
 
             {/* Contact */}
-            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Contact Information</legend>
-              <div>
-                <Label htmlFor="owner" className="text-xs sm:text-sm">Owner Name *</Label>
-                <Input id="owner" value={form.owner_name} onChange={(e) => set("owner_name", e.target.value)} className="text-sm" />
+            <fieldset className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-sm sm:space-y-6 sm:p-8">
+              <legend className="px-4 text-sm font-bold uppercase tracking-widest text-primary sm:text-base">Contact Information</legend>
+              <div className="space-y-2">
+                <Label htmlFor="owner" className="text-sm font-bold sm:text-base">Owner Name *</Label>
+                <Input id="owner" value={form.owner_name} onChange={(e) => set("owner_name", e.target.value)} placeholder="Your full name" className="h-12 text-base rounded-xl" />
               </div>
-              <div>
-                  <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number *</Label>
-                  <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder={`e.g. ${phonePlaceholder}9876543210`} className="text-sm" />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone" className="text-sm font-bold sm:text-base">Phone Number *</Label>
+                <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder={`e.g. ${phonePlaceholder}9876543210`} className="h-12 text-base rounded-xl" />
+              </div>
             </fieldset>
 
-            {/* Password */}
-            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Security</legend>
-              <div>
-                <Label htmlFor="password" className="text-xs sm:text-sm">Listing Password *</Label>
+            {/* Security */}
+            <fieldset className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-sm sm:space-y-6 sm:p-8">
+              <legend className="px-4 text-sm font-bold uppercase tracking-widest text-primary sm:text-base">Security</legend>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-bold sm:text-base">Listing Password *</Label>
                 <div className="relative">
                   <Input 
                     id="password" 
@@ -349,121 +365,117 @@ const PostListing = () => {
                     value={form.password} 
                     onChange={(e) => set("password", e.target.value)} 
                     placeholder="Set a password to edit/delete later" 
-                    className="pr-10 text-sm" 
+                    className="h-12 pr-12 text-base rounded-xl" 
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     tabIndex={-1}
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Remember this password — you'll need it to edit or delete your listing later.
                 </p>
               </div>
             </fieldset>
 
             {/* Listing Plan */}
-            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Listing Duration Plan</legend>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <fieldset className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-sm sm:space-y-6 sm:p-8">
+              <legend className="px-4 text-sm font-bold uppercase tracking-widest text-primary sm:text-base">Listing Duration Plan</legend>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={() => setPlan("30")}
-                  className={`flex items-center justify-between rounded-lg border p-3 transition-all ${
-                    plan === "30" ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-muted"
+                  className={`flex items-center justify-between rounded-xl border p-4 transition-all ${
+                    plan === "30" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:bg-muted"
                   }`}
                 >
                   <div className="text-left">
-                    <p className="text-sm font-bold">30 Days</p>
+                    <p className="text-base font-bold">30 Days</p>
                     <p className="text-xs text-muted-foreground">Standard listing</p>
                   </div>
-                  <span className="text-sm font-bold text-primary">Free</span>
+                  <span className="text-base font-black text-primary">Free</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setPlan("60")}
-                  className={`flex items-center justify-between rounded-lg border p-3 transition-all ${
-                    plan === "60" ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-muted"
+                  className={`flex items-center justify-between rounded-xl border p-4 transition-all ${
+                    plan === "60" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:bg-muted"
                   }`}
                 >
                   <div className="text-left">
-                    <p className="text-sm font-bold">60 Days</p>
+                    <p className="text-base font-bold">60 Days</p>
                     <p className="text-xs text-muted-foreground">Extended visibility</p>
                   </div>
-                  <span className="text-sm font-bold text-primary">₹99</span>
+                  <span className="text-base font-black text-primary">₹99</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setPlan("90")}
-                  className={`flex items-center justify-between rounded-lg border p-3 transition-all ${
-                    plan === "90" ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-muted"
+                  className={`flex items-center justify-between rounded-xl border p-4 transition-all ${
+                    plan === "90" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:bg-muted"
                   }`}
                 >
                   <div className="text-left">
-                    <p className="text-sm font-bold">90 Days</p>
+                    <p className="text-base font-bold">90 Days</p>
                     <p className="text-xs text-muted-foreground">Long term listing</p>
                   </div>
-                  <span className="text-sm font-bold text-primary">₹199</span>
+                  <span className="text-base font-black text-primary">₹199</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setPlan("forever")}
-                  className={`flex items-center justify-between rounded-lg border p-3 transition-all ${
-                    plan === "forever" ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-muted"
+                  className={`flex items-center justify-between rounded-xl border p-4 transition-all ${
+                    plan === "forever" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:bg-muted"
                   }`}
                 >
                   <div className="text-left">
                     <div className="flex items-center gap-1">
-                      <p className="text-sm font-bold">Forever</p>
-                      <Crown className="h-3 w-3 text-amber-500" />
+                      <p className="text-base font-bold">Forever</p>
+                      <Crown className="h-4 w-4 text-amber-500" />
                     </div>
                     <p className="text-xs text-muted-foreground">Never expires</p>
                   </div>
-                  <span className="text-sm font-bold text-primary">₹399</span>
+                  <span className="text-base font-black text-primary">₹399</span>
                 </button>
               </div>
-              <p className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground sm:text-xs">
-                <Calendar className="h-3 w-3" />
+              <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+                <Calendar className="h-4 w-4" />
                 Listings are automatically deleted after their duration expires.
               </p>
             </fieldset>
 
             {/* Images */}
-            <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
-              <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Images</legend>
+            <fieldset className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-sm sm:space-y-6 sm:p-8">
+              <legend className="px-4 text-sm font-bold uppercase tracking-widest text-primary sm:text-base">Images</legend>
               <div className="space-y-4">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="images" className="text-xs sm:text-sm">Upload Photos (1-3) *</Label>
-                  <p className="text-[10px] text-muted-foreground sm:text-xs">Higher quality photos attract more tenants. Max 3 free.</p>
+                <div className="space-y-2">
+                  <Label htmlFor="images" className="text-sm font-bold sm:text-base">Upload Photos (up to {isPremium ? "10" : "3"}) *</Label>
+                  <p className="text-xs text-muted-foreground">Higher quality photos attract more tenants. {isPremium ? "You can upload up to 10 photos." : "Max 3 free. Upgrade for 10."}</p>
                   <Input 
                     id="images" 
                     type="file" 
                     accept="image/*" 
                     multiple 
                     onChange={handleImages} 
-                    className="text-sm h-11 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" 
+                    className="h-12 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer rounded-xl border-dashed" 
                   />
                 </div>
                 
                 {images.length > 0 && (
-                  <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                  <div className="grid grid-cols-3 gap-3 sm:gap-6">
                     {images.map((file, i) => (
-                      <div key={i} className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-muted">
+                      <div key={i} className="group relative aspect-square rounded-2xl overflow-hidden border border-border bg-muted shadow-sm">
                         <img 
                           src={URL.createObjectURL(file)} 
                           alt="Preview" 
-                          className="h-full w-full object-cover" 
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" 
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="text-white text-[10px] font-bold">Photo {i + 1}</span>
+                          <span className="text-white text-xs font-bold">Photo {i + 1}</span>
                         </div>
                       </div>
                     ))}
@@ -474,50 +486,49 @@ const PostListing = () => {
 
             {/* Premium Dialog */}
             <Dialog open={showPremiumDialog} onOpenChange={setShowPremiumDialog}>
-              <DialogContent className="mx-auto max-w-[calc(100vw-2rem)] rounded-lg sm:max-w-md">
+              <DialogContent className="mx-auto max-w-[calc(100vw-2rem)] rounded-2xl sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-                    <Crown className="h-4 w-4 text-amber-500 sm:h-5 sm:w-5" />
+                  <DialogTitle className="flex items-center gap-2 text-xl font-bold">
+                    <Crown className="h-5 w-5 text-amber-500" />
                     Upgrade to Premium
                   </DialogTitle>
-                  <DialogDescription className="text-xs sm:text-sm">
+                  <DialogDescription className="text-sm">
                     {premiumReason === "images"
                       ? "Free listings support up to 3 images. Upgrade to upload more."
                       : "Commercial & apartment listings are premium. Upgrade to unlock."}
                   </DialogDescription>
                 </DialogHeader>
-                <div className="rounded-lg border border-border bg-muted/50 p-3 text-center sm:p-4">
-                  <p className="text-xl font-bold text-foreground sm:text-2xl">+₹99</p>
-                  <p className="text-xs text-muted-foreground sm:text-sm">one-time add-on fee</p>
-                  <ul className="mt-2 space-y-1 text-left text-xs text-muted-foreground sm:mt-3 sm:text-sm">
-                    {premiumReason === "images" ? (
-                      <>
-                        <li>✓ Upload up to 10 images</li>
-                        <li>✓ Featured badge on listing</li>
-                        <li>✓ Priority in search results</li>
-                      </>
-                    ) : (
-                      <>
-                        <li>✓ List apartments &amp; commercial properties</li>
-                        <li>✓ Upload up to 10 images</li>
-                        <li>✓ Featured badge &amp; priority placement</li>
-                      </>
-                    )}
+                <div className="rounded-2xl border border-border bg-muted/50 p-6 text-center">
+                  <p className="text-3xl font-black text-foreground">₹99</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">one-time add-on fee</p>
+                  <ul className="mt-6 space-y-3 text-left text-sm text-foreground/80">
+                    <li className="flex items-center gap-2">
+                      <div className="h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px]">✓</div>
+                      Upload up to 10 images
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px]">✓</div>
+                      Featured badge on listing
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px]">✓</div>
+                      Priority in search results
+                    </li>
                   </ul>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="flex-1 text-xs sm:text-sm" onClick={() => setShowPremiumDialog(false)}>
-                    {premiumReason === "images" ? "Continue with 3" : "Pick another type"}
+                <div className="flex gap-3 mt-4">
+                  <Button variant="outline" className="flex-1 rounded-xl h-12 font-bold" onClick={() => setShowPremiumDialog(false)}>
+                    {premiumReason === "images" ? "Keep 3" : "Change Type"}
                   </Button>
-                  <Button size="sm" className="flex-1 text-xs sm:text-sm" onClick={handleUpgrade}>
+                  <Button className="flex-1 rounded-xl h-12 font-bold" onClick={handleUpgrade}>
                     Add Premium
                   </Button>
                 </div>
               </DialogContent>
             </Dialog>
 
-            <Button type="submit" className="w-full" size="lg" disabled={submitting}>
-              {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-black shadow-xl" disabled={submitting}>
+              {submitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
               {submitting ? "Posting..." : "Post Listing"}
             </Button>
           </form>

@@ -1,28 +1,18 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Country = "India" | "Nepal";
+type Country = "India";
 
 interface CountryContextType {
   country: Country;
-  setCountry: (country: Country) => void;
 }
 
 const CountryContext = createContext<CountryContextType | undefined>(undefined);
 
 export const CountryProvider = ({ children }: { children: ReactNode }) => {
-  const [country, setCountryState] = useState<Country>(() => {
-    // Forcing India for now as per request
-    return "India";
-  });
-
-  const setCountry = (newCountry: Country) => {
-    // Disable country switching for now
-    setCountryState("India");
-    localStorage.setItem("selected_country", "India");
-  };
+  const [country] = useState<Country>("India");
 
   return (
-    <CountryContext.Provider value={{ country, setCountry }}>
+    <CountryContext.Provider value={{ country }}>
       {children}
     </CountryContext.Provider>
   );

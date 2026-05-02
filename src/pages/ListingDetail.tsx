@@ -23,7 +23,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Phone, MapPin, IndianRupee, ArrowLeft, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2 } from "lucide-react";
+import { Phone, MapPin, IndianRupee, ArrowLeft, ArrowRight, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2, Crown } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { PROPERTY_TYPES, INDIAN_STATES, COUNTRIES } from "@/lib/constants";
@@ -341,46 +341,108 @@ const ListingDetail = () => {
             </div>
           ) : (
             <>
-              {/* Image Gallery */}
-              {images.length > 0 && (
-                <div className="animate-scale-up overflow-hidden rounded-lg">
-                  <WatermarkedImage
-                    src={images[activeImage]}
-                    alt={listing.title}
-                    imageClassName="aspect-[4/3] w-full object-cover transition-all duration-500 sm:aspect-video"
-                  />
-                  {images.length > 1 && (
-                    <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
-                      {images.map((img, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setActiveImage(i)}
-                          className={`h-12 w-14 shrink-0 overflow-hidden rounded-md border-2 active:scale-95 sm:h-16 sm:w-20 ${
-                            i === activeImage ? "border-primary" : "border-border"
-                          }`}
-                        >
-                          <WatermarkedImage src={img} alt="" imageClassName="h-full w-full object-cover" />
-                        </button>
-                      ))}
+              {/* Image Gallery - Improved Mobile Experience */}
+              <div className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-card shadow-sm sm:rounded-3xl">
+                <div className="relative aspect-square sm:aspect-video w-full overflow-hidden bg-muted">
+                  {images.length > 0 ? (
+                    <WatermarkedImage
+                      src={images[activeImage]}
+                      alt={listing.title}
+                      imageClassName="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-muted-foreground">
+                      No images available
                     </div>
                   )}
+                  
+                  {images.length > 1 && (
+                    <>
+                      <div className="absolute inset-y-0 left-2 flex items-center sm:left-4">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 sm:h-12 sm:w-12"
+                          onClick={() => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                        >
+                          <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </Button>
+                      </div>
+                      <div className="absolute inset-y-0 right-2 flex items-center sm:right-4">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 sm:h-12 sm:w-12"
+                          onClick={() => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+                        >
+                          <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </Button>
+                      </div>
+                      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-1.5 sm:bottom-6 sm:gap-2">
+                        {images.map((_, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setActiveImage(i)}
+                            className={`h-1.5 rounded-full transition-all duration-300 sm:h-2 ${
+                              i === activeImage ? "bg-white w-6 sm:w-8 shadow-md" : "bg-white/40 w-1.5 sm:w-2"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
-              )}
+                
+                {images.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto p-3 no-scrollbar sm:gap-4 sm:p-4">
+                    {images.map((img, i) => (
+                      <button
+                        key={img}
+                        onClick={() => setActiveImage(i)}
+                        className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 sm:h-24 sm:w-24 sm:rounded-xl ${
+                          i === activeImage ? "border-primary scale-105 shadow-md" : "border-transparent opacity-60 hover:opacity-100"
+                        }`}
+                      >
+                        <WatermarkedImage src={img} alt="" imageClassName="h-full w-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-              {/* Details */}
-              <div className="mt-4 animate-fade-up sm:mt-8">
-                <h1 className="text-xl font-extrabold text-foreground sm:text-3xl leading-tight">{listing.title}</h1>
-                <div className="mt-2.5 flex items-center gap-1 text-2xl font-black text-primary sm:mt-4 sm:text-4xl">
-                  <span className="text-lg sm:text-2xl font-bold">{currencySymbol}</span>
-                  {Number(listing.rent).toLocaleString("en-IN")}
-                  <span className="text-xs sm:text-sm font-normal text-muted-foreground ml-1.5">/ month</span>
+              {/* Details - Improved Mobile Typography */}
+              <div className="mt-6 animate-fade-up sm:mt-10">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary sm:px-4 sm:text-sm">
+                    {listing.property_type}
+                  </span>
+                  {(listing as any).is_premium && (
+                    <span className="flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-md sm:px-4 sm:text-sm">
+                      <Crown className="h-3.5 w-3.5" /> Featured
+                    </span>
+                  )}
                 </div>
-                <div className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary sm:mt-3 sm:px-4 sm:py-1.5 sm:text-sm">
-                  {listing.property_type}
+
+                <h1 className="mt-4 text-3xl font-black tracking-tight text-foreground sm:text-4xl md:text-5xl leading-tight">
+                  {listing.title}
+                </h1>
+
+                <div className="mt-4 flex items-center gap-2 text-3xl font-black text-primary sm:mt-6 sm:text-5xl">
+                  <span className="text-xl sm:text-3xl font-bold">{currencySymbol}</span>
+                  {Number(listing.rent).toLocaleString("en-IN")}
+                  <span className="text-sm sm:text-lg font-normal text-muted-foreground ml-2">/ month</span>
+                </div>
+
+                <div className="mt-4 flex items-center gap-2 text-base text-muted-foreground sm:mt-6 sm:text-xl">
+                  <MapPin className="h-5 w-5 text-primary sm:h-6 sm:w-6" />
+                  {listing.area}, {listing.city}, {listing.state}
                 </div>
 
                 {listing.description && (
-                  <p className="mt-3 text-sm text-foreground sm:mt-4">{listing.description}</p>
+                  <div className="mt-8 animate-fade-up sm:mt-12">
+                    <h2 className="text-xl font-bold text-foreground sm:text-2xl">Description</h2>
+                    <p className="mt-3 text-base leading-relaxed text-foreground/80 sm:mt-4 sm:text-lg">{listing.description}</p>
+                  </div>
                 )}
 
                 {/* Location */}
