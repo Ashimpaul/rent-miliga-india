@@ -111,29 +111,43 @@ const ListingDetail = () => {
     };
 
     try {
-      if (navigator.share) {
-        // Try to share with image if possible
-        if (listing.image1 && navigator.canShare && (navigator as any).canShare({ files: [] })) {
-          try {
-            const response = await fetch(listing.image1);
-            const blob = await response.blob();
-            const file = new File([blob], "property.jpg", { type: "image/jpeg" });
-            if ((navigator as any).canShare({ files: [file] })) {
-              shareData.files = [file];
-              // When sharing files, some browsers don't like both URL and files
-              // but we'll try to include everything.
-            }
-          } catch (fileErr) {
-            console.error("Error preparing image for share:", fileErr);
+      // Check if we can share files
+      if (listing.image1 && navigator.canShare && (navigator as any).canShare({ files: [new File([], "test.jpg", { type: "image/jpeg" })] })) {
+        try {
+          const response = await fetch(listing.image1, { mode: 'cors', cache: 'no-cache' });
+          const blob = await response.blob();
+          const file = new File([blob], `${listing.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`, { type: "image/jpeg" });
+          
+          if ((navigator as any).canShare({ files: [file] })) {
+            // Some browsers prefer only files or only text/url. 
+            // We'll try to provide everything but prioritize the file for better preview.
+            await navigator.share({
+              ...shareData,
+              files: [file]
+            });
+            return; // Success
           }
+        } catch (fileErr) {
+          console.error("Error preparing image for share:", fileErr);
+          // Fall back to standard share below
         }
+      }
+
+      // Standard share fallback (no files)
+      if (navigator.share) {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(url);
         toast.success("Link copied to clipboard!");
       }
     } catch (err) {
-      console.error("Error sharing:", err);
+      // Only show error if it's not a user cancellation
+      if ((err as Error).name !== 'AbortError') {
+        console.error("Error sharing:", err);
+        // Final fallback: copy to clipboard
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+      }
     }
   };
 

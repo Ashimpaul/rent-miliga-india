@@ -24,6 +24,7 @@ const WatermarkedImage = ({ src, alt, className, imageClassName }: WatermarkedIm
         className={cn("h-full w-full object-cover pointer-events-none", imageClassName)}
         loading="lazy"
         draggable="false"
+        crossOrigin="anonymous"
       />
       
       {/* Watermark Overlays */}
