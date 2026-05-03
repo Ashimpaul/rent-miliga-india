@@ -147,11 +147,22 @@ const Blogs = () => {
                   </div>
                 )}
 
-                <div className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-10 dark:prose-invert">
-                  {(blog.content || "").split("\n").map((para, i) => (
-                    para.trim() ? <p key={i}>{para}</p> : <br key={i} />
-                  ))}
-                </div>
+                <div 
+                  className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-10 dark:prose-invert blog-content font-serif leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: blog.content || "" }}
+                />
+
+                <style>{`
+                  .blog-content h1 { font-size: 2.25rem; font-weight: 900; margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+                  .blog-content h2 { font-size: 1.75rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; letter-spacing: -0.01em; border-left: 4px solid hsl(var(--primary)); padding-left: 1rem; }
+                  .blog-content h3 { font-size: 1.25rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+                  .blog-content p { margin-bottom: 1.25rem; line-height: 1.7; color: hsl(var(--foreground) / 0.85); }
+                  .blog-content ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 1.25rem; }
+                  .blog-content ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 1.25rem; }
+                  .blog-content blockquote { font-style: italic; border-left: 4px solid hsl(var(--primary)); padding: 0.75rem 1.5rem; margin: 1.5rem 0; background: hsl(var(--primary) / 0.05); border-radius: 0 0.75rem 0.75rem 0; }
+                  .blog-content img { max-width: 100%; height: auto; border-radius: 1rem; margin: 2rem auto; display: block; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+                  .blog-content a { color: hsl(var(--primary)); text-decoration: underline; font-weight: 600; }
+                `}</style>
 
                 {blog.video_url && (
                   <div className="mb-8 md:mb-10">

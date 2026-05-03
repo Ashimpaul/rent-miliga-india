@@ -388,7 +388,7 @@ const Index = () => {
                           {blog.title}
                         </h3>
                         <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-1">
-                          {blog.excerpt || "Stay updated with the latest rental insights and trends from the RentMilega blog."}
+                          {blog.excerpt ? blog.excerpt.replace(/<[^>]*>/g, '') : "Stay updated with the latest rental insights and trends from the RentMilega blog."}
                         </p>
                         <div className="mt-auto flex items-center text-primary font-bold text-sm">
                           Read More <ArrowRight className="ml-1.5 h-4 w-4" />
