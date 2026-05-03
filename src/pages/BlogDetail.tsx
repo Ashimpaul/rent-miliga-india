@@ -46,16 +46,37 @@ const BlogDetail = () => {
     if (slug) fetchBlog();
   }, [slug]);
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: blog?.title,
-        text: blog?.excerpt || "Check out this blog post!",
-        url: window.location.href,
-      }).catch(console.error);
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard!");
+  const handleShare = async () => {
+    if (!blog) return;
+    const url = window.location.href;
+    const shareData: any = {
+      title: blog.title,
+      text: blog.excerpt || "Check out this blog post!",
+      url: url,
+    };
+
+    try {
+      if (navigator.share) {
+        // Try to share with image if possible
+        if (blog.image_url && navigator.canShare && (navigator as any).canShare({ files: [] })) {
+          try {
+            const response = await fetch(blog.image_url);
+            const blob = await response.blob();
+            const file = new File([blob], "blog-post.jpg", { type: "image/jpeg" });
+            if ((navigator as any).canShare({ files: [file] })) {
+              shareData.files = [file];
+            }
+          } catch (fileErr) {
+            console.error("Error preparing image for share:", fileErr);
+          }
+        }
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
     }
   };
 
@@ -106,6 +127,11 @@ const BlogDetail = () => {
         <meta property="og:title" content={`${blog.title} | RentMilega Blog`} />
         <meta property="og:description" content={blog.excerpt || blog.title} />
         <meta property="og:image" content={blog.image_url || "https://rentmilega.in/logo.png"} />
+        <meta property="og:image:secure_url" content={blog.image_url || "https://rentmilega.in/logo.png"} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="RentMilega" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -113,6 +139,12 @@ const BlogDetail = () => {
         <meta name="twitter:title" content={`${blog.title} | RentMilega Blog`} />
         <meta name="twitter:description" content={blog.excerpt || blog.title} />
         <meta name="twitter:image" content={blog.image_url || "https://rentmilega.in/logo.png"} />
+        <meta name="twitter:image:alt" content={blog.title} />
+
+        {/* Schema.org for Google+ / Pinterest */}
+        <meta itemprop="name" content={blog.title} />
+        <meta itemprop="description" content={blog.excerpt || ""} />
+        <meta itemprop="image" content={blog.image_url || "https://rentmilega.in/logo.png"} />
       </Helmet>
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl overflow-x-hidden">

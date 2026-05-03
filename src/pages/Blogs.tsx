@@ -50,17 +50,36 @@ const Blogs = () => {
     fetchBlogs();
   }, []);
 
-  const handleShare = (blog: Blog) => {
+  const handleShare = async (blog: Blog) => {
     const url = `${window.location.origin}/blog/${blog.slug}`;
-    if (navigator.share) {
-      navigator.share({
-        title: blog.title,
-        text: blog.excerpt || "Check out this blog post!",
-        url: url,
-      }).catch(console.error);
-    } else {
-      navigator.clipboard.writeText(url);
-      toast.success("Link copied to clipboard!");
+    const shareData: any = {
+      title: blog.title,
+      text: blog.excerpt || "Check out this blog post!",
+      url: url,
+    };
+
+    try {
+      if (navigator.share) {
+        // Try to share with image if possible
+        if (blog.image_url && navigator.canShare && (navigator as any).canShare({ files: [] })) {
+          try {
+            const response = await fetch(blog.image_url);
+            const blob = await response.blob();
+            const file = new File([blob], "blog-post.jpg", { type: "image/jpeg" });
+            if ((navigator as any).canShare({ files: [file] })) {
+              shareData.files = [file];
+            }
+          } catch (fileErr) {
+            console.error("Error preparing image for share:", fileErr);
+          }
+        }
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
     }
   };
 

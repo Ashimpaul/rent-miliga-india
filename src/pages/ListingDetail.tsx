@@ -103,17 +103,33 @@ const ListingDetail = () => {
 
   const handleShare = async () => {
     if (!listing) return;
-    const shareData = {
+    const url = window.location.href;
+    const shareData: any = {
       title: `${listing.title} | RentMilega`,
-      text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${listing.rent.toLocaleString()}/mo.`,
-      url: window.location.href,
+      text: `Check out this ${listing.property_type} for rent in ${listing.area}, ${listing.city}. Monthly Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}.`,
+      url: url,
     };
 
     try {
       if (navigator.share) {
+        // Try to share with image if possible
+        if (listing.image1 && navigator.canShare && (navigator as any).canShare({ files: [] })) {
+          try {
+            const response = await fetch(listing.image1);
+            const blob = await response.blob();
+            const file = new File([blob], "property.jpg", { type: "image/jpeg" });
+            if ((navigator as any).canShare({ files: [file] })) {
+              shareData.files = [file];
+              // When sharing files, some browsers don't like both URL and files
+              // but we'll try to include everything.
+            }
+          } catch (fileErr) {
+            console.error("Error preparing image for share:", fileErr);
+          }
+        }
         await navigator.share(shareData);
       } else {
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(url);
         toast.success("Link copied to clipboard!");
       }
     } catch (err) {
@@ -211,6 +227,11 @@ const ListingDetail = () => {
         <meta property="og:title" content={`${listing.title} for Rent in ${listing.city} | RentMilega`} />
         <meta property="og:description" content={`Check out this ${listing.property_type} for rent in ${listing.area}, ${listing.city}. Monthly Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}.`} />
         <meta property="og:image" content={listing.image1 || "https://rentmilega.in/logo.png"} />
+        <meta property="og:image:secure_url" content={listing.image1 || "https://rentmilega.in/logo.png"} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="RentMilega" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -218,6 +239,12 @@ const ListingDetail = () => {
         <meta name="twitter:title" content={`${listing.title} for Rent in ${listing.city} | RentMilega`} />
         <meta name="twitter:description" content={`Check out this ${listing.property_type} for rent in ${listing.area}, ${listing.city}. Monthly Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}.`} />
         <meta name="twitter:image" content={listing.image1 || "https://rentmilega.in/logo.png"} />
+        <meta name="twitter:image:alt" content={listing.title} />
+
+        {/* Schema.org for Google+ / Pinterest */}
+        <meta itemprop="name" content={listing.title} />
+        <meta itemprop="description" content={listing.description || ""} />
+        <meta itemprop="image" content={listing.image1 || "https://rentmilega.in/logo.png"} />
 
         <script type="application/ld+json">
           {JSON.stringify(jsonLd)}

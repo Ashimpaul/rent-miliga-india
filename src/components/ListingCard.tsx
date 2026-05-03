@@ -32,7 +32,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
     e.preventDefault();
     e.stopPropagation();
     const url = `${window.location.origin}/listing/${listing.id}`;
-    const shareData = {
+    const shareData: any = {
       title: `${listing.title} | RentMilega`,
       text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${Number(listing.rent).toLocaleString()}/mo.`,
       url: url,
@@ -40,6 +40,19 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
 
     try {
       if (navigator.share) {
+        // Try to share with image if possible
+        if (listing.image1 && navigator.canShare && (navigator as any).canShare({ files: [] })) {
+          try {
+            const response = await fetch(listing.image1);
+            const blob = await response.blob();
+            const file = new File([blob], "property.jpg", { type: "image/jpeg" });
+            if ((navigator as any).canShare({ files: [file] })) {
+              shareData.files = [file];
+            }
+          } catch (fileErr) {
+            console.error("Error preparing image for share:", fileErr);
+          }
+        }
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(url);

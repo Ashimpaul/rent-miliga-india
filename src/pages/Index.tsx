@@ -161,8 +161,22 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Helmet>
-        <title>RentMilega | Find & Post Rental Listings in India</title>
-        <meta name="description" content={`Find the best houses, rooms, and PGs for rent in India. Verified listings with direct owner contact.`} />
+        <title>RentMilega - Find & Post Rental Listings in India | No Signup Required</title>
+        <meta name="description" content="Discover thousands of rental properties across India on RentMilega. Find rooms, apartments, houses, PGs, and commercial spaces. Post your property for free with no signup needed." />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://rentmilega.in/" />
+        <meta property="og:title" content="RentMilega - Find & Post Rental Listings in India" />
+        <meta property="og:description" content="Find your perfect rental home or commercial space across India. Post listings for free with no signup required." />
+        <meta property="og:image" content="https://rentmilega.in/logo.png" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://rentmilega.in/" />
+        <meta name="twitter:title" content="RentMilega - Find & Post Rental Listings in India" />
+        <meta name="twitter:description" content="Find your perfect rental home or commercial space across India. Post listings for free with no signup required." />
+        <meta name="twitter:image" content="https://rentmilega.in/logo.png" />
       </Helmet>
       <Header />
       <main className="flex-1 pb-20 sm:pb-0 overflow-x-hidden">

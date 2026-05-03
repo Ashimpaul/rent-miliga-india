@@ -4,11 +4,13 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const Contact = () => {
   const [sending, setSending] = useState(false);
+  const whatsappNumber = "919612963394";
+  const whatsappMessage = encodeURIComponent("Hello RentMilega! I have a question about your services.");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,21 +37,46 @@ const Contact = () => {
           <div className="mt-8 grid gap-6 sm:mt-12 sm:grid-cols-2">
             {/* Contact Info */}
             <div className="animate-fade-up space-y-5 opacity-0 stagger-2">
-              {[
-                { icon: Mail, label: "Email", value: "rentmilega@gmail.com" },
-                { icon: Phone, label: "Phone", value: "+91 96129 63394" },
-                { icon: MapPin, label: "Location", value: "India" },
-              ].map((item) => (
-                <div key={item.label} className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent">
-                    <item.icon className="h-5 w-5 text-accent-foreground" />
+              <div className="rounded-xl border border-border bg-card p-5 space-y-5">
+                {[
+                  { icon: Mail, label: "Email", value: "rentmilega@gmail.com", href: "mailto:rentmilega@gmail.com" },
+                  { icon: Phone, label: "Phone", value: "+91 96129 63394", href: "tel:+919612963394" },
+                  { icon: MapPin, label: "Location", value: "India", href: null },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent">
+                      <item.icon className="h-5 w-5 text-accent-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-muted-foreground">{item.label}</p>
+                      {item.href ? (
+                        <a href={item.href} className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p className="text-sm font-semibold text-foreground">{item.value}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-medium text-muted-foreground">{item.label}</p>
-                    <p className="text-sm font-semibold text-foreground">{item.value}</p>
-                  </div>
+                ))}
+
+                <div className="pt-2">
+                  <Button 
+                    variant="default" 
+                    className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold gap-2 h-12 rounded-xl"
+                    asChild
+                  >
+                    <a 
+                      href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                      Chat on WhatsApp
+                    </a>
+                  </Button>
                 </div>
-              ))}
+              </div>
             </div>
 
             {/* Contact Form */}
