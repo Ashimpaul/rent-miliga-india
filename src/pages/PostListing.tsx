@@ -197,22 +197,9 @@ const PostListing = () => {
           pincode: form.pincode || null,
           owner_name: form.owner_name,
           phone_number: form.phone_number,
-          google_map_link: form.google_map_link || null,
-          password: form.password,
-          country: "India",
-          is_premium: isPremium,
-          plan_type: plan,
-          expires_at: expires_at,
           image1: urls[0] || null,
           image2: urls[1] || null,
           image3: urls[2] || null,
-          image4: urls[3] || null,
-          image5: urls[4] || null,
-          image6: urls[5] || null,
-          image7: urls[6] || null,
-          image8: urls[7] || null,
-          image9: urls[8] || null,
-          image10: urls[9] || null,
         });
         if (error) throw error;
         toast.success("Listing posted successfully!");

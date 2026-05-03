@@ -178,7 +178,6 @@ const ListingDetail = () => {
         state: editForm.state, city: editForm.city, area: editForm.area,
         address: editForm.address || null, pincode: editForm.pincode || null,
         owner_name: editForm.owner_name, phone_number: editForm.phone_number,
-        google_map_link: editForm.google_map_link || null,
       }).eq("id", id);
       if (error) throw error;
       const { data } = await supabase.from("listings").select("*").eq("id", id).single();
