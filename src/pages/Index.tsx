@@ -336,7 +336,7 @@ const Index = () => {
             ) : (
               <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredListings.map((l, i) => (
-                  <div key={l.id} className="animate-slide-up opacity-0" style={{ animationDelay: `${i * 0.1}s` }}>
+                  <div key={l.id} className="animate-fade-up">
                     <ListingCard listing={l} />
                   </div>
                 ))}

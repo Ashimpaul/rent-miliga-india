@@ -4,10 +4,13 @@ import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, User, ArrowLeft, Share2 } from "lucide-react";
+import { Calendar, User, ArrowLeft, Share2, Clock, BookOpen, ChevronRight, MoreVertical } from "lucide-react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 interface Blog {
   id: string;
@@ -126,7 +129,7 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-muted/30">
       <Helmet>
         <title>{blog.title} | RentMilega Blog</title>
         <meta name="description" content={blog.excerpt || blog.title} />
@@ -158,71 +161,120 @@ const BlogDetail = () => {
       </Helmet>
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl overflow-x-hidden">
-        <div className="mb-6 md:mb-8">
-          <Link to="/blogs" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center mb-4 md:mb-6">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to All Posts
-          </Link>
-          <h1 className="text-3xl md:text-4xl font-extrabold mb-4 leading-tight text-center md:text-left">{blog.title}</h1>
-          <div className="flex items-center justify-center md:justify-between flex-wrap gap-4 py-4 border-y border-border">
-            <div className="flex items-center flex-wrap justify-center gap-4 md:gap-6">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Calendar className="h-4 w-4 text-primary" />
-                <span className="text-xs md:text-sm font-medium">{blog.created_at ? format(new Date(blog.created_at), "MMMM d, yyyy") : "Recently"}</span>
+        <div className="animate-fade-up mb-8">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+            <Link to="/blogs" className="hover:text-primary transition-colors">Blog</Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-foreground truncate font-medium">{blog.title}</span>
+          </nav>
+          
+          <div className="space-y-4 text-center md:text-left">
+            <Badge variant="secondary" className="px-3 py-1 bg-primary/10 text-primary border-none font-bold uppercase tracking-widest text-[10px]">
+              Rental Guide
+            </Badge>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 leading-[1.1] tracking-tight text-foreground">{blog.title}</h1>
+            
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-8 pt-4">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <User className="h-5 w-5" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Author</p>
+                  <p className="text-sm font-bold">{blog.author || "RentMilega Team"}</p>
+                </div>
+              </div>
+              
+              <Separator orientation="vertical" className="hidden md:block h-8" />
+              
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <Calendar className="h-5 w-5" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Published</p>
+                  <p className="text-sm font-bold">{blog.created_at ? format(new Date(blog.created_at), "MMMM d, yyyy") : "Recently"}</p>
+                </div>
+              </div>
+
+              <div className="flex-1 flex justify-center md:justify-end">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleShare} 
+                  className="rounded-full bg-background shadow-sm hover:shadow-md transition-all active:scale-95"
+                >
+                  <Share2 className="mr-2 h-4 w-4 text-primary" /> Share Post
+                </Button>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleShare} className="text-muted-foreground hover:text-primary h-8 text-xs md:text-sm">
-              <Share2 className="mr-2 h-4 w-4" /> Share Post
-            </Button>
           </div>
         </div>
 
         {blog.image_url && (
-          <div className="mb-8 md:mb-12 rounded-xl md:rounded-2xl overflow-hidden shadow-lg border border-border bg-muted aspect-video">
+          <div className="animate-fade-up mb-10 md:mb-16 rounded-3xl overflow-hidden shadow-2xl border border-border bg-muted aspect-video ring-1 ring-primary/5">
             <img
               src={blog.image_url}
               alt={blog.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
           </div>
         )}
 
-        <div 
-          className="prose prose-base md:prose-lg max-w-none mb-8 md:mb-12 dark:prose-invert blog-content"
-          dangerouslySetInnerHTML={{ __html: blog.content || "" }}
-        />
+        <div className="animate-fade-up max-w-3xl mx-auto">
+          <div 
+            className="prose prose-base md:prose-lg max-w-none mb-12 dark:prose-invert blog-content font-serif leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: blog.content || "" }}
+          />
+        </div>
 
         <style>{`
-          .blog-content h1 { font-size: 2.25rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; }
-          .blog-content h2 { font-size: 1.875rem; font-weight: 700; margin-top: 1.75rem; margin-bottom: 0.75rem; }
-          .blog-content p { margin-bottom: 1.25rem; line-height: 1.75; }
-          .blog-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-          .blog-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-          .blog-content img { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 2rem auto; display: block; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-          .blog-content a { color: hsl(var(--primary)); text-decoration: underline; }
+          .blog-content h1 { font-size: 2.5rem; font-weight: 900; margin-top: 3rem; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+          .blog-content h2 { font-size: 2rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; letter-spacing: -0.01em; border-left: 4px solid hsl(var(--primary)); padding-left: 1rem; }
+          .blog-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; }
+          .blog-content p { margin-bottom: 1.5rem; line-height: 1.8; color: hsl(var(--foreground) / 0.9); }
+          .blog-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+          .blog-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+          .blog-content blockquote { font-style: italic; border-left: 4px solid hsl(var(--primary)); padding: 1rem 2rem; margin: 2rem 0; background: hsl(var(--primary) / 0.05); border-radius: 0 1rem 1rem 0; }
+          .blog-content img { max-width: 100%; height: auto; border-radius: 1.5rem; margin: 3rem auto; display: block; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+          .blog-content a { color: hsl(var(--primary)); text-decoration: underline; font-weight: 600; }
         `}</style>
 
         {blog.video_url && (
-          <div className="mb-8 md:mb-12">
-            <h3 className="text-xl md:text-2xl font-bold mb-4 text-center md:text-left">Watch Video</h3>
-            <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden border border-border shadow-lg">
-              <iframe
-                className="w-full h-full"
-                src={(blog.video_url || "").includes("youtube.com") || (blog.video_url || "").includes("youtu.be") 
-                  ? blog.video_url!.replace("watch?v=", "embed/").split("&")[0] 
-                  : (blog.video_url || "").includes("vimeo.com")
-                    ? `https://player.vimeo.com/video/${blog.video_url!.split("/").pop()}`
-                    : blog.video_url || ""}
-                title="Blog video content"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
+          <div className="animate-fade-up mb-16 max-w-3xl mx-auto">
+            <h3 className="text-2xl font-black mb-6 text-center md:text-left flex items-center gap-3">
+              <BookOpen className="h-6 w-6 text-primary" /> Watch Video Content
+            </h3>
+            <Card className="overflow-hidden rounded-3xl border-none shadow-2xl ring-1 ring-primary/5">
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src={(blog.video_url || "").includes("youtube.com") || (blog.video_url || "").includes("youtu.be") 
+                    ? blog.video_url!.replace("watch?v=", "embed/").split("&")[0] 
+                    : (blog.video_url || "").includes("vimeo.com")
+                      ? `https://player.vimeo.com/video/${blog.video_url!.split("/").pop()}`
+                      : blog.video_url || ""}
+                  title="Blog video content"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </Card>
           </div>
         )}
 
-        <div className="mt-8 md:mt-16 pt-8 border-t border-border flex justify-end items-center">
-          <Button asChild variant="outline" size="sm" className="w-full sm:w-auto h-10">
-            <Link to="/blogs">View More Posts</Link>
+        <div className="animate-fade-up mt-16 pt-12 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+              <BookOpen className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="font-black">RentMilega Blog</p>
+              <p className="text-sm text-muted-foreground font-medium">Helping you find the perfect home.</p>
+            </div>
+          </div>
+          <Button asChild variant="outline" size="lg" className="w-full sm:w-auto rounded-full font-bold shadow-sm hover:shadow-md transition-all active:scale-95">
+            <Link to="/blogs">Explore More Articles</Link>
           </Button>
         </div>
       </main>

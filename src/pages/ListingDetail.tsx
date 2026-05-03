@@ -23,7 +23,21 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Phone, MapPin, IndianRupee, ArrowLeft, ArrowRight, Loader2, Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2, Crown } from "lucide-react";
+import { 
+  Phone, MapPin, IndianRupee, ArrowLeft, ArrowRight, Loader2, 
+  Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2, 
+  Crown, MoreVertical, Calendar, Info, Building2, User2, 
+  Navigation, CheckCircle2 
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { PROPERTY_TYPES, INDIAN_STATES, COUNTRIES } from "@/lib/constants";
@@ -265,40 +279,48 @@ const ListingDetail = () => {
         </script>
       </Helmet>
       <Header />
-      <main className="flex-1">
-        <div className="container mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">
-          <div className="animate-fade-up mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
-            <Link to="/" className="group inline-flex items-center text-xs text-muted-foreground transition-colors duration-200 hover:text-foreground sm:text-sm">
-              <ArrowLeft className="mr-1 h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1 sm:h-4 sm:w-4" /> Back to listings
+      <main className="flex-1 bg-muted/30">
+        <div className="container mx-auto max-w-4xl px-3 py-4 sm:px-4 sm:py-8">
+          <div className="animate-fade-up mb-4 flex items-center justify-between">
+            <Link to="/" className="group inline-flex items-center text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground">
+              <ArrowLeft className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:-translate-x-1" /> Back to listings
             </Link>
-            {!editing && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 text-xs sm:flex-none sm:text-sm bg-primary/5 border-primary/20 hover:bg-primary/10"
-                  onClick={handleShare}
-                >
-                  <Share2 className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5 text-primary" /> Share
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 text-xs sm:flex-none sm:text-sm"
-                  onClick={() => isAdmin ? startEditing() : setPasswordDialog("edit")}
-                >
-                  <Pencil className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5" /> Edit
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  className="flex-1 text-xs sm:flex-none sm:text-sm"
-                  onClick={() => isAdmin ? handleDelete() : setPasswordDialog("delete")}
-                >
-                  <Trash2 className="mr-1 h-3 w-3 sm:h-3.5 sm:w-3.5" /> Delete
-                </Button>
-              </div>
-            )}
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full bg-background border-border shadow-sm hover:bg-muted"
+                onClick={handleShare}
+              >
+                <Share2 className="mr-2 h-4 w-4 text-primary" /> Share
+              </Button>
+
+              {!editing && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full bg-background border-border shadow-sm">
+                      <MoreVertical className="h-4 w-4" />
+                      <span className="sr-only">More options</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40 rounded-xl">
+                    <DropdownMenuItem 
+                      onClick={() => isAdmin ? startEditing() : setPasswordDialog("edit")}
+                      className="cursor-pointer"
+                    >
+                      <Pencil className="mr-2 h-4 w-4" /> Edit Post
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => isAdmin ? handleDelete() : setPasswordDialog("delete")}
+                      className="cursor-pointer text-destructive focus:text-destructive"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" /> Delete Post
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
 
           {editing ? (
@@ -397,167 +419,238 @@ const ListingDetail = () => {
             </div>
           ) : (
             <>
-              {/* Image Gallery - Improved Mobile Experience */}
-              <div className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-card shadow-sm sm:rounded-3xl">
-                <div className="relative aspect-square sm:aspect-video w-full overflow-hidden bg-muted">
-                  {images.length > 0 ? (
-                    <WatermarkedImage
-                      src={images[activeImage]}
-                      alt={listing.title}
-                      imageClassName="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-muted-foreground">
-                      No images available
-                    </div>
-                  )}
+              {/* Image Gallery - Enhanced Visuals */}
+              <Card className="animate-fade-up overflow-hidden border-none shadow-xl sm:rounded-3xl bg-background">
+                <CardContent className="p-0">
+                  <div className="relative aspect-square sm:aspect-video w-full overflow-hidden bg-muted">
+                    {images.length > 0 ? (
+                      <WatermarkedImage
+                        src={images[activeImage]}
+                        alt={listing.title}
+                        imageClassName="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-muted-foreground">
+                        <Building2 className="h-12 w-12 opacity-20" />
+                      </div>
+                    )}
+                    
+                    {images.length > 1 && (
+                      <>
+                        <div className="absolute inset-y-0 left-4 flex items-center">
+                          <Button
+                            variant="secondary"
+                            size="icon"
+                            className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-md shadow-lg hover:bg-background"
+                            onClick={() => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                          >
+                            <ArrowLeft className="h-5 w-5" />
+                          </Button>
+                        </div>
+                        <div className="absolute inset-y-0 right-4 flex items-center">
+                          <Button
+                            variant="secondary"
+                            size="icon"
+                            className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-md shadow-lg hover:bg-background"
+                            onClick={() => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+                          >
+                            <ArrowRight className="h-5 w-5" />
+                          </Button>
+                        </div>
+                        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+                          {images.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setActiveImage(i)}
+                              className={`h-2 rounded-full transition-all duration-300 ${
+                                i === activeImage ? "bg-primary w-8 shadow-md" : "bg-white/60 w-2 hover:bg-white"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
                   
                   {images.length > 1 && (
-                    <>
-                      <div className="absolute inset-y-0 left-2 flex items-center sm:left-4">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 sm:h-12 sm:w-12"
-                          onClick={() => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                    <div className="flex gap-3 overflow-x-auto p-4 no-scrollbar bg-muted/20">
+                      {images.map((img, i) => (
+                        <button
+                          key={img}
+                          onClick={() => setActiveImage(i)}
+                          className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-200 ${
+                            i === activeImage ? "border-primary scale-105 shadow-md" : "border-transparent opacity-70 hover:opacity-100"
+                          }`}
                         >
-                          <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-                        </Button>
-                      </div>
-                      <div className="absolute inset-y-0 right-2 flex items-center sm:right-4">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 sm:h-12 sm:w-12"
-                          onClick={() => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
-                        >
-                          <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
-                        </Button>
-                      </div>
-                      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-1.5 sm:bottom-6 sm:gap-2">
-                        {images.map((_, i) => (
-                          <button
-                            key={i}
-                            onClick={() => setActiveImage(i)}
-                            className={`h-1.5 rounded-full transition-all duration-300 sm:h-2 ${
-                              i === activeImage ? "bg-white w-6 sm:w-8 shadow-md" : "bg-white/40 w-1.5 sm:w-2"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </>
+                          <WatermarkedImage src={img} alt="" imageClassName="h-full w-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
                   )}
-                </div>
-                
-                {images.length > 1 && (
-                  <div className="flex gap-2 overflow-x-auto p-3 no-scrollbar sm:gap-4 sm:p-4">
-                    {images.map((img, i) => (
-                      <button
-                        key={img}
-                        onClick={() => setActiveImage(i)}
-                        className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 sm:h-24 sm:w-24 sm:rounded-xl ${
-                          i === activeImage ? "border-primary scale-105 shadow-md" : "border-transparent opacity-60 hover:opacity-100"
-                        }`}
-                      >
-                        <WatermarkedImage src={img} alt="" imageClassName="h-full w-full object-cover" />
-                      </button>
-                    ))}
+                </CardContent>
+              </Card>
+
+              {/* Details - Modern Layout */}
+              <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+                <div className="lg:col-span-2 space-y-6 sm:space-y-8">
+                  <div className="animate-fade-up space-y-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant="secondary" className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border-none">
+                        {listing.property_type}
+                      </Badge>
+                      {(listing as any).is_premium && (
+                        <Badge className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-amber-500 text-white border-none shadow-sm">
+                          <Crown className="mr-1.5 h-3 w-3" /> Featured
+                        </Badge>
+                      )}
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>Posted {format(new Date(listing.created_at), "MMM d, yyyy")}</span>
+                      </div>
+                    </div>
+
+                    <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl md:text-5xl leading-[1.1]">
+                      {listing.title}
+                    </h1>
+
+                    <div className="flex items-center gap-2 text-muted-foreground text-lg">
+                      <MapPin className="h-5 w-5 text-primary shrink-0" />
+                      <span>{listing.area}, {listing.city}</span>
+                    </div>
+
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl sm:text-5xl font-black text-primary tracking-tighter">
+                        ₹{Number(listing.rent).toLocaleString("en-IN")}
+                      </span>
+                      <span className="text-lg font-medium text-muted-foreground">/ month</span>
+                    </div>
                   </div>
-                )}
-              </div>
 
-              {/* Details - Improved Mobile Typography */}
-              <div className="mt-6 animate-fade-up sm:mt-10">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary sm:px-4 sm:text-sm">
-                    {listing.property_type}
-                  </span>
-                  {(listing as any).is_premium && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-md sm:px-4 sm:text-sm">
-                      <Crown className="h-3.5 w-3.5" /> Featured
-                    </span>
-                  )}
-                </div>
-
-                <h1 className="mt-4 text-3xl font-black tracking-tight text-foreground sm:text-4xl md:text-5xl leading-tight">
-                  {listing.title}
-                </h1>
-
-                <div className="mt-4 flex items-center gap-2 text-3xl font-black text-primary sm:mt-6 sm:text-5xl">
-                  <span className="text-xl sm:text-3xl font-bold">{currencySymbol}</span>
-                  {Number(listing.rent).toLocaleString("en-IN")}
-                  <span className="text-sm sm:text-lg font-normal text-muted-foreground ml-2">/ month</span>
-                </div>
-
-                <div className="mt-4 flex items-center gap-2 text-base text-muted-foreground sm:mt-6 sm:text-xl">
-                  <MapPin className="h-5 w-5 text-primary sm:h-6 sm:w-6" />
-                  {listing.area}, {listing.city}, {listing.state}
-                </div>
-
-                {listing.description && (
-                  <div className="mt-8 animate-fade-up sm:mt-12">
-                    <h2 className="text-xl font-bold text-foreground sm:text-2xl">Description</h2>
-                    <p className="mt-3 text-base leading-relaxed text-foreground/80 sm:mt-4 sm:text-lg">{listing.description}</p>
+                  <div className="animate-fade-up">
+                    <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                      <Info className="h-5 w-5 text-primary" /> About this property
+                    </h2>
+                    <Card className="border-none shadow-sm bg-background">
+                      <CardContent className="p-6">
+                        <p className="text-base leading-relaxed text-foreground/80 sm:text-lg whitespace-pre-wrap">
+                          {listing.description || "No description provided."}
+                        </p>
+                      </CardContent>
+                    </Card>
                   </div>
-                )}
 
-                {/* Location */}
-                <div className="mt-4 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-1 transition-all duration-300 hover:shadow-md sm:mt-6 sm:p-4">
-                  <h2 className="mb-2 flex items-center gap-1 text-sm font-semibold text-foreground sm:text-base">
-                    <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
-                  </h2>
-                  <div className="grid grid-cols-1 gap-1.5 text-xs sm:grid-cols-2 sm:gap-2 sm:text-sm">
-                    <div><span className="text-muted-foreground">Country:</span> India</div>
-                    <div><span className="text-muted-foreground">State:</span> {listing.state}</div>
-                    <div><span className="text-muted-foreground">City:</span> {listing.city}</div>
-                    <div><span className="text-muted-foreground">Area:</span> {listing.area}</div>
-                    {listing.pincode && <div><span className="text-muted-foreground">Pincode:</span> {listing.pincode}</div>}
+                  <div className="animate-fade-up">
+                    <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-primary" /> Key Features
+                    </h2>
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                      <Card className="border-none shadow-sm bg-background hover:bg-muted/50 transition-colors">
+                        <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+                          <Building2 className="h-6 w-6 text-primary/70" />
+                          <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Type</div>
+                          <div className="text-sm font-bold capitalize">{listing.property_type}</div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-none shadow-sm bg-background hover:bg-muted/50 transition-colors">
+                        <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+                          <Navigation className="h-6 w-6 text-primary/70" />
+                          <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">City</div>
+                          <div className="text-sm font-bold">{listing.city}</div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-none shadow-sm bg-background hover:bg-muted/50 transition-colors">
+                        <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+                          <MapPin className="h-6 w-6 text-primary/70" />
+                          <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Locality</div>
+                          <div className="text-sm font-bold truncate w-full">{listing.area}</div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </div>
-                  {listing.address && (
-                    <p className="mt-1.5 text-xs sm:mt-2 sm:text-sm"><span className="text-muted-foreground">Address:</span> {listing.address}</p>
-                  )}
+
                   {listing.google_map_link && (
-                    <a
-                      href={listing.google_map_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2.5 inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground active:bg-primary/80 hover:bg-primary/90 sm:mt-3 sm:text-sm"
-                    >
-                      <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> View on Google Maps
-                    </a>
+                    <div className="animate-fade-up">
+                      <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                        <Navigation className="h-5 w-5 text-primary" /> Location Map
+                      </h2>
+                      <Card className="border-none shadow-sm overflow-hidden">
+                        <div className="aspect-[21/9] bg-muted flex items-center justify-center relative group">
+                          <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
+                          <a
+                            href={listing.google_map_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="relative z-10 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg transition-all hover:scale-105 active:scale-95"
+                          >
+                            <MapPin className="h-4 w-4" /> Open in Google Maps
+                          </a>
+                        </div>
+                      </Card>
+                      {listing.address && (
+                        <p className="mt-4 text-sm text-muted-foreground px-1">
+                          <span className="font-bold text-foreground">Address:</span> {listing.address}
+                          {listing.pincode && `, ${listing.pincode}`}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
 
-                {/* Contact */}
-                <div className="mt-3 animate-fade-up rounded-lg border border-border p-3 opacity-0 stagger-2 transition-all duration-300 hover:shadow-md sm:mt-4 sm:p-4">
-                  <h2 className="mb-2 text-sm font-semibold text-foreground sm:text-base">Contact Information</h2>
-                  <div className="flex flex-col gap-1 sm:gap-1.5">
-                    <p className="text-xs font-medium sm:text-sm">{listing.owner_name}</p>
-                    <p className="text-xs text-muted-foreground sm:text-sm">{listing.phone_number}</p>
-                  </div>
-                  
-                  <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-3">
-                    <Button 
-                      className="flex-1 transition-all duration-300 active:scale-95 hover:shadow-md h-11" 
-                      asChild
-                    >
-                      <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
-                        <Phone className="mr-2 h-4 w-4" /> Call Owner
-                      </a>
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      className="flex-1 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 active:scale-95 hover:shadow-md h-11" 
-                      asChild
-                    >
-                      <a 
-                        href={`https://wa.me/${listing.phone_number.replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp
-                      </a>
-                    </Button>
+                <div className="space-y-6">
+                  <div className="animate-fade-up sticky top-24">
+                    <Card className="border-none shadow-xl bg-background overflow-hidden ring-1 ring-primary/5">
+                      <div className="bg-primary p-6 text-primary-foreground">
+                        <h2 className="text-xl font-bold flex items-center gap-2">
+                          <User2 className="h-5 w-5" /> Contact Owner
+                        </h2>
+                        <p className="text-sm text-primary-foreground/80 mt-1">Interested in this property?</p>
+                      </div>
+                      <CardContent className="p-6 space-y-6">
+                        <div className="space-y-1">
+                          <div className="text-[10px] uppercase font-black text-muted-foreground tracking-[0.2em]">Property Owner</div>
+                          <p className="text-xl font-black text-foreground">{listing.owner_name}</p>
+                        </div>
+                        
+                        <div className="flex flex-col gap-3">
+                          <Button 
+                            className="w-full h-12 text-base font-bold rounded-xl shadow-md transition-all active:scale-95" 
+                            asChild
+                          >
+                            <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
+                              <Phone className="mr-2 h-5 w-5" /> Call {listing.phone_number}
+                            </a>
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            className="w-full h-12 text-base font-bold rounded-xl border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-all active:scale-95" 
+                            asChild
+                          >
+                            <a 
+                              href={`https://wa.me/${listing.phone_number.replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <MessageCircle className="mr-2 h-5 w-5" /> WhatsApp Owner
+                            </a>
+                          </Button>
+                        </div>
+                        
+                        <div className="pt-4 border-t border-border">
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                            <span>Owner is active and responding</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <div className="mt-6 px-4">
+                      <div className="rounded-2xl bg-amber-500/10 p-4 border border-amber-500/20">
+                        <p className="text-xs text-amber-800 leading-relaxed">
+                          <span className="font-bold">Safety Tip:</span> Never pay any token amount before visiting the property in person and verifying the owner.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
