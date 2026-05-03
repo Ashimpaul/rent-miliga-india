@@ -204,6 +204,21 @@ const ListingDetail = () => {
       <Helmet>
         <title>{listing.title} for Rent in {listing.city}, {listing.state} | RentMilega</title>
         <meta name="description" content={`${listing.title} for rent in ${listing.area}, ${listing.city}, ${listing.state}. Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}/mo. ${listing.description?.substring(0, 150)}`} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:title" content={`${listing.title} for Rent in ${listing.city} | RentMilega`} />
+        <meta property="og:description" content={`Check out this ${listing.property_type} for rent in ${listing.area}, ${listing.city}. Monthly Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}.`} />
+        <meta property="og:image" content={listing.image1 || "https://rentmilega.in/logo.png"} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={window.location.href} />
+        <meta name="twitter:title" content={`${listing.title} for Rent in ${listing.city} | RentMilega`} />
+        <meta name="twitter:description" content={`Check out this ${listing.property_type} for rent in ${listing.area}, ${listing.city}. Monthly Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}.`} />
+        <meta name="twitter:image" content={listing.image1 || "https://rentmilega.in/logo.png"} />
+
         <script type="application/ld+json">
           {JSON.stringify(jsonLd)}
         </script>

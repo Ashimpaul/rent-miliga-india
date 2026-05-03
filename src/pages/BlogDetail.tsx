@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -95,6 +96,24 @@ const BlogDetail = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Helmet>
+        <title>{blog.title} | RentMilega Blog</title>
+        <meta name="description" content={blog.excerpt || blog.title} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:title" content={`${blog.title} | RentMilega Blog`} />
+        <meta property="og:description" content={blog.excerpt || blog.title} />
+        <meta property="og:image" content={blog.image_url || "https://rentmilega.in/logo.png"} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={window.location.href} />
+        <meta name="twitter:title" content={`${blog.title} | RentMilega Blog`} />
+        <meta name="twitter:description" content={blog.excerpt || blog.title} />
+        <meta name="twitter:image" content={blog.image_url || "https://rentmilega.in/logo.png"} />
+      </Helmet>
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl overflow-x-hidden">
         <div className="mb-6 md:mb-8">
