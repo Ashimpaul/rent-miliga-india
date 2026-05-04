@@ -177,6 +177,51 @@ const Index = () => {
         <meta name="twitter:title" content="RentMilega - Find & Post Rental Listings in India" />
         <meta name="twitter:description" content="Find your perfect rental home or commercial space across India. Post listings for free with no signup required." />
         <meta name="twitter:image" content="https://rentmilega.in/logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "RentMilega",
+              "url": "https://rentmilega.in/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://rentmilega.in/rentals?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://rentmilega.in/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rentals",
+                  "item": "https://rentmilega.in/rentals"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Blog",
+                  "item": "https://rentmilega.in/blogs"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 4,
+                  "name": "About Us",
+                  "item": "https://rentmilega.in/about"
+                }
+              ]
+            }
+          ])}
+        </script>
       </Helmet>
       <Header />
       <main className="flex-1 pb-20 sm:pb-0 overflow-x-hidden">

@@ -117,7 +117,7 @@ const ListingDetail = () => {
 
   const handleShare = async () => {
     if (!listing) return;
-    const url = window.location.href;
+    const url = `https://rentmilega.in/listing/${listing.id}`;
     const shareData: any = {
       title: `${listing.title} | RentMilega`,
       text: `Check out this ${listing.property_type} for rent in ${listing.area}, ${listing.city}. Monthly Rent: ₹${Number(listing.rent).toLocaleString("en-IN")}.`,

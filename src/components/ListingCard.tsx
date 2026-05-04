@@ -31,7 +31,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
   const handleShare = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const url = `${window.location.origin}/listing/${listing.id}`;
+    const url = `https://rentmilega.in/listing/${listing.id}`;
     const shareData: any = {
       title: `${listing.title} | RentMilega`,
       text: `Check out this rental property in ${listing.area}, ${listing.city}: ${listing.title}. Rent: ${currencySymbol}${Number(listing.rent).toLocaleString()}/mo.`,

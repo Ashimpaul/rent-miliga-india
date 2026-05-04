@@ -51,7 +51,7 @@ const Blogs = () => {
   }, []);
 
   const handleShare = async (blog: Blog) => {
-    const url = `${window.location.origin}/blog/${blog.slug}`;
+    const url = `https://rentmilega.in/blog/${blog.slug}`;
     const shareData: any = {
       title: blog.title,
       text: blog.excerpt || "Check out this blog post!",
