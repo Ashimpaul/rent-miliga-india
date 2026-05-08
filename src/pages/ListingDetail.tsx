@@ -229,14 +229,20 @@ const ListingDetail = () => {
         image1: imageUrls[0] || null,
         image2: imageUrls[1] || null,
         image3: imageUrls[2] || null,
-        image4: imageUrls[3] || null,
-        image5: imageUrls[4] || null,
-        image6: imageUrls[5] || null,
-        image7: imageUrls[6] || null,
-        image8: imageUrls[7] || null,
-        image9: imageUrls[8] || null,
-        image10: imageUrls[9] || null,
       };
+
+      // Only add extra images if they exist in the schema
+      // Note: This is a safety measure. If columns don't exist, Supabase will return an error
+      // unless we explicitly check or the user updates the schema.
+      if (imageUrls.length > 3) {
+        updateData.image4 = imageUrls[3] || null;
+        updateData.image5 = imageUrls[4] || null;
+        updateData.image6 = imageUrls[5] || null;
+        updateData.image7 = imageUrls[6] || null;
+        updateData.image8 = imageUrls[7] || null;
+        updateData.image9 = imageUrls[8] || null;
+        updateData.image10 = imageUrls[9] || null;
+      }
 
       const { error } = await supabase.from("listings").update(updateData).eq("id", id);
       if (error) throw error;
