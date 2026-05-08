@@ -61,6 +61,7 @@ const ListingDetail = () => {
     title: "", property_type: "", rent: "", description: "",
     state: "", city: "", area: "", address: "", pincode: "",
     owner_name: "", phone_number: "", google_map_link: "",
+    password: "",
   });
   const [editImages, setEditImages] = useState<(string | File)[]>([]);
   const [saving, setSaving] = useState(false);
@@ -79,6 +80,7 @@ const ListingDetail = () => {
       area: listing?.area || "", address: listing?.address || "",
       pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
       phone_number: listing?.phone_number || "", google_map_link: listing?.google_map_link || "",
+      password: listing?.password || "",
     });
     
     const currentImages = [
@@ -226,6 +228,7 @@ const ListingDetail = () => {
         state: editForm.state, city: editForm.city, area: editForm.area,
         address: editForm.address || null, pincode: editForm.pincode || null,
         owner_name: editForm.owner_name, phone_number: editForm.phone_number,
+        password: editForm.password,
         image1: imageUrls[0] || null,
         image2: imageUrls[1] || null,
         image3: imageUrls[2] || null,
@@ -469,6 +472,31 @@ const ListingDetail = () => {
                 <div>
                   <Label htmlFor="edit-phone" className="text-xs sm:text-sm">Phone Number *</Label>
                   <Input id="edit-phone" type="tel" value={editForm.phone_number} onChange={(e) => setEdit("phone_number", e.target.value)} className="text-sm" />
+                </div>
+              </fieldset>
+
+              <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+                <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Security</legend>
+                <div>
+                  <Label htmlFor="edit-password" className="text-xs sm:text-sm">Listing Password *</Label>
+                  <div className="relative">
+                    <Input 
+                      id="edit-password" 
+                      type={showPassword ? "text" : "password"} 
+                      value={editForm.password} 
+                      onChange={(e) => setEdit("password", e.target.value)} 
+                      className="text-sm pr-10" 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  <p className="mt-1 text-[10px] text-muted-foreground">Change this password if you want to update how you access this listing later.</p>
                 </div>
               </fieldset>
 
