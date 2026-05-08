@@ -27,7 +27,7 @@ import {
   Phone, MapPin, IndianRupee, ArrowLeft, ArrowRight, Loader2, 
   Pencil, Trash2, Lock, Eye, EyeOff, MessageCircle, Share2, 
   Crown, MoreVertical, Calendar, Info, Building2, User2, 
-  Navigation, CheckCircle2 
+  Navigation, CheckCircle2, ImagePlus, X
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -62,6 +62,7 @@ const ListingDetail = () => {
     state: "", city: "", area: "", address: "", pincode: "",
     owner_name: "", phone_number: "", google_map_link: "",
   });
+  const [editImages, setEditImages] = useState<(string | File)[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -79,7 +80,39 @@ const ListingDetail = () => {
       pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
       phone_number: listing?.phone_number || "", google_map_link: listing?.google_map_link || "",
     });
+    
+    const currentImages = [
+      listing?.image1, listing?.image2, listing?.image3, listing?.image4, listing?.image5,
+      listing?.image6, listing?.image7, listing?.image8, listing?.image9, listing?.image10
+    ].filter(Boolean) as string[];
+    setEditImages(currentImages);
+    
     setEditing(true);
+  };
+
+  const uploadImage = async (file: File) => {
+    const ext = file.name.split(".").pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("listing-images").upload(path, file);
+    if (error) throw error;
+    const { data } = supabase.storage.from("listing-images").getPublicUrl(path);
+    return data.publicUrl;
+  };
+
+  const handleEditImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const maxImages = 10;
+    
+    if (editImages.length + files.length > maxImages) {
+      toast.error(`You can only have up to ${maxImages} images`);
+      return;
+    }
+
+    setEditImages(prev => [...prev, ...files]);
+  };
+
+  const removeEditImage = (index: number) => {
+    setEditImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const currencySymbol = "₹";
@@ -170,15 +203,42 @@ const ListingDetail = () => {
     if (!editForm.title || !editForm.property_type || !editForm.rent || !editForm.state || !editForm.city || !editForm.area || !editForm.owner_name || !editForm.phone_number) {
       toast.error("Please fill all required fields"); return;
     }
+    if (editImages.length === 0) {
+      toast.error("Please have at least 1 image"); return;
+    }
+
     setSaving(true);
     try {
-      const { error } = await supabase.from("listings").update({
+      // Handle images
+      const imageUrls: string[] = [];
+      for (const item of editImages) {
+        if (typeof item === "string") {
+          imageUrls.push(item);
+        } else {
+          const url = await uploadImage(item);
+          imageUrls.push(url);
+        }
+      }
+
+      const updateData: any = {
         title: editForm.title, property_type: editForm.property_type,
         rent: Number(editForm.rent), description: editForm.description || null,
         state: editForm.state, city: editForm.city, area: editForm.area,
         address: editForm.address || null, pincode: editForm.pincode || null,
         owner_name: editForm.owner_name, phone_number: editForm.phone_number,
-      }).eq("id", id);
+        image1: imageUrls[0] || null,
+        image2: imageUrls[1] || null,
+        image3: imageUrls[2] || null,
+        image4: imageUrls[3] || null,
+        image5: imageUrls[4] || null,
+        image6: imageUrls[5] || null,
+        image7: imageUrls[6] || null,
+        image8: imageUrls[7] || null,
+        image9: imageUrls[8] || null,
+        image10: imageUrls[9] || null,
+      };
+
+      const { error } = await supabase.from("listings").update(updateData).eq("id", id);
       if (error) throw error;
       const { data } = await supabase.from("listings").select("*").eq("id", id).single();
       setListing(data as any);
@@ -403,6 +463,48 @@ const ListingDetail = () => {
                 <div>
                   <Label htmlFor="edit-phone" className="text-xs sm:text-sm">Phone Number *</Label>
                   <Input id="edit-phone" type="tel" value={editForm.phone_number} onChange={(e) => setEdit("phone_number", e.target.value)} className="text-sm" />
+                </div>
+              </fieldset>
+
+              <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
+                <legend className="px-2 text-xs font-semibold text-foreground sm:text-sm">Property Photos</legend>
+                <div className="space-y-4">
+                  <div className="relative group cursor-pointer">
+                    <input 
+                      id="edit-images" 
+                      type="file" 
+                      accept="image/*" 
+                      multiple 
+                      onChange={handleEditImages} 
+                      className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                    />
+                    <div className="flex flex-col items-center justify-center py-6 border-2 border-dashed border-muted rounded-xl group-hover:border-primary group-hover:bg-primary/5 transition-all">
+                      <ImagePlus className="h-8 w-8 text-muted-foreground mb-2 group-hover:text-primary" />
+                      <p className="text-xs font-medium text-muted-foreground group-hover:text-primary">Click to add more photos</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">Up to 10 photos total</p>
+                    </div>
+                  </div>
+                  
+                  {editImages.length > 0 && (
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                      {editImages.map((item, i) => (
+                        <div key={i} className="group relative aspect-square rounded-xl overflow-hidden border-2 border-muted hover:border-primary transition-all">
+                          <img 
+                            src={typeof item === "string" ? item : URL.createObjectURL(item)} 
+                            alt="Preview" 
+                            className="h-full w-full object-cover" 
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeEditImage(i)}
+                            className="absolute top-1 right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md hover:scale-110 transition-transform"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </fieldset>
 
