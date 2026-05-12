@@ -61,7 +61,7 @@ const ListingDetail = () => {
     title: "", property_type: "", rent: "", description: "",
     state: "", city: "", area: "", address: "", pincode: "",
     owner_name: "", phone_number: "", google_map_link: "",
-    password: "",
+    password: "", user_type: "owner" as "owner" | "agent",
   });
   const [editImages, setEditImages] = useState<(string | File)[]>([]);
   const [saving, setSaving] = useState(false);
@@ -80,7 +80,7 @@ const ListingDetail = () => {
       area: listing?.area || "", address: listing?.address || "",
       pincode: listing?.pincode || "", owner_name: listing?.owner_name || "",
       phone_number: listing?.phone_number || "", google_map_link: listing?.google_map_link || "",
-      password: listing?.password || "",
+      password: listing?.password || "", user_type: listing?.user_type || "owner",
     });
     
     const currentImages = [
@@ -473,6 +473,16 @@ const ListingDetail = () => {
                   <Label htmlFor="edit-phone" className="text-xs sm:text-sm">Phone Number *</Label>
                   <Input id="edit-phone" type="tel" value={editForm.phone_number} onChange={(e) => setEdit("phone_number", e.target.value)} className="text-sm" />
                 </div>
+                <div>
+                  <Label className="text-xs sm:text-sm">Posting As *</Label>
+                  <Select value={editForm.user_type} onValueChange={(v) => setEdit("user_type", v as "owner" | "agent")}>
+                    <SelectTrigger className="text-sm"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="owner" className="capitalize">Property Owner</SelectItem>
+                      <SelectItem value="agent" className="capitalize">Real Estate Agent / Broker</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </fieldset>
 
               <fieldset className="space-y-3 rounded-lg border border-border p-3 sm:space-y-4 sm:p-4">
@@ -633,6 +643,15 @@ const ListingDetail = () => {
                       <Badge variant="secondary" className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border-none">
                         {listing.property_type}
                       </Badge>
+                      {listing.user_type && (
+                        <Badge className={`px-3 py-1 text-xs font-bold uppercase tracking-wider border-none shadow-sm ${
+                          listing.user_type === 'owner' 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-purple-500 text-white'
+                        }`}>
+                          {listing.user_type === 'owner' ? 'Property Owner' : 'Agent / Broker'}
+                        </Badge>
+                      )}
                       {(listing as any).is_premium && (
                         <Badge className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-amber-500 text-white border-none shadow-sm">
                           <Crown className="mr-1.5 h-3 w-3" /> Featured

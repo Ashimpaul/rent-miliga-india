@@ -51,6 +51,7 @@ const PostListing = () => {
     phone_number: "",
     google_map_link: "",
     password: "",
+    user_type: "owner",
   });
   const [locating, setLocating] = useState(false);
 
@@ -481,6 +482,21 @@ const PostListing = () => {
                       </Label>
                       <Input id="phone" type="tel" value={form.phone_number} onChange={(e) => set("phone_number", e.target.value)} placeholder={`e.g. ${phonePlaceholder}9876543210`} className="h-14 text-base rounded-2xl bg-muted/30 border-none focus:bg-background transition-all" />
                     </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="text-sm font-bold flex items-center gap-2">
+                      <Building2 className="h-4 w-4 text-primary" /> Posting As *
+                    </Label>
+                    <Select value={form.user_type} onValueChange={(v) => set("user_type", v as "owner" | "agent")}>
+                      <SelectTrigger className="h-14 text-base rounded-2xl bg-muted/30 border-none focus:bg-background transition-all">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl">
+                        <SelectItem value="owner" className="capitalize py-3">Property Owner</SelectItem>
+                        <SelectItem value="agent" className="capitalize py-3">Real Estate Agent / Broker</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <Separator className="bg-muted/50" />

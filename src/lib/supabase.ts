@@ -30,4 +30,5 @@ export type Listing = {
   google_map_link: string | null;
   password: string;
   created_at: string;
+  user_type: "owner" | "agent" | null;
 };

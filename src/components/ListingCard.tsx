@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Phone, MapPin, MessageCircle, Share2, Crown } from "lucide-react";
+import { Phone, MapPin, MessageCircle, Share2, Crown, Calendar, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import WatermarkedImage from "./WatermarkedImage";
 import { toast } from "sonner";
+import { format, formatDistanceToNow } from "date-fns";
 
 const ListingCard = ({ listing }: { listing: Listing }) => {
   const images = [
@@ -108,6 +109,13 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               Featured
             </div>
           )}
+
+          {/* New Badge (within 7 days) */}
+          {new Date(listing.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
+            <div className={`absolute top-2 z-30 flex items-center gap-1 rounded-full bg-blue-600 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white shadow-lg sm:top-3 sm:px-2.5 sm:py-1 sm:text-[10px] ${listing.is_premium ? 'left-20 sm:left-24' : 'left-2 sm:left-3'}`}>
+              New
+            </div>
+          )}
           
           {/* Overlay Gradient (Hidden on mobile for clarity) */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-20 pointer-events-none hidden sm:block" />
@@ -142,7 +150,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               {Number(listing.rent).toLocaleString(locale)}
               <span className="text-xs font-normal text-muted-foreground ml-1">/mo</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               <Button
                 size="icon"
                 variant="ghost"
@@ -155,6 +163,15 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
                 {listing.property_type}
               </span>
+              {listing.user_type && (
+                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                  listing.user_type === 'owner' 
+                    ? 'bg-green-100 text-green-700' 
+                    : 'bg-purple-100 text-purple-700'
+                }`}>
+                  {listing.user_type}
+                </span>
+              )}
             </div>
           </div>
           
@@ -167,6 +184,10 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           <div className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground sm:text-sm">
             <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" />
             <span className="truncate">{listing.area}, {listing.city}</span>
+          </div>
+          <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground/80 sm:text-xs">
+            <Calendar className="h-3 w-3 shrink-0" />
+            <span>Posted {formatDistanceToNow(new Date(listing.created_at), { addSuffix: true })}</span>
           </div>
         </div>
 
