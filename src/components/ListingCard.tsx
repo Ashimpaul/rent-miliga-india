@@ -163,15 +163,13 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
                 {listing.property_type}
               </span>
-              {listing.user_type && (
-                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                  listing.user_type === 'owner' 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-purple-100 text-purple-700'
-                }`}>
-                  {listing.user_type}
-                </span>
-              )}
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                (listing as any).user_type === 'agent' 
+                  ? 'bg-purple-100 text-purple-700' 
+                  : 'bg-green-100 text-green-700'
+              }`}>
+                {(listing as any).user_type === 'agent' ? 'Agent / Broker' : 'Property Owner'}
+              </span>
             </div>
           </div>
           
