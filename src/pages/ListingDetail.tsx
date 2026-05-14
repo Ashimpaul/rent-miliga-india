@@ -229,6 +229,7 @@ const ListingDetail = () => {
         address: editForm.address || null, pincode: editForm.pincode || null,
         owner_name: editForm.owner_name, phone_number: editForm.phone_number,
         password: editForm.password,
+        user_type: editForm.user_type,
         image1: imageUrls[0] || null,
         image2: imageUrls[1] || null,
         image3: imageUrls[2] || null,
