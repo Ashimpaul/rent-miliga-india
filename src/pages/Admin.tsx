@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Lock, LogOut, ArrowLeft, ShieldCheck, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Mail, Lock, LogOut, ArrowLeft, ShieldCheck, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,20 +13,35 @@ import AdminBlogManagement from "@/components/AdminBlogManagement";
 const Admin = () => {
   const { login, isAdmin, logout } = useAuth();
   console.log("Admin page render. isAdmin:", isAdmin);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(password);
-    if (success) {
-      toast.success("Admin login successful");
-      navigate("/admin");
-    } else {
-      toast.error("Incorrect password");
-      setPassword("");
+    setIsLoading(true);
+    try {
+      const success = await login(email, password);
+      if (success) {
+        toast.success("Admin login successful");
+        navigate("/admin");
+      } else {
+        toast.error("Invalid email or password");
+        setPassword("");
+      }
+    } catch (err) {
+      toast.error("Login failed, please try again");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    toast.success("Logged out successfully");
+    navigate("/");
   };
 
   return (
@@ -42,7 +57,7 @@ const Admin = () => {
             <p className="text-muted-foreground">
               {isAdmin 
                 ? "Manage your website content and settings." 
-                : "Enter your administrator password to continue."}
+                : "Enter your admin credentials to continue."}
             </p>
           </div>
 
@@ -59,7 +74,7 @@ const Admin = () => {
                       <ArrowLeft className="mr-2 h-4 w-4" /> Homepage
                     </Link>
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={logout}>
+                  <Button variant="destructive" size="sm" onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" /> Logout
                   </Button>
                 </div>
@@ -92,8 +107,26 @@ const Admin = () => {
             <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Admin Email
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                      placeholder="admin@rentmilega.in"
+                      required
+                      autoFocus
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
                   <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    Administrator Password
+                    Admin Password
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -105,7 +138,6 @@ const Admin = () => {
                       className="pl-10 pr-10"
                       placeholder="••••••••"
                       required
-                      autoFocus
                     />
                     <button
                       type="button"
@@ -122,8 +154,12 @@ const Admin = () => {
                   </div>
                 </div>
                 
-                <Button type="submit" className="w-full font-semibold">
-                  Access Admin Panel
+                <Button type="submit" className="w-full font-semibold" disabled={isLoading}>
+                  {isLoading ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...</>
+                  ) : (
+                    "Access Admin Panel"
+                  )}
                 </Button>
                 
                 <p className="text-center text-xs text-muted-foreground mt-4">
