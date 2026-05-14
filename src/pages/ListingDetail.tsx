@@ -771,7 +771,7 @@ const ListingDetail = () => {
                             asChild
                           >
                             <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
-                              <Phone className="mr-2 h-5 w-5" /> Call {listing.phone_number}
+                              <Phone className="mr-2 h-5 w-5" /> Call
                             </a>
                           </Button>
                           <Button 
