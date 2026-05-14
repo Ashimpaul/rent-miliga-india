@@ -44,7 +44,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         try {
           const response = await fetch(listing.image1, { mode: 'cors', cache: 'no-cache' });
           const blob = await response.blob();
-          const file = new File([blob], `${listing.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`, { type: "image/jpeg" });
+          const file = new File([blob], `${(listing.title || 'listing').replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`, { type: "image/jpeg" });
           if ((navigator as any).canShare({ files: [file] })) {
             await navigator.share({
               ...shareData,
@@ -195,7 +195,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
             className="h-10 flex-1 text-xs font-bold transition-all duration-300 active:scale-95 hover:shadow-lg sm:text-sm" 
             asChild
           >
-            <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
+            <a href={`tel:${(listing.phone_number || '').replace(/\s+/g, '')}`}>
               <Phone className="mr-1.5 h-3.5 w-3.5" /> Call
             </a>
           </Button>
@@ -206,7 +206,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
             asChild
           >
             <a 
-              href={`https://wa.me/${listing.phone_number.replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
+              href={`https://wa.me/${(listing.phone_number || '').replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 interface AuthContextType {
   isAdmin: boolean;
@@ -26,41 +27,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      checkIfAdmin(session?.user?.id);
+      setIsAdmin(!!session?.user);
+      setLoading(false);
+    }).catch((err) => {
+      console.error("Error getting session:", err);
+      setLoading(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
-        checkIfAdmin(session?.user?.id);
+        setIsAdmin(!!session?.user);
+        setLoading(false);
       }
     );
 
     return () => subscription.unsubscribe();
   }, []);
-
-  // Check if user is admin using our server-side function
-  const checkIfAdmin = async (userId: string | undefined) => {
-    if (!userId) {
-      setIsAdmin(false);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      // TEMP: Let any authenticated user be admin for testing!
-      // const { data, error } = await supabase.rpc("is_admin");
-      // if (!error) {
-      //   setIsAdmin(!!data);
-      // }
-      setIsAdmin(true);
-    } catch (err) {
-      console.error("Error checking admin status:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
@@ -71,12 +55,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (error) {
         console.error("Supabase login error:", error);
-        alert(`Login failed: ${error.message}`);
-        throw error;
+        toast.error(`Login failed: ${error.message}`);
+        return false;
       }
+
+      toast.success("Logged in successfully!");
       return true;
     } catch (err: any) {
-      console.error("Login error:", err);
+      console.error("Unexpected login error:", err);
+      toast.error(`Login failed: ${err.message}`);
       return false;
     }
   };

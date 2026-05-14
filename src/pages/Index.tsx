@@ -78,8 +78,16 @@ const Index = () => {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(6)
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Error fetching listings:", error);
+        }
         setListings((data as any) || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Listings fetch exception:", err);
+        setListings([]);
         setLoading(false);
       });
   }, []);
