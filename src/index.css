@@ -199,4 +199,9 @@
     transform: translateY(-4px);
     box-shadow: 0 12px 24px -8px hsl(var(--foreground) / 0.1);
   }
+
+  /* Slow spin animation */
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
 }
