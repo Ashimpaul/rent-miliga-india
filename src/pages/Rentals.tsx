@@ -17,6 +17,10 @@ const Rentals = () => {
   const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 12;
   
   const searchError = searchParams.get("error");
   const isNearbySearch = searchParams.get("nearMe") === "true";
@@ -49,17 +53,45 @@ const Rentals = () => {
     }
   }, [searchParams, location]);
 
+  const loadListings = async (page = 0, reset = false) => {
+    const from = page * PAGE_SIZE;
+    const to = (page + 1) * PAGE_SIZE - 1;
+    
+    try {
+      const { data, error } = await supabase
+        .from("listings")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .range(from, to);
+
+      if (error) {
+        console.error("Error fetching listings:", error);
+        return;
+      }
+
+      if (data) {
+        setListings(prev => reset ? data : [...prev, ...data]);
+        setHasMore(data.length === PAGE_SIZE);
+      }
+    } catch (err) {
+      console.error("Listings fetch exception:", err);
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
-    supabase
-      .from("listings")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        setListings((data as any) || []);
-        setLoading(false);
-      });
+    loadListings(0, true).then(() => setLoading(false));
   }, []);
+
+  const loadMore = async () => {
+    if (loadingMore || !hasMore) return;
+    
+    setLoadingMore(true);
+    const nextPage = currentPage + 1;
+    await loadListings(nextPage);
+    setCurrentPage(nextPage);
+    setLoadingMore(false);
+  };
 
   const filtered = useMemo(() => {
     // If the search specifically failed to find a location, don't show any results 
@@ -182,11 +214,31 @@ const Rentals = () => {
               </div>
             </div>
           ) : (
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
-              {filtered.map((l) => (
-                <ListingCard key={l.id} listing={l} />
-              ))}
-            </div>
+            <>
+              <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+                {filtered.map((l) => (
+                  <ListingCard key={l.id} listing={l} />
+                ))}
+              </div>
+              {hasMore && filtered.length > 0 && (
+                <div className="mt-8 flex justify-center">
+                  <Button 
+                    onClick={loadMore} 
+                    disabled={loadingMore}
+                    className="px-8 py-6"
+                  >
+                    {loadingMore ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Loading...
+                      </>
+                    ) : (
+                      "Load More Listings"
+                    )}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>

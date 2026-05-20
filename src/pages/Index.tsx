@@ -308,6 +308,8 @@ const Index = () => {
                       src={l.image1 || "/placeholder.svg"} 
                       alt="" 
                       className="w-full h-full object-cover rounded-full"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <span className="text-xs font-black text-foreground truncate w-full text-center">
@@ -430,6 +432,8 @@ const Index = () => {
                           src={blog.image_url || "/placeholder.svg"}
                           alt={blog.title}
                           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                       <div className="p-6 flex-1 flex flex-col">

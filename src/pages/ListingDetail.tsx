@@ -574,6 +574,8 @@ const ListingDetail = () => {
                         src={images[activeImage]}
                         alt={listing.title}
                         imageClassName="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        width={1200}
+                        quality={85}
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -628,7 +630,13 @@ const ListingDetail = () => {
                             i === activeImage ? "border-primary scale-105 shadow-md" : "border-transparent opacity-70 hover:opacity-100"
                           }`}
                         >
-                          <WatermarkedImage src={img} alt="" imageClassName="h-full w-full object-cover" />
+                          <WatermarkedImage 
+                            src={img} 
+                            alt="" 
+                            imageClassName="h-full w-full object-cover"
+                            width={200}
+                            quality={70}
+                          />
                         </button>
                       ))}
                     </div>

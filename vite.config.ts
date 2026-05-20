@@ -12,6 +12,21 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  build: {
+    target: 'es2020',
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'router-vendor': ['react-router-dom'],
+          'supabase-vendor': ['@supabase/supabase-js'],
+          'ui-vendor': ['lucide-react', 'sonner'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
   plugins: [
     react(),
     mode === "production" && obfuscator({}),

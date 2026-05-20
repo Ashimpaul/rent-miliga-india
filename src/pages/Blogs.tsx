@@ -7,6 +7,7 @@ import { Calendar, User, Share2, AlertCircle, PlayCircle } from "lucide-react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { optimizeImage } from "@/lib/utils";
 
 interface Blog {
   id: string;
@@ -140,9 +141,11 @@ const Blogs = () => {
                 {blog.image_url && (
                   <div className="mb-8 md:mb-10 rounded-xl md:rounded-2xl overflow-hidden shadow-md border border-border bg-muted aspect-video">
                     <img
-                      src={blog.image_url}
+                      src={optimizeImage(blog.image_url, 1200, undefined, 80)}
                       alt={blog.title}
                       className="w-full h-full object-cover transition-transform duration-500 hover:scale-[1.02]"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 )}

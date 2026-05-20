@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { optimizeImage } from "@/lib/utils";
 
 interface Blog {
   id: string;
@@ -214,9 +215,10 @@ const BlogDetail = () => {
         {blog.image_url && (
           <div className="animate-fade-up mb-10 md:mb-16 rounded-3xl overflow-hidden shadow-2xl border border-border bg-muted aspect-video ring-1 ring-primary/5">
             <img
-              src={blog.image_url}
+              src={optimizeImage(blog.image_url, 1600, undefined, 85)}
               alt={blog.title}
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              loading="eager"
             />
           </div>
         )}

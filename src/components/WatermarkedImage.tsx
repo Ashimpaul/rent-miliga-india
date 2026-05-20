@@ -1,17 +1,32 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn, optimizeImage } from "@/lib/utils";
 
 interface WatermarkedImageProps {
   src: string;
   alt: string;
   className?: string;
   imageClassName?: string;
+  width?: number;
+  height?: number;
+  quality?: number;
+  format?: 'webp' | 'jpg' | 'png';
 }
 
-const WatermarkedImage = ({ src, alt, className, imageClassName }: WatermarkedImageProps) => {
+const WatermarkedImage = ({ 
+  src, 
+  alt, 
+  className, 
+  imageClassName,
+  width = 800,
+  height,
+  quality = 80,
+  format = 'webp'
+}: WatermarkedImageProps) => {
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
   };
+
+  const optimizedSrc = optimizeImage(src, width, height, quality, format);
 
   return (
     <div 
@@ -19,11 +34,12 @@ const WatermarkedImage = ({ src, alt, className, imageClassName }: WatermarkedIm
       onContextMenu={handleContextMenu}
     >
       <img
-        src={src}
+        src={optimizedSrc}
         alt={alt}
         className={cn("h-full w-full object-cover pointer-events-none", imageClassName)}
         loading="lazy"
         draggable="false"
+        decoding="async"
       />
       
       {/* Watermark Overlays */}

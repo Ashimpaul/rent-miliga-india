@@ -92,6 +92,8 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
                   src={img}
                   alt={`Rental property: ${listing.title} in ${listing.area}, ${listing.city}`}
                   imageClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  width={400}
+                  quality={80}
                 />
               </div>
             ))
@@ -100,6 +102,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
               src="/placeholder.svg"
               alt="Placeholder"
               imageClassName="h-full w-full object-cover"
+              width={400}
             />
           )}
 
