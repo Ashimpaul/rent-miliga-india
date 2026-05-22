@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { SUPABASE_URL } from "@/integrations/supabase/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,8 +28,9 @@ export function optimizeImage(
   try {
     const urlObj = new URL(url);
     
-    // Only apply transformations to Supabase Storage URLs
-    if (!urlObj.hostname.includes('supabase')) {
+    // Only apply transformations to OUR Supabase Storage URLs
+    const isOurSupabaseUrl = urlObj.hostname === new URL(SUPABASE_URL).hostname;
+    if (!isOurSupabaseUrl) {
       return url;
     }
 
