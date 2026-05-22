@@ -13,6 +13,27 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <!-- Font Preloading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+      rel="preload" 
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" 
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    >
+    <link 
+      rel="preload" 
+      href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" 
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    >
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
+    </noscript>
+    
     <meta name="theme-color" content="#22c55e" />
     <meta name="msapplication-TileColor" content="#22c55e" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -39,7 +60,8 @@
 
   <body>
     <div id="root"></div>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Defer non-critical scripts -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
