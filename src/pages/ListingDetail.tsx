@@ -348,7 +348,7 @@ const ListingDetail = () => {
         </script>
       </Helmet>
       <Header />
-      <main className="flex-1 bg-muted/30">
+      <main className="flex-1 bg-muted/30 pb-24 sm:pb-0">
         <div className="container mx-auto max-w-4xl px-3 py-4 sm:px-4 sm:py-8">
           <div className="animate-fade-up mb-4 flex items-center justify-between">
             <Link to="/" className="group inline-flex items-center text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground">
@@ -822,6 +822,39 @@ const ListingDetail = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Sticky Mobile CTA Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border shadow-2xl sm:hidden pb-safe">
+        <div className="flex items-center gap-3 p-3">
+          <div className="flex flex-col flex-1">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Monthly Rent</span>
+            <span className="text-2xl font-black text-primary">₹{Number(listing.rent).toLocaleString("en-IN")}</span>
+          </div>
+          <div className="flex gap-2 flex-1">
+            <Button 
+              className="flex-1 h-12 text-sm font-bold rounded-xl shadow-lg transition-all active:scale-95" 
+              asChild
+            >
+              <a href={`tel:${listing.phone_number.replace(/\s+/g, '')}`}>
+                <Phone className="mr-1.5 h-4 w-4" /> Call
+              </a>
+            </Button>
+            <Button 
+              variant="outline"
+              className="flex-1 h-12 text-sm font-bold rounded-xl border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-all active:scale-95" 
+              asChild
+            >
+              <a 
+                href={`https://wa.me/${listing.phone_number.replace(/\s+/g, '').replace(/^\+/, '')}?text=${encodeURIComponent(`Hi, I'm interested in your property: ${listing.title} on RentMilega.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle className="mr-1.5 h-4 w-4" /> Chat
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Password Verification Dialog */}
       <Dialog open={passwordDialog !== null} onOpenChange={() => { setPasswordDialog(null); setPassword(""); setShowPassword(false); }}>

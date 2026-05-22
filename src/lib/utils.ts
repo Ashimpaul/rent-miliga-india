@@ -46,3 +46,17 @@ export function optimizeImage(
     return url;
   }
 }
+
+/**
+ * Generates a URL-friendly slug from a string
+ * @param text - Input text to convert to a slug
+ * @returns URL-friendly slug
+ */
+export function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/--+/g, '-')
+    .trim();
+}
