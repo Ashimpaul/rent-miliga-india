@@ -22,17 +22,39 @@ const WatermarkedImage = ({
   quality = 80,
   format = 'webp'
 }: WatermarkedImageProps) => {
-  const [imageSrc, setImageSrc] = useState<string>(optimizeImage(src, width, height, quality, format));
+  // First, try to use optimized image, then fall back step by step
+  const [imageSrc, setImageSrc] = useState<string>(() => {
+    if (!src) return '/placeholder.svg';
+    try {
+      // Test if URL is valid
+      new URL(src);
+      return optimizeImage(src, width, height, quality, format);
+    } catch {
+      // If invalid URL, use placeholder or try src directly if it's a path
+      if (src.startsWith('/') || src.startsWith('data:')) {
+        return src;
+      }
+      return '/placeholder.svg';
+    }
+  });
+
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
   };
 
   const handleImageError = () => {
-    // Fall back to original image if optimized version fails
-    if (imageSrc !== src) {
-      console.log("Falling back to original image:", src);
+    console.log("Image failed to load, trying fallback options:", src);
+    
+    // Fallback 1: Try original source without optimization
+    if (imageSrc !== src && src && src !== '/placeholder.svg') {
+      console.log("Fallback 1: Trying original source:", src);
       setImageSrc(src);
-    } else if (src !== '/placeholder.svg') {
+      return;
+    }
+
+    // Fallback 2: Use placeholder as last resort
+    if (imageSrc !== '/placeholder.svg') {
+      console.log("Fallback 2: Using placeholder.svg");
       setImageSrc('/placeholder.svg');
     }
   };
