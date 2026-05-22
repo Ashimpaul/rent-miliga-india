@@ -4,12 +4,11 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, User, Share2, AlertCircle, PlayCircle, ArrowLeft, Menu, X, BookOpen, Clock } from "lucide-react";
+import { Calendar, User, Share2, AlertCircle, PlayCircle, ArrowLeft, Menu, BookOpen } from "lucide-react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "sonner";
-import { optimizeImage } from "@/lib/utils";
 
 interface Blog {
   id: string;
@@ -47,7 +46,6 @@ const Blogs = () => {
         } else {
           setBlogs(data || []);
           
-          // Auto-select blog from URL or first blog
           if (slug && data) {
             const blogFromSlug = data.find(b => b.slug === slug);
             if (blogFromSlug) {
@@ -154,7 +152,7 @@ const Blogs = () => {
                   {blog.image_url && (
                     <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
                       <img
-                        src={optimizeImage(blog.image_url, 200, undefined, 80)}
+                        src={blog.image_url}
                         alt=""
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                         loading="lazy"
@@ -182,7 +180,14 @@ const Blogs = () => {
   );
 
   // Blog Detail Component
-  const BlogDetail = ({ blog }: { blog: Blog }) => (
+  const BlogDetail = ({ blog }: { blog: Blog }) => {
+    const currentIndex = blogs.findIndex(b => b.id === blog.id);
+    const hasPrev = currentIndex > 0;
+    const hasNext = currentIndex < blogs.length - 1;
+    const prevBlog = hasPrev ? blogs[currentIndex - 1] : null;
+    const nextBlog = hasNext ? blogs[currentIndex + 1] : null;
+
+    return (
     <article className="max-w-3xl mx-auto px-4 py-10 md:py-16">
       <div className="animate-fade-up">
         {/* Header */}
@@ -238,7 +243,7 @@ const Blogs = () => {
         {blog.image_url && (
           <div className="mb-10 md:mb-14 rounded-2xl overflow-hidden border border-border/50">
             <img
-              src={optimizeImage(blog.image_url, 1400, undefined, 85)}
+              src={blog.image_url}
               alt={blog.title}
               className="w-full h-full object-cover"
               loading="eager"
@@ -273,8 +278,39 @@ const Blogs = () => {
           </div>
         )}
 
+        {/* Previous/Next Navigation */}
+        <div className="flex items-center justify-between gap-4 pt-8 border-t border-border/30">
+          {prevBlog ? (
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full h-10 w-10"
+              onClick={() => handleBlogSelect(prevBlog)}
+              title={`Previous: ${prevBlog.title}`}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          ) : (
+            <div className="h-10 w-10" />
+          )}
+          
+          {nextBlog ? (
+            <Button 
+              variant="default" 
+              size="icon" 
+              className="rounded-full h-10 w-10"
+              onClick={() => handleBlogSelect(nextBlog)}
+              title={`Next: ${nextBlog.title}`}
+            >
+              <ArrowLeft className="h-4 w-4 rotate-180" />
+            </Button>
+          ) : (
+            <div className="h-10 w-10" />
+          )}
+        </div>
+
         {/* End of Post */}
-        <div className="pt-8 border-t border-border/30 text-center">
+        <div className="pt-8 mt-4 border-t border-border/30 text-center">
           <div className="text-[10px] text-muted-foreground/60 font-mono tracking-widest uppercase">
             End of Article
           </div>
@@ -295,6 +331,7 @@ const Blogs = () => {
       `}</style>
     </article>
   );
+  };
 
   if (loading) {
     return (
