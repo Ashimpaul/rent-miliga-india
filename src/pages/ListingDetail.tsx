@@ -296,20 +296,55 @@ const ListingDetail = () => {
   // Structured Data for SEO
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "RealEstateListing",
-    "name": `${listing.title} in ${listing.area}, ${listing.city}`,
-    "description": listing.description || `Rental property in ${listing.area}, ${listing.city}, ${listing.state}`,
-    "datePosted": listing.created_at,
-    "propertyID": listing.id,
-    "url": `https://rentmilega.in/listing/${listing.id}`,
-    "image": images,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": listing.city,
-      "addressRegion": listing.state,
-      "addressCountry": "India",
-      "streetAddress": listing.address || listing.area
-    }
+    "@graph": [
+      {
+        "@type": "RealEstateListing",
+        "name": `${listing.title} in ${listing.area}, ${listing.city}`,
+        "description": listing.description || `Rental property in ${listing.area}, ${listing.city}, ${listing.state}`,
+        "datePosted": listing.created_at,
+        "propertyID": listing.id,
+        "url": `https://rentmilega.in/listing/${listing.id}`,
+        "image": images,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": listing.city,
+          "addressRegion": listing.state,
+          "addressCountry": "IN",
+          "streetAddress": listing.address || listing.area,
+          "postalCode": listing.pincode
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": Number(listing.rent),
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://rentmilega.in/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Rentals",
+            "item": "https://rentmilega.in/rentals"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": listing.title,
+            "item": `https://rentmilega.in/listing/${listing.id}`
+          }
+        ]
+      }
+    ]
   };
 
   return (

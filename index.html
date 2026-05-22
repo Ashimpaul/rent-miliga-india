@@ -56,6 +56,33 @@
     <meta name="twitter:image" content="https://rentmilega.in/logo.png" />
 
     <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "RentMilega",
+          "url": "https://rentmilega.in/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://rentmilega.in/rentals?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "name": "RentMilega",
+          "url": "https://rentmilega.in/",
+          "logo": "https://rentmilega.in/logo.png",
+          "sameAs": [
+            "https://rentmilega.in/about",
+            "https://rentmilega.in/contact"
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>

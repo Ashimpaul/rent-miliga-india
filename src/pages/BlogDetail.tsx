@@ -113,6 +113,61 @@ const BlogDetail = () => {
     );
   }
 
+  // Structured Data for Blog
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "headline": blog.title,
+        "description": blog.excerpt || blog.title,
+        "datePublished": blog.created_at,
+        "dateModified": blog.created_at,
+        "author": {
+          "@type": "Person",
+          "name": blog.author || "RentMilega Team"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "RentMilega",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://rentmilega.in/logo.png"
+          }
+        },
+        "image": blog.image_url || "https://rentmilega.in/logo.png",
+        "url": `https://rentmilega.in/blog/${blog.slug}`,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `https://rentmilega.in/blog/${blog.slug}`
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://rentmilega.in/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://rentmilega.in/blogs"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": blog.title,
+            "item": `https://rentmilega.in/blog/${blog.slug}`
+          }
+        ]
+      }
+    ]
+  };
+
   if (!blog) {
     return (
       <div className="flex min-h-screen flex-col">
@@ -159,6 +214,10 @@ const BlogDetail = () => {
         <meta itemprop="name" content={blog.title} />
         <meta itemprop="description" content={blog.excerpt || ""} />
         <meta itemprop="image" content={blog.image_url || "https://rentmilega.in/logo.png"} />
+
+        <script type="application/ld+json">
+          {JSON.stringify(blogJsonLd)}
+        </script>
       </Helmet>
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl overflow-x-hidden">
