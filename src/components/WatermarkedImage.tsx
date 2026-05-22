@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn, optimizeImage } from "@/lib/utils";
 
 interface WatermarkedImageProps {
@@ -22,11 +22,20 @@ const WatermarkedImage = ({
   quality = 80,
   format = 'webp'
 }: WatermarkedImageProps) => {
+  const [imageSrc, setImageSrc] = useState<string>(optimizeImage(src, width, height, quality, format));
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
   };
 
-  const optimizedSrc = optimizeImage(src, width, height, quality, format);
+  const handleImageError = () => {
+    // Fall back to original image if optimized version fails
+    if (imageSrc !== src) {
+      console.log("Falling back to original image:", src);
+      setImageSrc(src);
+    } else if (src !== '/placeholder.svg') {
+      setImageSrc('/placeholder.svg');
+    }
+  };
 
   return (
     <div 
@@ -34,12 +43,13 @@ const WatermarkedImage = ({
       onContextMenu={handleContextMenu}
     >
       <img
-        src={optimizedSrc}
+        src={imageSrc}
         alt={alt}
         className={cn("h-full w-full object-cover pointer-events-none", imageClassName)}
         loading="lazy"
         draggable="false"
         decoding="async"
+        onError={handleImageError}
       />
       
       {/* Watermark Overlays */}

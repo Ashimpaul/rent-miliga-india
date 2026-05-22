@@ -7,12 +7,13 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Optimizes a Supabase Storage image URL with transformations
+ * Falls back to original URL if optimization fails or not a Supabase URL
  * @param url - Original image URL from Supabase Storage
  * @param width - Desired width (default: 800)
  * @param height - Desired height (optional)
  * @param quality - Image quality (default: 80)
  * @param format - Image format (default: webp)
- * @returns Optimized image URL
+ * @returns Optimized image URL or original URL
  */
 export function optimizeImage(
   url: string,
@@ -21,7 +22,7 @@ export function optimizeImage(
   quality: number = 80,
   format: 'webp' | 'jpg' | 'png' = 'webp'
 ): string {
-  if (!url) return url;
+  if (!url) return '/placeholder.svg';
   
   try {
     const urlObj = new URL(url);
@@ -43,6 +44,7 @@ export function optimizeImage(
     urlObj.search = params.toString();
     return urlObj.toString();
   } catch (e) {
+    console.error("Error optimizing image:", e);
     return url;
   }
 }
