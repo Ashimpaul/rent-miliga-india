@@ -95,15 +95,19 @@ const Footer = () => {
             </Link>
             <span className="text-border hidden sm:inline">•</span>
             <Link to="/contact" className="text-sm font-medium text-primary transition-colors hover:text-primary/80">
-              Contact
+              Contact Us
+            </Link>
+            <span className="text-border hidden sm:inline">•</span>
+            <Link to="/terms" className="text-sm font-medium text-primary transition-colors hover:text-primary/80">
+              Terms & Conditions
             </Link>
             <span className="text-border hidden sm:inline">•</span>
             <Link to="/privacy" className="text-sm font-medium text-primary transition-colors hover:text-primary/80">
-              Privacy
+              Privacy Policy
             </Link>
             <span className="text-border hidden sm:inline">•</span>
-            <Link to="/blogs" className="text-sm font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-lg transition-colors hover:bg-primary/10">
-              Latest Blog
+            <Link to="/cancellation-refund" className="text-sm font-medium text-primary transition-colors hover:text-primary/80">
+              Cancellation & Refunds
             </Link>
           </div>
           <p className="mt-6 text-[10px] sm:text-xs">
