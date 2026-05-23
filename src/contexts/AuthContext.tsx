@@ -81,32 +81,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [user, resetInactivityTimer]);
 
-  // Check admin status by verifying with the database
+  // Check admin status by direct UID comparison (no database call!)
   const checkAdminStatus = async (userId: string | undefined) => {
     if (!userId) {
       setIsAdmin(false);
       return;
     }
 
-    try {
-      // Query admin_config table to check if user is admin
-      const { data, error } = await supabase
-        .from('admin_config')
-        .select('admin_user_id')
-        .eq('id', 'config')
-        .single();
-
-      if (error) {
-        console.error("Error checking admin status:", error);
-        setIsAdmin(false);
-        return;
-      }
-
-      setIsAdmin(data?.admin_user_id === userId);
-    } catch (err) {
-      console.error("Unexpected error checking admin status:", err);
-      setIsAdmin(false);
-    }
+    // Direct comparison with YOUR ADMIN UID - no database issues!
+    const ADMIN_UID = '243b4d3d-2eab-400d-a89a-7b114a0017ee';
+    setIsAdmin(userId === ADMIN_UID);
   };
 
   // Check auth state on mount
