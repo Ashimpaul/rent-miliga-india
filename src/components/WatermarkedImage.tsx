@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface WatermarkedImageProps {
@@ -21,6 +21,11 @@ const WatermarkedImage = ({
 }: WatermarkedImageProps) => {
   // Simple state - just use original src first, then placeholder on error
   const [imageSrc, setImageSrc] = useState<string>(src || '/placeholder.svg');
+  
+  // Update imageSrc when src prop changes
+  useEffect(() => {
+    setImageSrc(src || '/placeholder.svg');
+  }, [src]);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
